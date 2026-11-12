@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Silage Day 2027 – Gate sign-in</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--green:#2c4a1c;--light:#f1edd8;--paper:#fbf8ee;--brown:#3a2614;--cream:#f6efcf;--ink:#2a1e12;--muted:#6b6250;--line:#e2dcc4;--yellow:#f5c518;--red:#c8202a}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
+input{-webkit-user-select:text;user-select:text}
+html,body{margin:0;height:100%;background:var(--paper);color:var(--ink);font-family:Barlow,system-ui,sans-serif;font-size:19px;overscroll-behavior:none}
+h1,h2{font-family:"Barlow Condensed",sans-serif;margin:0}
+button{font:inherit;cursor:pointer}
+.top{background:var(--cream);border-bottom:4px solid var(--brown);display:flex;align-items:center;gap:16px;padding:10px 22px}
+.top img{height:64px}.top b{font:800 26px "Barlow Condensed";color:var(--green)}
+.top .st{margin-left:auto;font-size:15px;color:var(--muted)}
+.wrap{max-width:760px;margin:0 auto;padding:22px}
+.screen{display:none}.screen.on{display:block}
+.big{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:26px}
+.big button{border:3px solid var(--line);background:#fff;border-radius:20px;padding:34px 10px;font:800 34px "Barlow Condensed";color:var(--green)}
+.big button:active{background:var(--light)}
+h1{font-size:44px;color:var(--brown);text-align:center;margin-top:20px}
+h2{font-size:32px;color:var(--brown);margin-bottom:6px}
+.sub{color:var(--muted);margin-bottom:16px}
+.fl{display:block;font-weight:700;margin:16px 0 6px;font-size:17px}
+.fl i{color:var(--red);font-style:normal}
+.fi{width:100%;border:2px solid #cfc7aa;border-radius:12px;padding:14px 16px;font-size:21px;background:#fffdf6}
+.fi.bad{border-color:var(--red);background:#fff4f4}
+.cnt{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:8px}
+.cnt div{background:#fff;border:2px solid var(--line);border-radius:14px;padding:12px;text-align:center}
+.cnt b{display:block;font-size:17px}
+.cnt .n{font:800 40px "Barlow Condensed";color:var(--green);margin:4px 0}
+.cnt button{width:56px;height:56px;border-radius:50%;border:0;background:var(--light);font-size:30px;font-weight:700;color:var(--green);margin:0 6px}
+.btn{display:block;width:100%;border:0;border-radius:14px;background:var(--green);color:#fff;font-weight:700;font-size:23px;padding:18px;margin-top:22px}
+.btn.alt{background:var(--light);color:var(--green)}
+.row{display:flex;gap:12px}.row .btn{flex:1}
+.rules{counter-reset:r;list-style:none;padding:0;margin:0;background:#fff;border:2px solid var(--line);border-radius:14px;padding:6px 16px;max-height:34vh;overflow:auto}
+.rules li{position:relative;padding:9px 0 9px 42px;border-bottom:1px solid var(--line);font-size:18px}
+.rules li:last-child{border-bottom:0}
+.rules li::before{counter-increment:r;content:counter(r);position:absolute;left:0;top:8px;width:30px;height:30px;border-radius:50%;background:var(--yellow);font:800 16px "Barlow Condensed";display:grid;place-items:center}
+.chk{display:flex;gap:14px;align-items:flex-start;margin:16px 0 0;font-weight:600;font-size:19px}
+.chk input{width:32px;height:32px;accent-color:var(--green);flex:none}
+.chk.bad{color:var(--red)}
+.sigbox{position:relative;background:#fff;border:2px dashed #b9ae86;border-radius:14px;margin-top:8px;height:190px;touch-action:none}
+.sigbox.bad{border-color:var(--red)}
+.sigbox canvas{width:100%;height:100%;display:block}
+.sigbox .ph{position:absolute;left:16px;bottom:12px;color:#b9ae86;pointer-events:none;font-size:16px}
+.sigbox .cl{position:absolute;right:10px;top:10px;border:0;background:var(--light);border-radius:8px;padding:6px 12px;font-size:15px;font-weight:700;color:var(--green)}
+.code{font:800 120px "Barlow Condensed";color:var(--green);text-align:center;line-height:1;margin:26px 0 8px;letter-spacing:4px}
+.sum{text-align:center;font-size:22px;font-weight:600}
+.note{background:var(--light);border-radius:12px;padding:12px 16px;color:var(--muted);font-size:16px;margin-top:16px}
+.err{color:var(--red);font-weight:700;margin-top:12px;display:none}
+.cd{text-align:center;color:var(--muted);margin-top:10px;font-size:16px}
+.staff{position:fixed;right:10px;bottom:8px;font-size:12px;color:#b9ae86}
+.staff a{color:inherit}
+</style>
+</head>
+<body>
+<div class="top"><img src="logo.png" alt=""><b id="tTitle">Gate sign-in</b><span class="st" id="tStatus"></span></div>
+<div class="wrap">
+ <!-- 0 language -->
+ <section class="screen on" id="s0">
+  <h1>Croeso! Welcome!</h1>
+  <div style="text-align:center;color:var(--muted);margin-top:8px">Dewiswch eich iaith · Choose your language</div>
+  <div class="big"><button data-lang="cy">Cymraeg</button><button data-lang="en">English</button></div>
+  <div class="note" style="text-align:center">Already bought tickets online? Go straight to the pre-booked lane. · Wedi prynu tocynnau ar-lein? Ewch yn syth i'r lôn tocynnau ymlaen llaw.</div>
+ </section>
+ <!-- 1 details -->
+ <section class="screen" id="s1">
+  <h2 data-t="detailsT"></h2><div class="sub" data-t="detailsS"></div>
+  <label class="fl"><span data-t="name"></span> <i>*</i></label><input class="fi" id="fName" autocomplete="off" autocapitalize="words">
+  <label class="fl"><span data-t="email"></span> <i>*</i></label><input class="fi" id="fEmail" type="email" autocomplete="off" inputmode="email">
+  <label class="fl" data-t="mobile"></label><input class="fi" id="fMob" type="tel" autocomplete="off" inputmode="tel">
+  <label class="fl" data-t="group"></label>
+  <div class="cnt" id="cnt"></div>
+  <div class="err" id="e1" data-t="fix"></div>
+  <div class="row"><button class="btn alt" data-go="0" data-t="back"></button><button class="btn" id="n1" data-t="next"></button></div>
+ </section>
+ <!-- 2 declaration -->
+ <section class="screen" id="s2">
+  <h2 data-t="rulesT"></h2><div class="sub" data-t="rulesS"></div>
+  <ol class="rules" id="rules"></ol>
+  <label class="chk" id="cAgreeL"><input type="checkbox" id="cAgree"><span data-t="agree"></span></label>
+  <label class="fl" data-t="sign"></label>
+  <div class="sigbox" id="sigbox"><canvas id="sig"></canvas><span class="ph" data-t="signHere"></span><button class="cl" id="sigClear" data-t="clear"></button></div>
+  <label class="chk" style="font-weight:500;font-size:17px"><input type="checkbox" id="cNews" style="width:26px;height:26px"><span data-t="news"></span></label>
+  <div class="err" id="e2" data-t="fix2"></div>
+  <div class="row"><button class="btn alt" data-go="1" data-t="back"></button><button class="btn" id="n2" data-t="done"></button></div>
+  <div class="note" data-t="privacy"></div>
+ </section>
+ <!-- 3 code -->
+ <section class="screen" id="s3">
+  <h1 data-t="thanks"></h1>
+  <div class="code" id="code">G-000</div>
+  <div class="sum" id="sum"></div>
+  <div class="note" style="text-align:center;font-size:19px;color:var(--ink)" data-t="showCashier"></div>
+  <button class="btn" id="finish" data-t="finish"></button>
+  <div class="cd" id="cd"></div>
+ </section>
+</div>
+<div class="staff">Prototype kiosk · lock with iPad Guided Access · <a href="ops.html">Operations app</a></div>
+
+<script>
+const $=s=>document.querySelector(s);
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}}};
+const T={en:{detailsT:"Your details",detailsS:"For the lead adult in your group. We'll email your tickets.",name:"Your full name",email:"Email address",mobile:"Mobile number (optional – we write it on children's wristbands)",group:"How many in your group?",
+ adults:"Adults",children:"Children (5–15)",under5:"Under 5 (free)",fix:"Please fill in the highlighted boxes.",back:"Back",next:"Next",
+ rulesT:"Safety rules",rulesS:"Please read these before entering the demonstration fields.",agree:"I accept these safety rules for everyone in my group, and I will supervise the children in my group at all times.",
+ sign:"Sign with your finger",signHere:"Sign here",clear:"Clear",news:"Send me news about future Silage Days (optional)",fix2:"Please tick the box and sign to continue.",done:"Finish",
+ privacy:"We use your details to issue your tickets and for safety on the day. Sample privacy wording – the organisers will replace this with their own notice.",
+ thanks:"Thank you!",showCashier:"Show this code to the cashier to pay. Your tickets will be emailed to you.",finish:"Done",resetIn:"This screen clears in {n} seconds",
+ adultsN:"{n} adult(s)",childrenN:"{n} child(ren)",under5N:"{n} under 5",offline:"Saved on this iPad – it will send when the signal returns.",title:"Gate sign-in"},
+ cy:{detailsT:"Eich manylion",detailsS:"Ar gyfer yr oedolyn sy'n arwain eich grŵp. Byddwn yn e-bostio eich tocynnau.",name:"Eich enw llawn",email:"Cyfeiriad e-bost",mobile:"Rhif ffôn symudol (dewisol – rydym yn ei ysgrifennu ar fandiau arddwrn y plant)",group:"Faint sydd yn eich grŵp?",
+ adults:"Oedolion",children:"Plant (5–15)",under5:"O dan 5 (am ddim)",fix:"Llenwch y blychau sydd wedi'u hamlygu.",back:"Yn ôl",next:"Nesaf",
+ rulesT:"Rheolau diogelwch",rulesS:"Darllenwch y rhain cyn mynd i'r caeau arddangos.",agree:"Rwy'n derbyn y rheolau diogelwch hyn ar ran pawb yn fy ngrŵp, a byddaf yn goruchwylio'r plant yn fy ngrŵp bob amser.",
+ sign:"Llofnodwch gyda'ch bys",signHere:"Llofnodwch yma",clear:"Clirio",news:"Anfonwch newyddion ataf am Ddiwrnodau Silwair yn y dyfodol (dewisol)",fix2:"Ticiwch y blwch a llofnodwch i barhau.",done:"Gorffen",
+ privacy:"Rydym yn defnyddio eich manylion i roi eich tocynnau ac er diogelwch ar y diwrnod. Geiriad preifatrwydd enghreifftiol – bydd y trefnwyr yn rhoi eu hysbysiad eu hunain yn ei le.",
+ thanks:"Diolch!",showCashier:"Dangoswch y cod hwn i'r ariannwr i dalu. Bydd eich tocynnau'n cael eu e-bostio atoch.",finish:"Wedi gorffen",resetIn:"Bydd y sgrin hon yn clirio mewn {n} eiliad",
+ adultsN:"{n} oedolyn",childrenN:"{n} plentyn",under5N:"{n} o dan 5",offline:"Wedi'i gadw ar yr iPad hwn – bydd yn anfon pan ddaw'r signal yn ôl.",title:"Cofrestru wrth y gât"}};
+const RULES={en:["Stay behind the rope lines and barriers at every demonstration field.","Never approach a working machine. Wait until it has stopped and the operator signals it's safe.","Keep children with you and under close supervision at all times.","Dogs must be on a short lead and kept away from demonstration fields.","Watch for moving vehicles on the lanes between fields. Machinery has right of way.","Follow instructions from marshals in hi-vis.","No drones may be flown over the site.","Wear sturdy footwear. Fields can be uneven and wet.","In an emergency, tell any marshal or go to First Aid in the Main Show Field."],
+ cy:["Arhoswch y tu ôl i'r rhaffau a'r rhwystrau ym mhob cae arddangos.","Peidiwch byth â mynd at beiriant sy'n gweithio. Arhoswch nes iddo stopio a'r gweithredwr yn dangos ei bod hi'n ddiogel.","Cadwch blant gyda chi ac o dan oruchwyliaeth agos bob amser.","Rhaid i gŵn fod ar dennyn byr a'u cadw draw o'r caeau arddangos.","Gwyliwch am gerbydau'n symud ar y lonydd rhwng caeau. Mae gan beiriannau'r flaenoriaeth.","Dilynwch gyfarwyddiadau'r stiwardiaid mewn dillad llachar.","Ni chaniateir hedfan dronau dros y safle.","Gwisgwch esgidiau cadarn. Gall y caeau fod yn anwastad ac yn wlyb.","Mewn argyfwng, dywedwch wrth unrhyw stiward neu ewch i'r Cymorth Cyntaf yn y Prif Gae Sioe."]};
+let lang="en",counts={adults:1,children:0,under5:0},hasInk=false,step=0,idle=null,cdT=null;
+const t=(k,v={})=>String(T[lang][k]??k).replace(/\{(\w+)\}/g,(_,x)=>v[x]);
+function applyLang(){document.documentElement.lang=lang;document.querySelectorAll("[data-t]").forEach(el=>el.textContent=t(el.dataset.t));$("#tTitle").textContent=t("title");$("#rules").innerHTML=RULES[lang].map(r=>`<li>${r.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]))}</li>`).join("");renderCounts()}
+function renderCounts(){$("#cnt").innerHTML=["adults","children","under5"].map(k=>`<div><b>${t(k)}</b><div class="n">${counts[k]}</div><button data-dec="${k}" aria-label="−">−</button><button data-inc="${k}" aria-label="+">+</button></div>`).join("")}
+function show(n){step=n;document.querySelectorAll(".screen").forEach((s,i)=>s.classList.toggle("on",i===n));window.scrollTo(0,0);if(n===2)sizeSig();armIdle()}
+/* privacy: wipe everything between visitors */
+function wipe(){["#fName","#fEmail","#fMob"].forEach(s=>{$(s).value="";$(s).classList.remove("bad")});counts={adults:1,children:0,under5:0};$("#cAgree").checked=false;$("#cNews").checked=false;clearSig();document.querySelectorAll(".err").forEach(e=>e.style.display="none");$("#cAgreeL").classList.remove("bad");$("#sigbox").classList.remove("bad");clearInterval(cdT);lang="en";applyLang();show(0)}
+function armIdle(){clearTimeout(idle);if(step>0&&step<3)idle=setTimeout(wipe,90000)}
+["pointerdown","keydown","input"].forEach(ev=>document.addEventListener(ev,armIdle,true));
+document.addEventListener("click",e=>{const l=e.target.closest("[data-lang]");if(l){lang=l.dataset.lang;applyLang();show(1);return}
+ const g=e.target.closest("[data-go]");if(g){show(+g.dataset.go);return}
+ const inc=e.target.closest("[data-inc]");if(inc){counts[inc.dataset.inc]=Math.min(20,counts[inc.dataset.inc]+1);renderCounts();return}
+ const dec=e.target.closest("[data-dec]");if(dec){const k=dec.dataset.dec;counts[k]=Math.max(k==="adults"?1:0,counts[k]-1);renderCounts()}});
+$("#n1").onclick=()=>{let ok=true;const nm=$("#fName").value.trim(),em=$("#fEmail").value.trim();$("#fName").classList.toggle("bad",nm.length<2);$("#fEmail").classList.toggle("bad",!/^\S+@\S+\.\S+$/.test(em));if(nm.length<2||!/^\S+@\S+\.\S+$/.test(em))ok=false;$("#e1").style.display=ok?"none":"block";if(ok)show(2)};
+/* signature pad */
+const cv=$("#sig"),ctx=cv.getContext("2d");let drawing=false,last=null;
+function sizeSig(){const r=cv.getBoundingClientRect(),d=window.devicePixelRatio||1;if(!r.width)return;const img=hasInk?cv.toDataURL():null;cv.width=r.width*d;cv.height=r.height*d;ctx.setTransform(d,0,0,d,0,0);ctx.lineWidth=2.6;ctx.lineCap="round";ctx.lineJoin="round";ctx.strokeStyle="#1b2419";if(img){const i=new Image();i.onload=()=>ctx.drawImage(i,0,0,r.width,r.height);i.src=img}}
+function clearSig(){ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,cv.width,cv.height);hasInk=false;sizeSig();$(".sigbox .ph").style.display=""}
+const pos=e=>{const r=cv.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top}};
+cv.addEventListener("pointerdown",e=>{drawing=true;last=pos(e);try{cv.setPointerCapture(e.pointerId)}catch(x){}});
+cv.addEventListener("pointermove",e=>{if(!drawing)return;const p=pos(e);ctx.beginPath();ctx.moveTo(last.x,last.y);ctx.lineTo(p.x,p.y);ctx.stroke();last=p;if(!hasInk){hasInk=true;$(".sigbox .ph").style.display="none";$("#sigbox").classList.remove("bad")}});
+["pointerup","pointercancel","pointerleave"].forEach(ev=>cv.addEventListener(ev,()=>drawing=false));
+$("#sigClear").onclick=e=>{e.stopPropagation();clearSig()};
+window.addEventListener("resize",sizeSig);
+/* submit */
+$("#n2").onclick=()=>{const ag=$("#cAgree").checked;$("#cAgreeL").classList.toggle("bad",!ag);$("#sigbox").classList.toggle("bad",!hasInk);if(!ag||!hasInk){$("#e2").style.display="block";return}$("#e2").style.display="none";
+ const g=store.get("psd_gate",{seq:0,signins:[]});g.seq=(g.seq||0)+1;const code="G-"+String(g.seq).padStart(3,"0");
+ // small signature image to keep storage light
+ const sc=document.createElement("canvas");sc.width=360;sc.height=110;const sx=sc.getContext("2d");sx.fillStyle="#fff";sx.fillRect(0,0,360,110);sx.drawImage(cv,0,0,360,110);
+ g.signins.unshift({code,lang,name:$("#fName").value.trim(),email:$("#fEmail").value.trim(),mobile:$("#fMob").value.trim(),adults:counts.adults,children:counts.children,under5:counts.under5,newsOptIn:$("#cNews").checked,signature:sc.toDataURL("image/jpeg",.6),signedAt:new Date().toLocaleString("en-GB"),status:"waiting",pay:null,tickets:[]});
+ if(g.signins.length>400)g.signins.length=400;
+ const saved=store.set("psd_gate",g);
+ $("#code").textContent=code;
+ $("#sum").textContent=[counts.adults?t("adultsN",{n:counts.adults}):"",counts.children?t("childrenN",{n:counts.children}):"",counts.under5?t("under5N",{n:counts.under5}):""].filter(Boolean).join(" · ");
+ $("#tStatus").textContent=navigator.onLine===false||!saved?t("offline"):"";
+ show(3);let n=30;$("#cd").textContent=t("resetIn",{n});clearInterval(cdT);cdT=setInterval(()=>{n--;$("#cd").textContent=t("resetIn",{n});if(n<=0)wipe()},1000);
+ // clear personal details from the form immediately – the code screen shows no name or email
+ ["#fName","#fEmail","#fMob"].forEach(s=>$(s).value="");clearSig()};
+$("#finish").onclick=wipe;
+["#fName","#fEmail"].forEach(x=>$(x).addEventListener("input",()=>{$(x).classList.remove("bad");if(!document.querySelector("#s1 .fi.bad"))$("#e1").style.display="none"}));
+$("#cAgree").addEventListener("change",()=>{$("#cAgreeL").classList.toggle("bad",!$("#cAgree").checked&&$("#e2").style.display==="block")});
+applyLang();
+</script>
+</body>
+</html>
