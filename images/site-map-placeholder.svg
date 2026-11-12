@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600" font-family="Arial, sans-serif">
+  <!--
+    site-map-placeholder.svg — a stand-in drawing until the real map is ready.
+    SVG is a picture written as text: each shape below (rect, text) is drawn
+    at x/y coordinates on an 800 × 600 grid. Replace this file with the real map later.
+  -->
+  <title>Placeholder site map</title>
+
+  <!-- Field background -->
+  <rect width="800" height="600" fill="#e8f3ea"/>
+
+  <!-- Demonstration field -->
+  <rect x="40" y="40" width="460" height="330" rx="12" fill="#c9e3c4" stroke="#0b4d1c" stroke-width="4"/>
+  <text x="270" y="200" text-anchor="middle" font-size="34" font-weight="bold" fill="#0b4d1c">Demonstration field</text>
+  <text x="270" y="240" text-anchor="middle" font-size="22" fill="#0b4d1c">No public entry</text>
+
+  <!-- Barrier / viewing line -->
+  <line x1="40" y1="395" x2="500" y2="395" stroke="#111" stroke-width="6" stroke-dasharray="18 10"/>
+  <rect x="40" y="410" width="460" height="60" rx="8" fill="#ffffff" stroke="#111" stroke-width="3"/>
+  <text x="270" y="449" text-anchor="middle" font-size="24" font-weight="bold" fill="#111">Viewing area</text>
+
+  <!-- Food -->
+  <rect x="530" y="40" width="230" height="140" rx="12" fill="#ffd200" stroke="#111" stroke-width="3"/>
+  <text x="645" y="120" text-anchor="middle" font-size="26" font-weight="bold" fill="#111">Food &amp; drink</text>
+
+  <!-- First aid -->
+  <rect x="530" y="200" width="230" height="80" rx="12" fill="#b00020"/>
+  <text x="645" y="250" text-anchor="middle" font-size="24" font-weight="bold" fill="#fff">+ First aid</text>
+
+  <!-- Toilets -->
+  <rect x="530" y="300" width="230" height="70" rx="12" fill="#ffffff" stroke="#111" stroke-width="3"/>
+  <text x="645" y="344" text-anchor="middle" font-size="24" font-weight="bold" fill="#111">Toilets</text>
+
+  <!-- Car park -->
+  <rect x="530" y="390" width="230" height="170" rx="12" fill="#ffffff" stroke="#0b4d1c" stroke-width="4"/>
+  <text x="645" y="470" text-anchor="middle" font-size="30" font-weight="bold" fill="#0b4d1c">P</text>
+  <text x="645" y="505" text-anchor="middle" font-size="24" font-weight="bold" fill="#0b4d1c">Car park</text>
+
+  <!-- Entrance -->
+  <text x="645" y="590" text-anchor="middle" font-size="20" font-weight="bold" fill="#111">▲ Entrance</text>
+
+  <!-- Placeholder banner -->
+  <rect x="40" y="500" width="460" height="70" rx="8" fill="#111"/>
+  <text x="270" y="545" text-anchor="middle" font-size="26" font-weight="bold" fill="#ffd200">PLACEHOLDER – not to scale</text>
+</svg>

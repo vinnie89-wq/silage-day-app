@@ -1,0 +1,405 @@
+/*
+  style.css — controls how the page LOOKS (colours, sizes, spacing, layout).
+
+  The HTML file says WHAT is on the page; this file says HOW it should look.
+
+  Design goals for reading outdoors on a phone:
+    - Big text (the base size is 20px, larger than the usual 16px).
+    - Very high contrast: near-black text on white, white text on dark green.
+    - Bold yellow only for safety warnings, with black text on top.
+    - Big tap targets (at least 48px tall) for cold or gloved fingers.
+*/
+
+/* ---------- 1. Colour "variables" ----------
+   Defining colours once here means you can change the whole colour scheme
+   by editing just these lines. Use them elsewhere with var(--name). */
+:root {
+  --green-dark: #0b4d1c;   /* header, nav bar, headings */
+  --green-light: #e8f3ea;  /* soft background for info boxes */
+  --yellow: #ffd200;       /* safety / warning highlight */
+  --ink: #111111;          /* main text colour (almost black) */
+  --paper: #ffffff;        /* page background */
+  --grey-line: #767676;    /* borders (still dark enough to see in sunshine) */
+  --red: #b00020;          /* emergency */
+
+  --nav-height: 72px;      /* height of the bottom navigation bar */
+}
+
+/* ---------- 2. Basic reset & page defaults ---------- */
+
+/* Make width/height include padding and borders — much easier to reason about. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 20px;          /* 1rem = 20px everywhere below */
+  scroll-behavior: smooth;  /* gentle scrolling when tapping nav links */
+  /* When jumping to a section, leave a little gap at the top. */
+  scroll-padding-top: 12px;
+}
+
+/* Respect people who have asked their phone to reduce motion. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  margin: 0;
+  /* "system-ui" uses the phone's own font, which is clear and loads instantly. */
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  line-height: 1.5;
+  color: var(--ink);
+  background: var(--paper);
+  /* Leave room at the bottom so the fixed nav bar never hides content.
+     env(safe-area-inset-bottom) adds extra room on iPhones with a home bar. */
+  padding-bottom: calc(var(--nav-height) + env(safe-area-inset-bottom));
+}
+
+img {
+  max-width: 100%;  /* images never spill off the side of the screen */
+  height: auto;
+  display: block;
+}
+
+h1, h2, h3 {
+  line-height: 1.2;
+  margin: 0 0 0.6em;
+}
+
+h2 {
+  font-size: 1.75rem;
+  color: var(--green-dark);
+  border-bottom: 4px solid var(--green-dark);
+  padding-bottom: 0.25em;
+}
+
+h3 {
+  font-size: 1.3rem;
+  margin-top: 1.4em;
+}
+
+p {
+  margin: 0 0 1em;
+}
+
+a {
+  color: var(--green-dark);
+  font-weight: 700;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+/* A thick, obvious outline when using a keyboard to move around. */
+a:focus-visible,
+button:focus-visible {
+  outline: 4px solid var(--ink);
+  outline-offset: 3px;
+}
+
+/* ---------- 3. Skip link (hidden until focused) ---------- */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+}
+.skip-link:focus {
+  left: 12px;
+  top: 12px;
+  z-index: 100;
+  background: var(--yellow);
+  color: var(--ink);
+  padding: 0.5em 1em;
+}
+
+/* ---------- 4. Header ---------- */
+.site-header {
+  background: var(--green-dark);
+  color: var(--paper);
+  padding: 1.5rem 1rem 1.25rem;
+  text-align: center;
+}
+
+.site-header h1 {
+  font-size: 2rem;
+  margin-bottom: 0.3em;
+}
+
+.header-kicker {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-bottom: 0.4em;
+}
+
+.header-date {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 0.1em;
+}
+
+.header-place {
+  margin-bottom: 0.6em;
+}
+
+/* The countdown "pill" filled in by JavaScript. */
+.countdown {
+  display: inline-block;
+  background: var(--yellow);
+  color: var(--ink);
+  font-weight: 800;
+  padding: 0.25em 0.8em;
+  border-radius: 999px;
+  margin: 0;
+}
+/* Hide the pill while it's still empty (e.g. if JavaScript is switched off). */
+.countdown:empty {
+  display: none;
+}
+
+/* ---------- 5. Sections ---------- */
+main {
+  max-width: 40rem;   /* stops lines getting too long on tablets/computers */
+  margin: 0 auto;
+}
+
+.section {
+  padding: 1.75rem 1rem;
+  border-bottom: 1px solid var(--grey-line);
+}
+
+.lead {
+  font-size: 1.1rem;
+}
+
+/* Grey-boxed notes such as "Placeholder times". */
+.notice {
+  background: var(--green-light);
+  border-left: 6px solid var(--green-dark);
+  padding: 0.75em 1em;
+}
+
+/* Marks text that still needs real details. Easy to search for later: "placeholder". */
+.placeholder {
+  font-style: italic;
+  font-weight: 400;
+  color: #444444;
+}
+
+/* Lists with a little more breathing room between items. */
+.big-list {
+  padding-left: 1.2em;
+}
+.big-list li {
+  margin-bottom: 0.5em;
+}
+
+/* ---------- 6. Key facts boxes ---------- */
+.facts {
+  margin: 0 0 1em;
+}
+
+.fact {
+  background: var(--green-light);
+  border-radius: 8px;
+  padding: 0.75em 1em;
+  margin-bottom: 0.6em;
+}
+
+.fact dt,
+.fact-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--green-dark);
+  margin: 0;
+}
+
+.fact dd,
+.fact-value {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.fact-highlight {
+  border: 3px solid var(--green-dark);
+  margin-bottom: 1.25em;
+}
+
+/* ---------- 7. Timetable ---------- */
+.timetable {
+  list-style: none;  /* remove the 1. 2. 3. numbers — the times do that job */
+  padding: 0;
+  margin: 0;
+}
+
+.timetable li {
+  display: flex;      /* puts the time and the description side by side */
+  gap: 1rem;
+  align-items: baseline;
+  padding: 0.8em 0;
+  border-bottom: 2px solid var(--green-light);
+}
+
+.timetable .time {
+  flex: 0 0 4.2rem;   /* fixed-width column so all the times line up */
+  font-weight: 800;
+  font-size: 1.2rem;
+  color: var(--green-dark);
+  font-variant-numeric: tabular-nums;  /* digits all the same width */
+}
+
+.timetable .what {
+  font-size: 1.1rem;
+}
+
+/* ---------- 8. Safety section ---------- */
+.section-safety {
+  background: #fffbe0;  /* very pale yellow so the section stands out */
+}
+
+.section-safety h2 {
+  color: var(--ink);
+  border-bottom-color: var(--yellow);
+  border-bottom-width: 8px;
+}
+
+.rules {
+  padding-left: 0;
+  list-style: none;
+  counter-reset: rule;  /* our own big numbers, see ::before below */
+}
+
+.rules li {
+  counter-increment: rule;
+  position: relative;
+  padding: 0.75em 0.75em 0.75em 3.4em;
+  margin-bottom: 0.6em;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+}
+
+/* Draws a big black-on-yellow number in front of each rule. */
+.rules li::before {
+  content: counter(rule);
+  position: absolute;
+  left: 0.6em;
+  top: 0.6em;
+  width: 2em;
+  height: 2em;
+  line-height: 2em;
+  text-align: center;
+  font-weight: 800;
+  background: var(--yellow);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+}
+
+.emergency {
+  margin-top: 1.5em;
+  background: var(--red);
+  color: var(--paper);
+  padding: 1em;
+  border-radius: 8px;
+}
+
+.emergency h3 {
+  margin-top: 0;
+}
+
+.emergency p:last-child {
+  margin-bottom: 0;
+}
+
+.call-link {
+  display: inline-block;
+  background: var(--paper);
+  color: var(--red);
+  font-size: 1.4rem;
+  font-weight: 800;
+  padding: 0.1em 0.6em;
+  border-radius: 6px;
+  text-decoration: none;
+}
+
+/* ---------- 9. Site map ---------- */
+.site-map {
+  margin: 0 0 1em;
+}
+
+.site-map img {
+  border: 3px solid var(--green-dark);
+  border-radius: 8px;
+}
+
+.site-map figcaption {
+  font-size: 0.9rem;
+  margin-top: 0.4em;
+}
+
+/* ---------- 10. Big button ---------- */
+.button {
+  display: block;
+  text-align: center;
+  background: var(--green-dark);
+  color: var(--paper);
+  text-decoration: none;
+  font-size: 1.15rem;
+  padding: 0.9em 1em;
+  border-radius: 10px;
+  margin-top: 1.5em;
+  min-height: 48px;
+}
+
+/* ---------- 11. Footer ---------- */
+.site-footer {
+  text-align: center;
+  padding: 1.5rem 1rem;
+  font-size: 0.9rem;
+}
+
+/* ---------- 12. Bottom navigation bar ---------- */
+.bottom-nav {
+  position: fixed;    /* stays put while the page scrolls underneath */
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+  display: flex;      /* lays the five links out in a row */
+  background: var(--green-dark);
+  border-top: 3px solid var(--yellow);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.bottom-nav a {
+  flex: 1;            /* each link takes an equal share of the width */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--nav-height);
+  color: var(--paper);
+  text-decoration: none;
+  font-size: 0.8rem;
+}
+
+.nav-icon {
+  font-size: 1.4rem;
+  line-height: 1;
+  margin-bottom: 0.15em;
+}
+
+/* The link for the section you're currently looking at.
+   The "is-active" class is added by js/main.js. */
+.bottom-nav a.is-active {
+  background: var(--yellow);
+  color: var(--ink);
+}
