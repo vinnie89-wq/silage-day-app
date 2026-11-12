@@ -206,7 +206,6 @@ select.fi{padding:9px 8px}
     <section class="view" id="v-ticket"></section>
   </main>
   <div class="cyflag" id="cyflag"></div>
-  <div class="cyflag"><a href="ops.html" style="color:var(--green);font-weight:700">Prototype: open the operations app (organisers, exhibitors, drivers, staff) →</a></div>
   <nav><div class="in" id="nav"></div></nav>
 </div>
 <div class="scrim" id="scrim"></div>
@@ -425,7 +424,7 @@ R.news=()=>{const today=new Date();today.setHours(0,0,0,0);const days=Math.round
  ${P3.news.filter(n=>n.status==="published").sort((a,b)=>b.date.localeCompare(a.date)).map(n=>{const c=lang==="cy"&&n.cy.t?n.cy:n.en;const y=ytId(n.yt);let d="";try{d=new Date(n.date+"T12:00").toLocaleDateString(lang==="cy"?"cy-GB":"en-GB",{day:"numeric",month:"long",year:"numeric"})}catch(e){d=n.date}
   return`<article class="post">${n.video&&/^news\/[\w.-]+$/.test(n.video)?`<video controls playsinline preload="metadata"${LOCAL_IMG(n.img)?` poster="${n.img}"`:""} src="${n.video}"></video>`:LOCAL_IMG(n.img)?`<img src="${n.img}" alt="">`:""}<div class="pb"><div class="pd">${esc(d)}</div><h3>${esc(c.t)}</h3><p>${esc(c.b)}</p>${y?`<a class="btn alt" href="https://youtu.be/${y}" target="_blank" rel="noopener">▶ ${t("watch")}</a>`:""}</div></article>`}).join("")}
  <div class="card"><h3>${t("expect")}</h3>${EXPECT[lang||"en"].map(([i,h,x])=>`<div class="expect"><div class="n">${i}</div><div><b>${esc(h)}</b>${esc(x)}</div></div>`).join("")}</div>
- <div class="card"><h3>🚜 ${t("exQ")}</h3><div>${t("exTxt")}</div><button class="btn" data-act="exApply">${t("exBtn")}</button><a href="ops.html" style="display:block;text-align:center;margin-top:8px;font-size:14px;color:var(--green);font-weight:600">${t("exIn")} →</a></div>
+ <div class="card"><h3>🚜 ${t("exQ")}</h3><div>${t("exTxt")}</div><button class="btn" data-act="exApply">${t("exBtn")}</button></div>
  <div class="pad" style="padding-bottom:6px"><div class="sec">${t("sponsors")}</div></div>
  <div class="sgrid">${SPONSORS.map((s,i)=>`<button class="scard" data-act="sponsor" data-i="${i}"><div class="slogo" style="background:${s.bg==="#000"?"#000":"#fff"}"><img src="${LOCAL_IMG(s.logo)?s.logo:""}" alt="${esc(s.n)}"></div><b>${esc(s.n)}</b></button>`).join("")}</div>
  <div class="card"><h3>${t("sponsorQ")}</h3><div>${t("sponsorTxt")}</div><button class="btn" data-act="spInterest">${t("sponsorBtn")}</button><div style="font-size:12.5px;color:var(--muted);margin-top:6px">pembs.silage.day@gmail.com · 07974 947764</div></div>`;
@@ -512,7 +511,7 @@ function regTicket(reg,m,shared){
 R.ticket=()=>{
  const lost=`<button class="lostbtn" data-act="lost"><span>🧒</span>${t("lostBtn")}</button>`;
  const info=`<div class="card"><h3>${t("getting")}</h3><div>${t("gettingTxt")}</div><a class="btn" href="https://www.google.com/maps/search/?api=1&query=SA61+2UX" target="_blank" rel="noopener">${t("openMaps")}</a></div>`;
- const proto=`<div class="pad" style="padding-top:0"><a class="btn alt" href="ops.html" style="font-size:12.5px">🧪 ${t("rTestGate")}</a></div>`;
+ const proto="";
  const rc=recipCode();
  if(rc){const f=memberById(rc);
   $("#v-ticket").innerHTML=`<div class="pad" style="padding-bottom:6px"><div class="sec">${t("yourTicket")}</div>${f?`<div style="font-size:14px;color:var(--muted)">${t("sharedBy",{name:esc(f.reg.name)})}</div>`:""}</div>

@@ -1,4 +1,4 @@
-/* Shared data for the Silage Day prototype – used by the visitor app (index.html) and the operations app (ops.html).
+/* Shared data for the Silage Day prototype – used by the visitor app (index.html).
    Needs a global parseTime("HH:MM") defined by the page. */
 const TYPES=[
  ["Tractor","power"],["Self-propelled forage harvester","self"],["Self-propelled mower","self"],["Loader / telehandler","self"],
