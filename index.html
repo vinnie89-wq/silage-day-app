@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<!--
+  index.html — the main (and only) page of the visitor app.
+
+  GitHub Pages automatically shows a file called "index.html" when someone
+  visits your site's address, so this file name matters.
+
+  The page is split into five <section> blocks, one for each part of the app.
+  Each section has an "id" (like id="timetable"). The navigation links at the
+  bottom of the screen point to those ids (href="#timetable"), so tapping a
+  link scrolls straight to that section. No JavaScript is needed for that.
+-->
+<html lang="en-GB">
+<head>
+  <!-- Tells the browser which characters the page uses (UTF-8 covers everything, including Welsh accents like ŵ and ŷ). -->
+  <meta charset="UTF-8">
+
+  <!-- Essential for phones: makes the page fit the screen width instead of showing a tiny zoomed-out desktop page. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+  <!-- The text shown in the browser tab and in search results. -->
+  <title>Pembrokeshire Silage Day 2027 – Visitor Guide</title>
+
+  <!-- A short summary used by search engines and when the link is shared. -->
+  <meta name="description" content="Visitor guide for Pembrokeshire Silage Day, a charity silage machinery demonstration near Haverfordwest on Saturday 11 September 2027.">
+
+  <!-- Colours the phone's browser bar to match the green header. -->
+  <meta name="theme-color" content="#0b4d1c">
+
+  <!-- Link to our stylesheet. The path is "relative" (no leading slash) so it works on GitHub Pages. -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- "Skip link": hidden until a keyboard user presses Tab. Lets screen-reader and keyboard users jump past the header. -->
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ===================== HEADER ===================== -->
+  <header class="site-header">
+    <p class="header-kicker">Charity machinery demonstration</p>
+    <h1>Pembrokeshire Silage Day</h1>
+    <p class="header-date">
+      <!-- <time> tells computers the exact date, while people see the friendly version. -->
+      <time datetime="2027-09-11">Saturday 11 September 2027</time>
+    </p>
+    <p class="header-place">Near Haverfordwest</p>
+    <!-- This empty paragraph gets filled in by js/main.js with "X days to go". -->
+    <p class="countdown" id="countdown" aria-live="polite"></p>
+  </header>
+
+  <!-- ===================== MAIN CONTENT ===================== -->
+  <main id="main">
+
+    <!-- ---------- 1. EVENT INFO ---------- -->
+    <section id="info" class="section" aria-labelledby="info-title">
+      <h2 id="info-title">Event info</h2>
+
+      <p class="lead">
+        A day out on the farm watching modern silage machinery at work in the
+        field — mowing, raking, harvesting, carting and clamping — all in aid
+        of charity.
+      </p>
+
+      <!-- A "definition list" (<dl>) is good for label + value pairs like these. -->
+      <dl class="facts">
+        <div class="fact">
+          <dt>Date</dt>
+          <dd>Saturday 11 September 2027</dd>
+        </div>
+        <div class="fact">
+          <dt>Gates open</dt>
+          <dd>9:00am <span class="placeholder">(to be confirmed)</span></dd>
+        </div>
+        <div class="fact">
+          <dt>Location</dt>
+          <dd>Farm near Haverfordwest, Pembrokeshire <span class="placeholder">(exact address to follow)</span></dd>
+        </div>
+        <div class="fact">
+          <dt>Entry</dt>
+          <dd>£X per car <span class="placeholder">(price to be confirmed)</span></dd>
+        </div>
+        <div class="fact">
+          <dt>In aid of</dt>
+          <dd><span class="placeholder">[Charity name]</span></dd>
+        </div>
+      </dl>
+
+      <h3>On the day</h3>
+      <ul class="big-list">
+        <li>Live silage demonstrations in the field</li>
+        <li>Machinery on display to look at up close (when parked and switched off)</li>
+        <li>Food and drink stalls</li>
+        <li>Toilets and first aid on site</li>
+      </ul>
+    </section>
+
+    <!-- ---------- 2. TIMETABLE ---------- -->
+    <section id="timetable" class="section" aria-labelledby="timetable-title">
+      <h2 id="timetable-title">Timetable</h2>
+      <p class="notice">
+        <strong>Placeholder times.</strong> The final timetable will be
+        published closer to the day. Times may change with the weather.
+      </p>
+
+      <!-- An ordered list (<ol>) because the events happen in order. -->
+      <ol class="timetable">
+        <li>
+          <span class="time">9:00</span>
+          <span class="what">Gates open &amp; parking</span>
+        </li>
+        <li>
+          <span class="time">10:00</span>
+          <span class="what">Welcome &amp; safety briefing</span>
+        </li>
+        <li>
+          <span class="time">10:30</span>
+          <span class="what">Mowing demonstration</span>
+        </li>
+        <li>
+          <span class="time">11:30</span>
+          <span class="what">Tedding &amp; raking</span>
+        </li>
+        <li>
+          <span class="time">12:30</span>
+          <span class="what">Lunch break — food stalls open</span>
+        </li>
+        <li>
+          <span class="time">13:30</span>
+          <span class="what">Forage harvesters in action</span>
+        </li>
+        <li>
+          <span class="time">14:30</span>
+          <span class="what">Carting &amp; clamping</span>
+        </li>
+        <li>
+          <span class="time">15:30</span>
+          <span class="what">Charity raffle &amp; thank-yous</span>
+        </li>
+        <li>
+          <span class="time">16:30</span>
+          <span class="what">Event closes</span>
+        </li>
+      </ol>
+    </section>
+
+    <!-- ---------- 3. SAFETY ---------- -->
+    <section id="safety" class="section section-safety" aria-labelledby="safety-title">
+      <h2 id="safety-title">Safety rules</h2>
+      <p class="lead">
+        This is a working farm with large, fast-moving machines.
+        Please follow these rules at all times.
+      </p>
+
+      <ol class="rules">
+        <li><strong>Stay behind the barriers</strong> and in public areas. Never enter the working field.</li>
+        <li><strong>Keep children close</strong> and hold their hands near machinery.</li>
+        <li><strong>Never approach a moving machine.</strong> Drivers may not be able to see you.</li>
+        <li><strong>Do what the marshals say.</strong> They wear high-visibility vests.</li>
+        <li><strong>Dogs must be on a short lead</strong> <span class="placeholder">(policy to be confirmed)</span>.</li>
+        <li><strong>Do not climb on machinery</strong> unless a marshal says it is safe.</li>
+        <li><strong>Wear sturdy footwear.</strong> Ground can be uneven and muddy.</li>
+        <li><strong>Wash your hands</strong> before eating, especially after touching machinery or animals.</li>
+      </ol>
+
+      <div class="emergency">
+        <h3>In an emergency</h3>
+        <p>Find the nearest marshal or go to the <strong>first aid point</strong> (shown on the site map).</p>
+        <!-- "tel:" links open the phone's dialler when tapped. -->
+        <p>If someone is seriously hurt, call <a class="call-link" href="tel:999">999</a></p>
+      </div>
+    </section>
+
+    <!-- ---------- 4. SITE MAP ---------- -->
+    <section id="map" class="section" aria-labelledby="map-title">
+      <h2 id="map-title">Site map</h2>
+      <p class="notice">
+        <strong>Placeholder map.</strong> The real site map will be added
+        once the layout is finalised.
+      </p>
+
+      <!-- <figure> groups an image with its caption. -->
+      <figure class="site-map">
+        <!--
+          "alt" text describes the image for people who can't see it.
+          Tapping the image opens it full size so visitors can pinch to zoom.
+          When you have the real map, save it in the images folder and change
+          both the href and src below to point to the new file.
+        -->
+        <a href="images/site-map-placeholder.svg">
+          <img src="images/site-map-placeholder.svg"
+               alt="Placeholder site map showing the entrance, car park, demonstration field, food stalls, toilets and first aid point."
+               width="800" height="600">
+        </a>
+        <figcaption>Tap the map to open it full size and zoom in.</figcaption>
+      </figure>
+
+      <h3>Key places</h3>
+      <ul class="big-list">
+        <li><strong>Entrance &amp; car park</strong> — follow the signs and the marshals</li>
+        <li><strong>Viewing area</strong> — behind the barriers beside the field</li>
+        <li><strong>Food &amp; drink</strong> — next to the viewing area</li>
+        <li><strong>Toilets</strong> — near the car park</li>
+        <li><strong>First aid</strong> — beside the information point</li>
+      </ul>
+    </section>
+
+    <!-- ---------- 5. GETTING HERE ---------- -->
+    <section id="travel" class="section" aria-labelledby="travel-title">
+      <h2 id="travel-title">Getting here</h2>
+
+      <div class="fact fact-highlight">
+        <p class="fact-label">Postcode for sat nav</p>
+        <p class="fact-value"><span class="placeholder">SA00 0XX (to be confirmed)</span></p>
+      </div>
+
+      <h3>By car</h3>
+      <p>
+        The event is a short drive from Haverfordwest. Follow the yellow
+        <strong>“Silage Day”</strong> event signs from the main road
+        <span class="placeholder">(directions to be confirmed)</span>.
+      </p>
+      <p>Free parking in a field on site. Marshals will direct you.</p>
+
+      <h3>By train or bus</h3>
+      <p>
+        The nearest railway station is Haverfordwest.
+        <span class="placeholder">Details of any shuttle bus or taxi options to be confirmed.</span>
+      </p>
+
+      <h3>Accessibility</h3>
+      <p>
+        The site is a grass field and can be uneven or muddy.
+        <span class="placeholder">Details of accessible parking and viewing to be confirmed.</span>
+      </p>
+
+      <!--
+        This button opens the location in the phone's map app.
+        Replace "Haverfordwest" in the link with the real postcode once you have it,
+        e.g. https://www.google.com/maps/search/?api=1&query=SA61+1AA
+      -->
+      <a class="button" href="https://www.google.com/maps/search/?api=1&amp;query=Haverfordwest" target="_blank" rel="noopener">
+        Open in maps
+      </a>
+    </section>
+
+  </main>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="site-footer">
+    <p>Pembrokeshire Silage Day 2027 · A charity event</p>
+    <p>Questions? <span class="placeholder">[contact email or phone]</span></p>
+    <!-- Extra space so the bottom navigation bar doesn't cover the footer text. -->
+  </footer>
+
+  <!-- ===================== BOTTOM NAVIGATION ===================== -->
+  <!--
+    This bar stays fixed at the bottom of the screen, like the tab bar in a
+    phone app, so it's always within easy reach of your thumb.
+    The "aria-label" names it for screen readers.
+  -->
+  <nav class="bottom-nav" aria-label="Sections">
+    <a href="#info">
+      <span class="nav-icon" aria-hidden="true">ℹ️</span>
+      <span class="nav-label">Info</span>
+    </a>
+    <a href="#timetable">
+      <span class="nav-icon" aria-hidden="true">🕘</span>
+      <span class="nav-label">Times</span>
+    </a>
+    <a href="#safety">
+      <span class="nav-icon" aria-hidden="true">⚠️</span>
+      <span class="nav-label">Safety</span>
+    </a>
+    <a href="#map">
+      <span class="nav-icon" aria-hidden="true">🗺️</span>
+      <span class="nav-label">Map</span>
+    </a>
+    <a href="#travel">
+      <span class="nav-icon" aria-hidden="true">🚗</span>
+      <span class="nav-label">Travel</span>
+    </a>
+  </nav>
+
+  <!-- Load our JavaScript last, so the page content appears first. -->
+  <script src="js/main.js"></script>
+</body>
+</html>
