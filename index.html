@@ -1,287 +1,713 @@
 <!DOCTYPE html>
-<!--
-  index.html — the main (and only) page of the visitor app.
-
-  GitHub Pages automatically shows a file called "index.html" when someone
-  visits your site's address, so this file name matters.
-
-  The page is split into five <section> blocks, one for each part of the app.
-  Each section has an "id" (like id="timetable"). The navigation links at the
-  bottom of the screen point to those ids (href="#timetable"), so tapping a
-  link scrolls straight to that section. No JavaScript is needed for that.
--->
-<html lang="en-GB">
+<html lang="en">
 <head>
-  <!-- Tells the browser which characters the page uses (UTF-8 covers everything, including Welsh accents like ŵ and ŷ). -->
-  <meta charset="UTF-8">
-
-  <!-- Essential for phones: makes the page fit the screen width instead of showing a tiny zoomed-out desktop page. -->
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-
-  <!-- The text shown in the browser tab and in search results. -->
-  <title>Pembrokeshire Silage Day 2027 – Visitor Guide</title>
-
-  <!-- A short summary used by search engines and when the link is shared. -->
-  <meta name="description" content="Visitor guide for Pembrokeshire Silage Day, a charity silage machinery demonstration near Haverfordwest on Saturday 11 September 2027.">
-
-  <!-- Colours the phone's browser bar to match the green header. -->
-  <meta name="theme-color" content="#0b4d1c">
-
-  <!-- Link to our stylesheet. The path is "relative" (no leading slash) so it works on GitHub Pages. -->
-  <link rel="stylesheet" href="css/style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pembrokeshire Silage Day 2027</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700;800&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="shared.js"></script>
+<style>
+:root{--green:#2c4a1c;--green2:#3f6b25;--grass:#7fa83a;--light:#f1edd8;--paper:#fbf8ee;--brown:#3a2614;--cream:#f6efcf;--ink:#2a1e12;--muted:#6b6250;--line:#e2dcc4;--yellow:#f5c518;--red:#c8202a;--amber:#e08a00;--live:#19a34a;--loud:#d9480f;--quiet:#2a6fb0;--fs:16px;--font:Barlow,system-ui,sans-serif;--head:"Barlow Condensed",Barlow,sans-serif}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font);font-size:var(--fs)}
+h1,h2,h3,.cond{font-family:var(--head)}
+button{font:inherit;cursor:pointer}
+/* calm + easy-read */
+body.calm{--red:#a5524f;--amber:#b98a3e;--live:#4f8a5f;--yellow:#e8d48a;--loud:#a8674a}
+body.calm *,body.calm *::before,body.calm *::after{animation:none!important;transition:none!important}
+body.easy{--fs:18px;--font:"Atkinson Hyperlegible",Verdana,sans-serif;--head:"Atkinson Hyperlegible",Verdana,sans-serif;letter-spacing:.02em;line-height:1.55}
+body.easy h2,body.easy h3,body.easy .sec{letter-spacing:0}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+.app{max-width:560px;margin:0 auto;min-height:100vh;background:var(--paper);padding-bottom:84px}
+header{background:var(--cream);border-bottom:3px solid var(--brown);padding:8px 12px 10px;position:sticky;top:0;z-index:20}
+.hrow{display:flex;align-items:center;gap:10px}
+.hlogo{height:58px}
+.hdate{font:700 13px var(--head);color:var(--green);text-transform:uppercase;letter-spacing:.4px;line-height:1.25}
+.hdate span{color:var(--brown)}
+.hbtns{margin-left:auto;display:flex;flex-direction:column;gap:5px;align-items:flex-end}
+.hb{border:0;border-radius:8px;padding:5px 9px;font-weight:700;font-size:12.5px;background:var(--green);color:var(--cream);white-space:nowrap}
+.hb.alt{background:#fff;color:var(--green);border:1px solid var(--line)}
+.hb.on{background:var(--quiet);color:#fff}
+.proto{display:flex;align-items:center;gap:8px;margin-top:7px;background:var(--green);color:var(--cream);border-radius:9px;padding:5px 10px;font-size:11.5px}
+.proto b{font:700 17px var(--head);min-width:42px}
+.proto input{flex:1;accent-color:var(--yellow)}
+.banner{background:var(--yellow);color:#2a2400;padding:8px 14px;font-weight:600;font-size:14px}
+main{padding:0}
+.view{display:none}.view.on{display:block}
+.pad{padding:12px 16px}
+.sec{font:700 23px var(--head);margin:4px 0 10px}
+.note{font-size:12.5px;color:var(--muted);background:var(--light);border-radius:8px;padding:8px 10px;margin:10px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;margin:0 16px 14px}
+.card h3{margin:0 0 8px;font-size:21px;color:var(--green)}
+.btn{display:block;width:100%;border:0;border-radius:10px;background:var(--green);color:#fff;font-weight:700;padding:12px;font-size:15px;margin-top:10px;text-align:center;text-decoration:none}
+.btn.alt{background:var(--light);color:var(--green)}
+.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:5px 11px;font-size:13px;font-weight:600;color:var(--ink);white-space:nowrap}
+.chip.on{background:var(--green);color:#fff;border-color:var(--green)}
+.chips{display:flex;gap:7px;overflow-x:auto;padding:0 16px 10px}
+.chips::-webkit-scrollbar{display:none}
+.pill{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;text-transform:uppercase;letter-spacing:.3px}
+.p-live{background:#dcf5e3;color:#11713a}.p-soon{background:#fff0d6;color:#8a5300}.p-next{background:var(--light);color:var(--muted)}.p-done{background:#eee;color:#777}.p-bad{background:#fde2e2;color:#a01919}.p-loud{background:#fde7dc;color:#9a3a10}.p-quiet{background:#e3eefa;color:#1d5590}
+.prog{height:5px;background:#e4ebe0;border-radius:3px;margin-top:7px;overflow:hidden}.prog span{display:block;height:100%;background:var(--live)}
+.fieldtag{display:inline-block;background:var(--red);color:#fff;border-radius:999px;font:700 12px var(--font);padding:1px 7px;margin-right:4px}
+nav{position:fixed;bottom:0;left:0;right:0;z-index:30;background:#fff;border-top:1px solid var(--line);display:flex;justify-content:center}
+nav .in{display:flex;width:100%;max-width:560px}
+nav button{flex:1;border:0;background:none;padding:8px 0 12px;color:var(--muted);font-size:11px;font-weight:600;display:flex;flex-direction:column;align-items:center;gap:2px}
+nav button .ic{font-size:20px;line-height:1.1}
+nav button.on{color:var(--green)}
+body.easy nav button{font-size:11.5px}
+/* news */
+.count{margin:4px 16px 14px;background:var(--green);color:var(--cream);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:14px}
+.count b{font:800 44px var(--head);line-height:1;color:var(--yellow)}
+.post{margin:0 16px 14px;background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.post video,.post img{display:block;width:100%;max-height:70vh;background:#000;object-fit:contain}
+.post .pb{padding:12px 14px}
+.post .pd{font-size:12px;font-weight:700;color:var(--grass);text-transform:uppercase}
+.post h3{margin:3px 0 6px;font-size:22px}
+.post p{margin:0 0 6px}
+.expect{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.expect:last-child{border-bottom:0}
+.expect .n{flex:none;width:40px;height:40px;border-radius:12px;background:var(--light);display:grid;place-items:center;font-size:22px}
+.expect b{display:block}
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 16px 14px}
+.scard{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center;color:inherit}
+.slogo{height:58px;display:flex;align-items:center;justify-content:center;margin-bottom:6px;border-radius:8px;overflow:hidden}
+.slogo img{max-height:58px;max-width:100%}
+/* map */
+.mapctl{display:flex;gap:7px;padding:10px 16px;align-items:center;flex-wrap:wrap}
+.zoom{margin-left:auto;display:flex;gap:6px}
+.zoom button{width:34px;height:34px;border-radius:8px;border:1px solid var(--line);background:#fff;font-size:19px;font-weight:700}
+.mapwrap{position:relative;overflow:hidden;touch-action:none;height:min(calc(100vh - 340px),calc(min(100vw,560px)*1.4708));min-height:300px;background:#2b3b26;cursor:grab}
+.mapinner{position:absolute;left:0;top:0;width:100%;transform-origin:0 0;--inv:1}
+.mapinner.anim{transition:transform .25s ease}
+.mapinner img.base{display:block;width:100%;user-select:none;-webkit-user-drag:none}
+body.calm .mapinner img.base{filter:saturate(.55) brightness(1.05)}
+.pin{position:absolute;transform:translate(-50%,-50%);border:0;background:transparent;padding:0;width:13%;aspect-ratio:1;border-radius:50%}
+.pin .ring{position:absolute;inset:6%;border-radius:50%;border:3px solid transparent}
+.pin.live .ring{border-color:var(--live);animation:pulse 1.6s infinite}
+.pin.soon .ring{border-color:var(--amber);border-style:dashed}
+.pin .badge{position:absolute;left:50%;top:-6%;transform:translate(-50%,-100%) scale(var(--inv));transform-origin:50% 100%;background:var(--live);color:#fff;font:700 10px var(--font);padding:2px 6px;border-radius:5px;white-space:nowrap;pointer-events:none}
+.pin.soon .badge{background:var(--amber)}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(25,163,74,.75)}70%{box-shadow:0 0 0 12px rgba(25,163,74,0)}100%{box-shadow:0 0 0 0 rgba(25,163,74,0)}}
+.amen{position:absolute;transform:translate(-50%,-50%) scale(var(--inv));width:30px;height:30px;border-radius:50%;border:2px solid #fff;display:grid;place-items:center;font-size:15px;box-shadow:0 2px 6px rgba(0,0,0,.4);padding:0}
+.amen.hide{display:none}
+.zone{position:absolute;transform:translate(-50%,-50%);border-radius:50%;pointer-events:none}
+.zone.loud{background:radial-gradient(circle,rgba(217,72,15,.45),rgba(217,72,15,.12) 65%,transparent 72%)}
+.zone.quiet{background:radial-gradient(circle,rgba(42,111,176,.6),rgba(42,111,176,.25) 60%,transparent 72%);border:2px dashed rgba(42,111,176,.8)}
+.me{position:absolute;transform:translate(-50%,-50%) scale(var(--inv));width:20px;height:20px;border-radius:50%;background:#1a73e8;border:3px solid #fff;box-shadow:0 0 0 6px rgba(26,115,232,.25)}
+.maphint{position:absolute;left:8px;bottom:8px;background:rgba(0,0,0,.55);color:#fff;font-size:11.5px;padding:4px 8px;border-radius:6px;pointer-events:none}
+.legend{display:flex;gap:12px;padding:8px 16px;font-size:12.5px;color:var(--muted);flex-wrap:wrap}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:-2px;margin-right:5px}
+/* lists */
+.item{display:flex;gap:12px;padding:12px 16px;border-bottom:1px solid var(--line);background:#fff;width:100%;text-align:left;border-left:0;border-right:0;border-top:0;color:inherit}
+.item .t{min-width:56px;font:700 18px var(--head);color:var(--green)}
+.item .t small{display:block;font:500 12px var(--font);color:var(--muted)}
+.item .b{flex:1}
+.item .ttl{font-weight:700}
+.item .meta{font-size:13px;color:var(--muted);margin-top:2px}
+.item.done{opacity:.5}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 16px}
+.mcard{background:#fff;border:1px solid var(--line);border-radius:12px;padding:0;overflow:hidden;text-align:left;color:inherit}
+.mimg{height:84px;display:grid;place-items:center;background:linear-gradient(135deg,var(--green2),var(--grass));font-size:38px}
+.mcard .mb{padding:9px 10px 11px}
+.mcard .mn{font-weight:700;line-height:1.15}
+.mcard .mt{font-size:12.5px;color:var(--muted);margin-top:2px}
+.search{width:calc(100% - 32px);margin:0 16px 12px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font:inherit}
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:12px 16px}
+.pgrid figure{margin:0;position:relative;aspect-ratio:1;overflow:hidden;border-radius:6px;background:#dfe7da;display:grid;place-items:center;font-size:26px}
+.pgrid img{width:100%;height:100%;object-fit:cover}
+.upl{display:block;border:2px dashed var(--grass);border-radius:14px;padding:20px;text-align:center;color:var(--green);font-weight:700;background:var(--light);margin:0 16px}
+.upl input{display:none}
+.ticket{margin:4px 16px;background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.12);border:1px solid var(--line)}
+.ticket .top{background:var(--cream);text-align:center;padding:14px;border-bottom:3px solid var(--brown)}
+.ticket .top img{width:70%;max-width:280px}
+.ticket .mid{padding:18px;display:flex;flex-direction:column;align-items:center}
+#qr{background:#fff;padding:10px;min-height:200px;min-width:200px;display:grid;place-items:center}
+.tinfo{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px 18px 18px;font-size:14px;border-top:2px dashed var(--line)}
+.tinfo span{display:block;color:var(--muted);font-size:12px}
+/* tickets */
+.tix{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 16px 14px}
+.tix::-webkit-scrollbar{height:6px}.tix::-webkit-scrollbar-thumb{background:#d9d0b2;border-radius:3px}
+.tk{flex:0 0 86%;scroll-snap-align:center;background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,.1);border:1px solid var(--line)}
+.tk .top{background:var(--cream);text-align:center;padding:10px;border-bottom:3px solid var(--brown)}
+.tk .top img{width:52%;max-width:200px}
+.tk .ty{font:800 22px var(--head);color:var(--green)}
+.tk .mid{padding:14px;display:flex;flex-direction:column;align-items:center;min-height:250px;justify-content:center;text-align:center}
+.qrbox{background:#fff;padding:8px;display:grid;place-items:center;min-height:176px;min-width:176px}
+.tk .state{font-size:15px;font-weight:700;margin:8px 0}
+.tk .acts{display:flex;gap:8px;padding:0 14px 14px}
+.tk .acts button{flex:1;margin:0;padding:9px;font-size:13.5px}
+.osum{margin:0 16px 12px;background:var(--green);color:var(--cream);border-radius:14px;padding:12px 14px}
+.osum b{color:var(--yellow);font:800 22px var(--head)}
+.lostbtn{display:flex;align-items:center;gap:10px;width:calc(100% - 32px);margin:0 16px 14px;border:0;border-radius:12px;background:#b3261e;color:#fff;font-weight:700;padding:12px 14px;font-size:15px;text-align:left}
+body.calm .lostbtn{background:#8a4a46}
+.lostbtn span{font-size:24px}
+.step{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
+.step b.n{flex:none;width:28px;height:28px;border-radius:50%;background:#b3261e;color:#fff;display:grid;place-items:center}
+.btn.red{background:#b3261e}
+.sigbox{position:relative;background:#fff;border:2px dashed #b9ae86;border-radius:12px;margin-top:6px;height:160px;touch-action:none}
+.sigbox.bad{border-color:var(--red)}.sigbox canvas{width:100%;height:100%;display:block}
+.sigbox .ph{position:absolute;left:14px;bottom:10px;color:#b9ae86;pointer-events:none}
+.sigbox .cl{position:absolute;right:8px;top:8px;border:0;background:var(--light);border-radius:8px;padding:5px 10px;font-size:13px;font-weight:700;color:var(--green)}
+select.fi{padding:9px 8px}
+/* sheet */
+.scrim{position:fixed;inset:0;background:rgba(10,20,10,.45);z-index:40;display:none}.scrim.on{display:block}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:41;background:#fff;border-radius:18px 18px 0 0;max-height:85vh;overflow:auto;transform:translateY(105%);visibility:hidden;transition:transform .25s,visibility .25s;max-width:560px;margin:0 auto;padding:10px 18px 26px}
+.sheet.on{transform:none;visibility:visible}
+.sheet h2{margin:0 0 2px;font-size:25px}
+.kind{color:var(--muted);font-size:14px;margin-bottom:10px}
+.close{position:absolute;right:14px;top:12px;border:0;background:var(--light);width:34px;height:34px;border-radius:50%;font-size:18px}
+.rules{counter-reset:r;padding:0;margin:0;list-style:none}
+.rules li{position:relative;padding:9px 0 9px 40px;border-bottom:1px solid var(--line)}
+.rules li::before{counter-increment:r;content:counter(r);position:absolute;left:0;top:8px;width:28px;height:28px;border-radius:50%;background:var(--yellow);font:800 15px var(--head);display:grid;place-items:center}
+.chk{display:flex;gap:10px;align-items:flex-start;margin:14px 0 4px;font-weight:600}
+.chk input{width:22px;height:22px;accent-color:var(--green);flex:none}
+.langpick{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.langpick button{border:2px solid var(--line);background:#fff;border-radius:12px;padding:14px;font-weight:700;font-size:17px}
+.langpick button.on{border-color:var(--green);background:var(--light)}
+.toggle{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.toggle .b{flex:1}.toggle .b small{display:block;color:var(--muted);font-size:13px}
+.sw{width:50px;height:28px;border-radius:999px;background:#ccc;border:0;position:relative;flex:none}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:left .15s}
+.sw.on{background:var(--green)}.sw.on::after{left:25px}
+.toast{position:fixed;left:12px;right:12px;top:12px;z-index:60;max-width:536px;margin:0 auto;background:var(--brown);color:var(--cream);border-radius:14px;padding:12px 14px;display:none;font-size:14.5px}
+.toast.on{display:block}
+.toast b{color:var(--yellow);display:block;font-size:12px;text-transform:uppercase}
+.cyflag{font-size:11.5px;color:var(--muted);text-align:center;padding:4px 16px 12px}
+.fi{width:100%;border:1px solid #cfc7aa;border-radius:9px;padding:10px 11px;font:inherit;background:#fffdf6}
+.fl{display:block;font-size:13px;font-weight:700;margin:10px 0 4px}
+</style>
 </head>
 <body>
-
-  <!-- "Skip link": hidden until a keyboard user presses Tab. Lets screen-reader and keyboard users jump past the header. -->
-  <a class="skip-link" href="#main">Skip to content</a>
-
-  <!-- ===================== HEADER ===================== -->
-  <header class="site-header">
-    <p class="header-kicker">Charity machinery demonstration</p>
-    <h1>Pembrokeshire Silage Day</h1>
-    <p class="header-date">
-      <!-- <time> tells computers the exact date, while people see the friendly version. -->
-      <time datetime="2027-09-11">Saturday 11 September 2027</time>
-    </p>
-    <p class="header-place">Near Haverfordwest</p>
-    <!-- This empty paragraph gets filled in by js/main.js with "X days to go". -->
-    <p class="countdown" id="countdown" aria-live="polite"></p>
+<div class="app">
+  <header>
+    <div class="hrow">
+      <img class="hlogo" src="logo.png" alt="Pembrokeshire Silage Day">
+      <div class="hdate" id="hdate"></div>
+      <div class="hbtns">
+        <button class="hb" data-act="access" id="accBtn"></button>
+        <button class="hb alt" data-act="safety" id="safeBtn"></button>
+      </div>
+    </div>
+    <div class="proto"><span>Prototype time</span><b id="clock">11:30</b><input type="range" id="slider" min="540" max="1080" step="5" value="690" aria-label="Preview the day at a different time"></div>
   </header>
-
-  <!-- ===================== MAIN CONTENT ===================== -->
-  <main id="main">
-
-    <!-- ---------- 1. EVENT INFO ---------- -->
-    <section id="info" class="section" aria-labelledby="info-title">
-      <h2 id="info-title">Event info</h2>
-
-      <p class="lead">
-        A day out on the farm watching modern silage machinery at work in the
-        field — mowing, raking, harvesting, carting and clamping — all in aid
-        of charity.
-      </p>
-
-      <!-- A "definition list" (<dl>) is good for label + value pairs like these. -->
-      <dl class="facts">
-        <div class="fact">
-          <dt>Date</dt>
-          <dd>Saturday 11 September 2027</dd>
-        </div>
-        <div class="fact">
-          <dt>Gates open</dt>
-          <dd>9:00am <span class="placeholder">(to be confirmed)</span></dd>
-        </div>
-        <div class="fact">
-          <dt>Location</dt>
-          <dd>Farm near Haverfordwest, Pembrokeshire <span class="placeholder">(exact address to follow)</span></dd>
-        </div>
-        <div class="fact">
-          <dt>Entry</dt>
-          <dd>£X per car <span class="placeholder">(price to be confirmed)</span></dd>
-        </div>
-        <div class="fact">
-          <dt>In aid of</dt>
-          <dd><span class="placeholder">[Charity name]</span></dd>
-        </div>
-      </dl>
-
-      <h3>On the day</h3>
-      <ul class="big-list">
-        <li>Live silage demonstrations in the field</li>
-        <li>Machinery on display to look at up close (when parked and switched off)</li>
-        <li>Food and drink stalls</li>
-        <li>Toilets and first aid on site</li>
-      </ul>
+  <div class="banner" id="banner" style="display:none"></div>
+  <main>
+    <section class="view" id="v-news"></section>
+    <section class="view" id="v-map">
+      <div class="mapctl" id="mapctl"></div>
+      <div class="mapwrap" id="mapwrap"><div class="mapinner" id="mapinner"><img class="base" src="map-2027.svg" alt=""></div><div class="maphint" id="maphint"></div></div>
+      <div class="legend" id="legend"></div>
+      <div id="nowList"></div>
     </section>
-
-    <!-- ---------- 2. TIMETABLE ---------- -->
-    <section id="timetable" class="section" aria-labelledby="timetable-title">
-      <h2 id="timetable-title">Timetable</h2>
-      <p class="notice">
-        <strong>Placeholder times.</strong> The final timetable will be
-        published closer to the day. Times may change with the weather.
-      </p>
-
-      <!-- An ordered list (<ol>) because the events happen in order. -->
-      <ol class="timetable">
-        <li>
-          <span class="time">9:00</span>
-          <span class="what">Gates open &amp; parking</span>
-        </li>
-        <li>
-          <span class="time">10:00</span>
-          <span class="what">Welcome &amp; safety briefing</span>
-        </li>
-        <li>
-          <span class="time">10:30</span>
-          <span class="what">Mowing demonstration</span>
-        </li>
-        <li>
-          <span class="time">11:30</span>
-          <span class="what">Tedding &amp; raking</span>
-        </li>
-        <li>
-          <span class="time">12:30</span>
-          <span class="what">Lunch break — food stalls open</span>
-        </li>
-        <li>
-          <span class="time">13:30</span>
-          <span class="what">Forage harvesters in action</span>
-        </li>
-        <li>
-          <span class="time">14:30</span>
-          <span class="what">Carting &amp; clamping</span>
-        </li>
-        <li>
-          <span class="time">15:30</span>
-          <span class="what">Charity raffle &amp; thank-yous</span>
-        </li>
-        <li>
-          <span class="time">16:30</span>
-          <span class="what">Event closes</span>
-        </li>
-      </ol>
-    </section>
-
-    <!-- ---------- 3. SAFETY ---------- -->
-    <section id="safety" class="section section-safety" aria-labelledby="safety-title">
-      <h2 id="safety-title">Safety rules</h2>
-      <p class="lead">
-        This is a working farm with large, fast-moving machines.
-        Please follow these rules at all times.
-      </p>
-
-      <ol class="rules">
-        <li><strong>Stay behind the barriers</strong> and in public areas. Never enter the working field.</li>
-        <li><strong>Keep children close</strong> and hold their hands near machinery.</li>
-        <li><strong>Never approach a moving machine.</strong> Drivers may not be able to see you.</li>
-        <li><strong>Do what the marshals say.</strong> They wear high-visibility vests.</li>
-        <li><strong>Dogs must be on a short lead</strong> <span class="placeholder">(policy to be confirmed)</span>.</li>
-        <li><strong>Do not climb on machinery</strong> unless a marshal says it is safe.</li>
-        <li><strong>Wear sturdy footwear.</strong> Ground can be uneven and muddy.</li>
-        <li><strong>Wash your hands</strong> before eating, especially after touching machinery or animals.</li>
-      </ol>
-
-      <div class="emergency">
-        <h3>In an emergency</h3>
-        <p>Find the nearest marshal or go to the <strong>first aid point</strong> (shown on the site map).</p>
-        <!-- "tel:" links open the phone's dialler when tapped. -->
-        <p>If someone is seriously hurt, call <a class="call-link" href="tel:999">999</a></p>
-      </div>
-    </section>
-
-    <!-- ---------- 4. SITE MAP ---------- -->
-    <section id="map" class="section" aria-labelledby="map-title">
-      <h2 id="map-title">Site map</h2>
-      <p class="notice">
-        <strong>Placeholder map.</strong> The real site map will be added
-        once the layout is finalised.
-      </p>
-
-      <!-- <figure> groups an image with its caption. -->
-      <figure class="site-map">
-        <!--
-          "alt" text describes the image for people who can't see it.
-          Tapping the image opens it full size so visitors can pinch to zoom.
-          When you have the real map, save it in the images folder and change
-          both the href and src below to point to the new file.
-        -->
-        <a href="images/site-map-placeholder.svg">
-          <img src="images/site-map-placeholder.svg"
-               alt="Placeholder site map showing the entrance, car park, demonstration field, food stalls, toilets and first aid point."
-               width="800" height="600">
-        </a>
-        <figcaption>Tap the map to open it full size and zoom in.</figcaption>
-      </figure>
-
-      <h3>Key places</h3>
-      <ul class="big-list">
-        <li><strong>Entrance &amp; car park</strong> — follow the signs and the marshals</li>
-        <li><strong>Viewing area</strong> — behind the barriers beside the field</li>
-        <li><strong>Food &amp; drink</strong> — next to the viewing area</li>
-        <li><strong>Toilets</strong> — near the car park</li>
-        <li><strong>First aid</strong> — beside the information point</li>
-      </ul>
-    </section>
-
-    <!-- ---------- 5. GETTING HERE ---------- -->
-    <section id="travel" class="section" aria-labelledby="travel-title">
-      <h2 id="travel-title">Getting here</h2>
-
-      <div class="fact fact-highlight">
-        <p class="fact-label">Postcode for sat nav</p>
-        <p class="fact-value"><span class="placeholder">SA00 0XX (to be confirmed)</span></p>
-      </div>
-
-      <h3>By car</h3>
-      <p>
-        The event is a short drive from Haverfordwest. Follow the yellow
-        <strong>“Silage Day”</strong> event signs from the main road
-        <span class="placeholder">(directions to be confirmed)</span>.
-      </p>
-      <p>Free parking in a field on site. Marshals will direct you.</p>
-
-      <h3>By train or bus</h3>
-      <p>
-        The nearest railway station is Haverfordwest.
-        <span class="placeholder">Details of any shuttle bus or taxi options to be confirmed.</span>
-      </p>
-
-      <h3>Accessibility</h3>
-      <p>
-        The site is a grass field and can be uneven or muddy.
-        <span class="placeholder">Details of accessible parking and viewing to be confirmed.</span>
-      </p>
-
-      <!--
-        This button opens the location in the phone's map app.
-        Replace "Haverfordwest" in the link with the real postcode once you have it,
-        e.g. https://www.google.com/maps/search/?api=1&query=SA61+1AA
-      -->
-      <a class="button" href="https://www.google.com/maps/search/?api=1&amp;query=Haverfordwest" target="_blank" rel="noopener">
-        Open in maps
-      </a>
-    </section>
-
+    <section class="view" id="v-sched"></section>
+    <section class="view" id="v-mach"></section>
+    <section class="view" id="v-photos"></section>
+    <section class="view" id="v-ticket"></section>
   </main>
+  <div class="cyflag" id="cyflag"></div>
+  <div class="cyflag"><a href="ops.html" style="color:var(--green);font-weight:700">Prototype: open the operations app (organisers, exhibitors, drivers, staff) →</a></div>
+  <nav><div class="in" id="nav"></div></nav>
+</div>
+<div class="scrim" id="scrim"></div>
+<div class="sheet" id="sheet"><button class="close" data-act="closeSheet" aria-label="Close">×</button><div id="sheetBody"></div></div>
+<div class="toast" id="toast"></div>
 
-  <!-- ===================== FOOTER ===================== -->
-  <footer class="site-footer">
-    <p>Pembrokeshire Silage Day 2027 · A charity event</p>
-    <p>Questions? <span class="placeholder">[contact email or phone]</span></p>
-    <!-- Extra space so the bottom navigation bar doesn't cover the footer text. -->
-  </footer>
+<script>
+/* ============ UTILITIES ============ */
+const $=s=>document.querySelector(s);
+const esc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt=m=>String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0");
+const parseTime=v=>{const m=String(v||"").trim().match(/^(\d{1,2})[:.]?(\d{2})/);if(!m)return null;return +m[1]*60+ +m[2]};
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const safeUrl=u=>{try{const s=String(u).trim(),x=new URL(/^https?:\/\//i.test(s)?s:"https://"+s);return /^https?:$/.test(x.protocol)&&x.hostname.includes(".")?x.href:""}catch(e){return""}};
 
-  <!-- ===================== BOTTOM NAVIGATION ===================== -->
-  <!--
-    This bar stays fixed at the bottom of the screen, like the tab bar in a
-    phone app, so it's always within easy reach of your thumb.
-    The "aria-label" names it for screen readers.
-  -->
-  <nav class="bottom-nav" aria-label="Sections">
-    <a href="#info">
-      <span class="nav-icon" aria-hidden="true">ℹ️</span>
-      <span class="nav-label">Info</span>
-    </a>
-    <a href="#timetable">
-      <span class="nav-icon" aria-hidden="true">🕘</span>
-      <span class="nav-label">Times</span>
-    </a>
-    <a href="#safety">
-      <span class="nav-icon" aria-hidden="true">⚠️</span>
-      <span class="nav-label">Safety</span>
-    </a>
-    <a href="#map">
-      <span class="nav-icon" aria-hidden="true">🗺️</span>
-      <span class="nav-label">Map</span>
-    </a>
-    <a href="#travel">
-      <span class="nav-icon" aria-hidden="true">🚗</span>
-      <span class="nav-label">Travel</span>
-    </a>
-  </nav>
+/* ============ LANGUAGE ============ */
+let lang=store.get("psd_lang",null);
+const T={
+ en:{news:"News",map:"Map",sched:"Schedule",mach:"Machines",photos:"Photos",ticket:"Tickets",safety:"⚠ Safety",access:"🌿 Comfort",tagline:"A Day of Grass!",date:"Sat 11 Sept 2027",hours:"10am – 5pm",fullDate:"Saturday 11 September 2027",daysTo:"days to go until",today:"Today!",gates:"Gates open at 10am",
+  live:"Live now",soon:"Starts in {n} min",next:"Upcoming",done:"Finished",cancel:"Cancelled",delay:"+{n} min late",happening:"Happening now",none:"No demos running right now.",nextUp:"Next up",
+  legLive:"Demo live now",legSoon:"Starting within 30 min",legLoud:"Loud area",legQuiet:"Quiet area",tapField:"Tap a field for details",hint:"Pinch or double-tap to zoom · drag to move",
+  all:"All",food:"Food",wc:"Toilets",aid:"First aid",sensory:"Sensory",locate:"📍 Where am I?",field:"Field",machinesN:"{n} machine(s)",loud:"Loud",moderate:"Some noise",quiet:"Quiet",
+  loudTip:"Loud – ear defenders recommended",onHere:"On here",noneHere:"Nothing scheduled here.",seeWorking:"See it working",story:"This machine's story",history:"History",aiNote:"Researched with AI and checked by the organisers.",sources:"Sources",videos:"Videos",watch:"Watch on YouTube",announce:"Announcements",offers:"Show-day offers",siTitle:"Sponsor Silage Day 2027",siIntro:"Leave your details and the organisers will be in touch about sponsorship packages.",siName:"Your name",siBiz:"Business name",siEmail:"Email",siPhone:"Phone",siMsg:"Anything you'd like to tell us? (optional)",siConsent:"I'm happy for the organisers to contact me about sponsorship.",siSend:"Send",siThanks:"Thank you! The organisers will be in touch soon.",siReq:"Please fill in the boxes marked *.",newNotice:"Announcement",exQ:"Bring your machinery",exTxt:"Contractors, farmers, dealers and vintage clubs – apply to demonstrate or display your machines.",exBtn:"Apply to exhibit",exIn:"Already exhibiting? Sign in",exTitle:"Apply to exhibit",exIntro:"Tell us who you are and which machines you'd like to bring. Add each machine separately – a tractor and its trailer are two entries. The organisers will text you once your application has been checked.",exBiz:"Business, farm or club name",exMach:"Your machines",exType:"Type",exMake:"Make and model",exYear:"Year",exAdd:"＋ Add another machine",exNote:"Anything else? (optional)",exConsent:"I'm happy for the organisers to contact me about exhibiting.",exThanks:"Thank you! Your application has been sent. The organisers will text you once it has been checked.",exReqM:"Add at least one machine with its make and model.",year:"Year",exhibitor:"Exhibitor",notTimetabled:"Not timetabled yet",search:"Search machines, e.g. harvester",
+  machIntro:"Machines working on the day. Tap one to see where and when.",schedIntro:"Today's programme",addPhotos:"📷 Add your photos",addPhotosSub:"Tap to choose from your camera roll",photosIntro:"Photos from the day",
+  photosNote:"Photos are checked by the organisers before they appear. Please don't post close-ups of other people's children.",
+  yourTicket:"Your ticket",showGate:"Show this at the pay gate",name:"Name",type:"Ticket type",adult:"Adult",venue:"Venue",gatesOpen:"Gates open",dateL:"Date",status:"Status",valid:"Valid",
+  ticketNote:"Tickets come from your ticket seller (e.g. Ticket Tailor). Gate staff scan this with the seller's own check-in app.",
+  getting:"Getting here",gettingTxt:"Enter via the lane by the Rising Sun Inn on the A487. Follow signs to Car Park 1, then walk to the pay gate.",openMaps:"Open in Maps",
+  expect:"What to expect",sponsors:"Thank you to our 2026 sponsors",sponsorQ:"Interested in sponsoring?",sponsorTxt:"Put your business in front of farmers and contractors from across West Wales.",sponsorBtn:"Register interest",
+  safetyTitle:"Safety rules",safetySub:"Please read before entering the demonstration fields",agree:"I have read and will follow the safety rules",accept:"Accept and continue",accepted:"✓ You accepted these rules.",closeB:"Close",
+  disclaimer:"Visitors attend at their own risk. Agricultural machinery is working on this site. Draft wording – the organisers will replace this with their own disclaimer.",
+  comfort:"Comfort settings",calm:"Calm mode",calmSub:"No flashing or moving effects, softer colours, gentle alerts.",easy:"Easy-read text",easySub:"Larger, clearer lettering that many people with dyslexia find easier.",sensoryL:"Show sensory map",sensorySub:"Highlights loud demo areas and the quiet area on the map.",langL:"Language / Iaith",
+  locNo:"Location isn't available in this preview. In the live app, a blue dot shows where you are on the site map.",locFar:"You're about {d} km from the site – the blue dot will appear when you arrive.",locHere:"That's you – the blue dot on the map.",
+  welcome:"Croeso! Welcome!",choose:"Choose your language",earInfo:"Borrow ear defenders at the information point by the pay gate.",
+  yourTickets:"Your tickets",
+  rTitle:"Register for Silage Day",rFree:"Free to register – pay at the gate",rIntro:"Register your group before the day and walk straight to the pay gate.",
+  rB1:"Everyone in your group gets their own named ticket on your phone.",rB2:"Sign the safety declaration once for the whole group – no forms at the gate.",rB3:"Share a ticket with anyone arriving separately.",
+  rPayAtGate:"Pay at the gate",rStart:"Register my group",rStep:"Step {n} of 2",rLead:"Lead adult",rLeadName:"Your full name",rEmail:"Email",rMobile:"Mobile (optional – written on children's wristbands)",
+  rWho:"Who's coming?",rWhoSub:"Add everyone in your group by name. Each person gets their own ticket.",rFullName:"Full name",rAddPerson:"Add a person",
+  rKidsNote:"Names are only used for tickets and to help reunite lost children. Registration details are deleted after the event.",
+  rFix:"Please fill in the highlighted boxes – your group needs at least one adult.",rNext:"Next: safety declaration",rCancel:"Cancel",
+  rDeclFor:"For all {n} people in your group",rSignFinger:"Sign with your finger",rSignHere:"Sign here",rClear:"Clear",rNews:"Send me news about future Silage Days (optional)",
+  rPrivacy:"We use these details to issue your tickets and for safety on the day. Sample privacy wording – the organisers will replace this with their own notice.",
+  rFix2:"Please tick both boxes and sign.",rRegister:"Register",rSave:"Save changes",rBack:"Back",rDone:"Registered – your tickets are ready",rPeople:"people",
+  rDeclDone:"Safety declaration signed by {name} for the whole group",rDue:"To pay at the gate: {amt}",rDueNote:"Show any ticket's QR code at the pay gate – card or cash.",rAllPaid:"All paid – enjoy the day!",
+  rPaid:"Paid – admitted {t}",rPayGate:"Registered – pay at the gate",rShare:"Share",rStopShare:"Stop sharing",rSharedWith:"Shared with {name}",rEdit:"Edit group",
+  rCancelReg:"Cancel registration",rCancelQ:"This removes your group's registration and tickets. Anyone who has already paid keeps their ticket.",rCancelYes:"Yes, cancel",rKeep:"Keep my registration",
+  rShareT:"Share {name}'s ticket",rShareSub:"Send this ticket to the person it's for, so they have it on their own phone – handy if they're arriving separately. It stays in your list too, but it can only be used once at the gate.",
+  rShareTo:"Who are you sending it to?",rShareBtn:"Create share link",rShareNote:"If they arrive separately, they show this ticket at the gate and pay for themselves.",
+  rPayNote:"Pay at the gate – the cashier scans this code.",rLinkGone:"This ticket link is no longer valid – ask the person who sent it.",rTestGate:"Prototype: open the gate cashier to test",order:"Order",swipe:"Swipe to see each ticket",
+  t_adult:"Adult",t_child:"Child (5–15)",t_under5:"Under 5 – free",
+  declNeeded:"Sign the safety declaration for your group to activate your tickets.",declBtn:"Sign for my group",
+  declTitle:"Safety declaration",declSub:"For everyone in order {o} ({n} people)",
+  declAgree:"I have read the safety rules and accept them on behalf of everyone in this order.",declKids:"I am responsible for supervising the children in my group at all times.",
+  declName:"Type your full name to sign",declSign:"Sign and activate tickets",declDone:"Signed by {name} – tickets active",
+  inactive:"Not active yet – sign the safety declaration",valid:"Valid",usedAt:"Used at {t}",withX:"With {name}",
+  transfer:"Transfer",takeBack:"Take back",testScan:"Test gate scan",
+  trTitle:"Transfer this ticket",trSub:"They'll get their own copy. Each ticket can only be used once, so once it's transferred it disappears from your phone.",
+  trName:"Their name",trContact:"Their mobile or email",trSend:"Transfer ticket",trLink:"Send them this link",copy:"Copy link",copied:"Copied ✓",openAs:"Preview as {name}",
+  sharedBy:"Shared with you by {name}",declByOther:"Safety rules accepted for your group by {name}.",readRules:"Read the safety rules",
+  scanTitle:"Gate scan – test",scanSub:"Prototype only: this is what gate staff see when they scan.",scanGroup:"Admit the whole group",
+  scanOk:"✓ Admit 1 – {type}",scanUsed:"✗ Already used at {t} – do not admit",scanInactive:"✗ Safety declaration not signed – ask the purchaser to sign in the app",scanTransferred:"Transferred – scan their copy",
+  scanGroupOk:"✓ Admit {n}: {list}",scanGroupNone:"No unused tickets left in this order to admit together.",
+  lostBtn:"Lost child?",lostTitle:"Lost child",lostSub:"Stay calm – lost children are usually found within minutes.",
+  lost1:"Tell the nearest marshal or member of staff in hi-vis straight away. They'll radio event control.",
+  lost2:"Go to the lost children point at First Aid in Field 5.",
+  lost3:"Your child's wristband has your mobile number on it – keep your phone with you and switched on.",
+  lost4:"Found a child on their own? Stay with them and tell a marshal. Don't leave the site with them.",
+  lostCall:"In an emergency call 999.",lostControl:"Event control number – to be added by the organisers",showMap:"Show First Aid on the map"},
+ cy:{news:"Newyddion",map:"Map",sched:"Amserlen",mach:"Peiriannau",photos:"Lluniau",ticket:"Tocynnau",safety:"⚠ Diogelwch",access:"🌿 Cysur",tagline:"Diwrnod o Borfa!",date:"Sad 11 Medi 2027",hours:"10yb – 5yh",fullDate:"Dydd Sadwrn 11 Medi 2027",daysTo:"diwrnod i fynd tan",today:"Heddiw!",gates:"Gatiau'n agor am 10yb",
+  live:"Yn fyw nawr",soon:"Yn dechrau mewn {n} munud",next:"I ddod",done:"Wedi gorffen",cancel:"Wedi'i ganslo",delay:"{n} munud yn hwyr",happening:"Yn digwydd nawr",none:"Does dim arddangosiadau ar hyn o bryd.",nextUp:"Nesaf",
+  legLive:"Arddangosiad yn fyw",legSoon:"Yn dechrau o fewn 30 munud",legLoud:"Ardal swnllyd",legQuiet:"Ardal dawel",tapField:"Tapiwch gae am fanylion",hint:"Pinsiwch neu dapio ddwywaith i chwyddo · llusgo i symud",
+  all:"Y cyfan",food:"Bwyd",wc:"Toiledau",aid:"Cymorth cyntaf",sensory:"Synhwyraidd",locate:"📍 Ble ydw i?",field:"Cae",machinesN:"Peiriannau: {n}",loud:"Swnllyd",moderate:"Ychydig o sŵn",quiet:"Tawel",
+  loudTip:"Swnllyd – argymhellir amddiffynwyr clustiau",onHere:"Yma heddiw",noneHere:"Dim byd wedi'i drefnu yma.",seeWorking:"Gweld e'n gweithio",story:"Stori'r peiriant",history:"Hanes",aiNote:"Ymchwiliwyd gyda deallusrwydd artiffisial a'i wirio gan y trefnwyr.",sources:"Ffynonellau",videos:"Fideos",watch:"Gwylio ar YouTube",announce:"Cyhoeddiadau",offers:"Cynigion ar y diwrnod",siTitle:"Noddi Diwrnod Silwair 2027",siIntro:"Gadewch eich manylion a bydd y trefnwyr yn cysylltu am becynnau noddi.",siName:"Eich enw",siBiz:"Enw'r busnes",siEmail:"E-bost",siPhone:"Ffôn",siMsg:"Unrhyw beth yr hoffech ei ddweud wrthym? (dewisol)",siConsent:"Rwy'n hapus i'r trefnwyr gysylltu â mi am noddi.",siSend:"Anfon",siThanks:"Diolch! Bydd y trefnwyr yn cysylltu cyn bo hir.",siReq:"Llenwch y blychau sydd â *.",newNotice:"Cyhoeddiad",exQ:"Dewch â'ch peiriannau",exTxt:"Contractwyr, ffermwyr, delwyr a chlybiau hen beiriannau – gwnewch gais i arddangos eich peiriannau.",exBtn:"Gwneud cais i arddangos",exIn:"Eisoes yn arddangos? Mewngofnodi",exTitle:"Gwneud cais i arddangos",exIntro:"Dywedwch wrthym pwy ydych chi a pha beiriannau yr hoffech ddod â nhw. Ychwanegwch bob peiriant ar wahân – mae tractor a'i drelar yn ddau gofnod. Bydd y trefnwyr yn anfon neges destun atoch unwaith y bydd eich cais wedi'i wirio.",exBiz:"Enw'r busnes, fferm neu glwb",exMach:"Eich peiriannau",exType:"Math",exMake:"Gwneuthuriad a model",exYear:"Blwyddyn",exAdd:"＋ Ychwanegu peiriant arall",exNote:"Unrhyw beth arall? (dewisol)",exConsent:"Rwy'n hapus i'r trefnwyr gysylltu â mi am arddangos.",exThanks:"Diolch! Mae eich cais wedi'i anfon. Bydd y trefnwyr yn anfon neges destun atoch unwaith y bydd wedi'i wirio.",exReqM:"Ychwanegwch o leiaf un peiriant gyda'i wneuthuriad a'i fodel.",year:"Blwyddyn",exhibitor:"Arddangoswr",notTimetabled:"Heb ei amserlennu eto",search:"Chwilio peiriannau, e.e. cynaeafwr",
+  machIntro:"Peiriannau'n gweithio ar y diwrnod. Tapiwch un i weld ble a phryd.",schedIntro:"Rhaglen heddiw",addPhotos:"📷 Ychwanegwch eich lluniau",addPhotosSub:"Tapiwch i ddewis o'ch lluniau",photosIntro:"Lluniau o'r diwrnod",
+  photosNote:"Mae'r trefnwyr yn gwirio lluniau cyn iddyn nhw ymddangos. Peidiwch â phostio lluniau agos o blant pobl eraill.",
+  yourTicket:"Eich tocyn",showGate:"Dangoswch hwn wrth y gât dalu",name:"Enw",type:"Math o docyn",adult:"Oedolyn",venue:"Lleoliad",gatesOpen:"Gatiau'n agor",dateL:"Dyddiad",status:"Statws",valid:"Dilys",
+  ticketNote:"Daw tocynnau gan eich gwerthwr tocynnau (e.e. Ticket Tailor). Bydd staff y gât yn sganio hwn gydag ap y gwerthwr.",
+  getting:"Cyrraedd yma",gettingTxt:"Dewch i mewn ar hyd y lôn wrth dafarn y Rising Sun ar yr A487. Dilynwch yr arwyddion i Faes Parcio 1, yna cerddwch i'r gât dalu.",openMaps:"Agor yn Mapiau",
+  expect:"Beth i'w ddisgwyl",sponsors:"Diolch i'n noddwyr 2026",sponsorQ:"Diddordeb mewn noddi?",sponsorTxt:"Rhowch eich busnes o flaen ffermwyr a chontractwyr o bob rhan o Orllewin Cymru.",sponsorBtn:"Cofrestru diddordeb",
+  safetyTitle:"Rheolau diogelwch",safetySub:"Darllenwch cyn mynd i'r caeau arddangos",agree:"Rwyf wedi darllen a byddaf yn dilyn y rheolau diogelwch",accept:"Derbyn a pharhau",accepted:"✓ Rydych wedi derbyn y rheolau.",closeB:"Cau",
+  disclaimer:"Mae ymwelwyr yn mynychu ar eu menter eu hunain. Mae peiriannau amaethyddol yn gweithio ar y safle. Geiriad drafft – bydd y trefnwyr yn rhoi eu hymwadiad eu hunain yn ei le.",
+  comfort:"Gosodiadau cysur",calm:"Modd tawel",calmSub:"Dim effeithiau'n fflachio na symud, lliwiau meddalach, rhybuddion tyner.",easy:"Testun hawdd ei ddarllen",easySub:"Llythrennau mwy a chliriach – yn haws i lawer o bobl â dyslecsia.",sensoryL:"Dangos map synhwyraidd",sensorySub:"Yn dangos ardaloedd swnllyd a'r ardal dawel ar y map.",langL:"Iaith / Language",
+  locNo:"Dydy lleoliad ddim ar gael yn y rhagolwg hwn. Yn yr ap byw, mae dot glas yn dangos ble rydych chi ar fap y safle.",locFar:"Rydych tua {d} km o'r safle – bydd y dot glas yn ymddangos pan fyddwch yn cyrraedd.",locHere:"Dyna chi – y dot glas ar y map.",
+  welcome:"Croeso! Welcome!",choose:"Dewiswch eich iaith",earInfo:"Benthycwch amddiffynwyr clustiau yn y man gwybodaeth wrth y gât dalu.",
+  yourTickets:"Eich tocynnau",
+  rTitle:"Cofrestru ar gyfer y Diwrnod Silwair",rFree:"Am ddim i gofrestru – talu wrth y gât",rIntro:"Cofrestrwch eich grŵp cyn y diwrnod a cherddwch yn syth at y gât dalu.",
+  rB1:"Mae pawb yn eich grŵp yn cael tocyn gyda'u henw arno ar eich ffôn.",rB2:"Llofnodwch y datganiad diogelwch unwaith ar ran y grŵp cyfan – dim ffurflenni wrth y gât.",rB3:"Rhannwch docyn gydag unrhyw un sy'n cyrraedd ar wahân.",
+  rPayAtGate:"Talu wrth y gât",rStart:"Cofrestru fy ngrŵp",rStep:"Cam {n} o 2",rLead:"Oedolyn arweiniol",rLeadName:"Eich enw llawn",rEmail:"E-bost",rMobile:"Ffôn symudol (dewisol – wedi'i ysgrifennu ar fandiau arddwrn y plant)",
+  rWho:"Pwy sy'n dod?",rWhoSub:"Ychwanegwch bawb yn eich grŵp wrth eu henw. Mae pob person yn cael ei docyn ei hun.",rFullName:"Enw llawn",rAddPerson:"Ychwanegu person",
+  rKidsNote:"Dim ond ar gyfer tocynnau ac i helpu i aduno plant coll y defnyddir enwau. Caiff manylion cofrestru eu dileu ar ôl y digwyddiad.",
+  rFix:"Llenwch y blychau sydd wedi'u hamlygu – mae angen o leiaf un oedolyn yn eich grŵp.",rNext:"Nesaf: datganiad diogelwch",rCancel:"Canslo",
+  rDeclFor:"Ar gyfer pob un o'r {n} o bobl yn eich grŵp",rSignFinger:"Llofnodwch gyda'ch bys",rSignHere:"Llofnodwch yma",rClear:"Clirio",rNews:"Anfonwch newyddion ataf am Ddiwrnodau Silwair yn y dyfodol (dewisol)",
+  rPrivacy:"Rydym yn defnyddio'r manylion hyn i roi eich tocynnau ac er diogelwch ar y diwrnod. Geiriad preifatrwydd enghreifftiol – bydd y trefnwyr yn rhoi eu hysbysiad eu hunain yn ei le.",
+  rFix2:"Ticiwch y ddau flwch a llofnodwch.",rRegister:"Cofrestru",rSave:"Cadw'r newidiadau",rBack:"Yn ôl",rDone:"Wedi cofrestru – mae eich tocynnau'n barod",rPeople:"o bobl",
+  rDeclDone:"Datganiad diogelwch wedi'i lofnodi gan {name} ar ran y grŵp cyfan",rDue:"I'w dalu wrth y gât: {amt}",rDueNote:"Dangoswch god QR unrhyw docyn wrth y gât dalu – cerdyn neu arian parod.",rAllPaid:"Wedi talu'r cyfan – mwynhewch y diwrnod!",
+  rPaid:"Wedi talu – i mewn am {t}",rPayGate:"Wedi cofrestru – talu wrth y gât",rShare:"Rhannu",rStopShare:"Stopio rhannu",rSharedWith:"Wedi'i rannu gyda {name}",rEdit:"Golygu'r grŵp",
+  rCancelReg:"Canslo'r cofrestriad",rCancelQ:"Bydd hyn yn dileu cofrestriad a thocynnau eich grŵp. Bydd unrhyw un sydd eisoes wedi talu'n cadw eu tocyn.",rCancelYes:"Ie, canslo",rKeep:"Cadw fy nghofrestriad",
+  rShareT:"Rhannu tocyn {name}",rShareSub:"Anfonwch y tocyn hwn at y person y mae ar ei gyfer, fel ei fod ar eu ffôn eu hunain – defnyddiol os ydyn nhw'n cyrraedd ar wahân. Mae'n aros yn eich rhestr chi hefyd, ond dim ond unwaith y gellir ei ddefnyddio wrth y gât.",
+  rShareTo:"At bwy ydych chi'n ei anfon?",rShareBtn:"Creu dolen rannu",rShareNote:"Os ydyn nhw'n cyrraedd ar wahân, maen nhw'n dangos y tocyn hwn wrth y gât ac yn talu drostyn nhw eu hunain.",
+  rPayNote:"Talu wrth y gât – bydd yr ariannwr yn sganio'r cod hwn.",rLinkGone:"Dydy'r ddolen docyn hon ddim yn ddilys mwyach – gofynnwch i'r person a'i hanfonodd.",rTestGate:"Prototeip: agor y sgrin ariannwr i brofi",order:"Archeb",swipe:"Llithrwch i weld pob tocyn",
+  t_adult:"Oedolyn",t_child:"Plentyn (5–15)",t_under5:"O dan 5 – am ddim",
+  declNeeded:"Llofnodwch y datganiad diogelwch ar ran eich grŵp i roi eich tocynnau ar waith.",declBtn:"Llofnodi ar ran fy ngrŵp",
+  declTitle:"Datganiad diogelwch",declSub:"Ar gyfer pawb yn archeb {o} ({n} o bobl)",
+  declAgree:"Rwyf wedi darllen y rheolau diogelwch ac yn eu derbyn ar ran pawb yn yr archeb hon.",declKids:"Rwy'n gyfrifol am oruchwylio'r plant yn fy ngrŵp bob amser.",
+  declName:"Teipiwch eich enw llawn i lofnodi",declSign:"Llofnodi a rhoi'r tocynnau ar waith",declDone:"Wedi'i lofnodi gan {name} – tocynnau ar waith",
+  inactive:"Ddim ar waith eto – llofnodwch y datganiad diogelwch",valid:"Dilys",usedAt:"Defnyddiwyd am {t}",withX:"Gyda {name}",
+  transfer:"Trosglwyddo",takeBack:"Cymryd yn ôl",testScan:"Prawf sganio",
+  trTitle:"Trosglwyddo'r tocyn hwn",trSub:"Byddan nhw'n cael eu copi eu hunain. Dim ond unwaith y gellir defnyddio pob tocyn, felly ar ôl ei drosglwyddo bydd yn diflannu o'ch ffôn.",
+  trName:"Eu henw",trContact:"Eu ffôn symudol neu e-bost",trSend:"Trosglwyddo'r tocyn",trLink:"Anfonwch y ddolen hon atyn nhw",copy:"Copïo'r ddolen",copied:"Wedi copïo ✓",openAs:"Gweld fel {name}",
+  sharedBy:"Wedi'i rannu gyda chi gan {name}",declByOther:"Mae {name} wedi derbyn y rheolau diogelwch ar ran eich grŵp.",readRules:"Darllen y rheolau diogelwch",
+  scanTitle:"Sganio wrth y gât – prawf",scanSub:"Prototeip yn unig: dyma beth mae staff y gât yn ei weld wrth sganio.",scanGroup:"Gadael y grŵp cyfan i mewn",
+  scanOk:"✓ Gadael 1 i mewn – {type}",scanUsed:"✗ Defnyddiwyd eisoes am {t} – peidiwch â gadael i mewn",scanInactive:"✗ Datganiad diogelwch heb ei lofnodi – gofynnwch i'r prynwr lofnodi yn yr ap",scanTransferred:"Wedi'i drosglwyddo – sganiwch eu copi nhw",
+  scanGroupOk:"✓ Gadael {n} i mewn: {list}",scanGroupNone:"Does dim tocynnau heb eu defnyddio ar ôl yn yr archeb hon.",
+  lostBtn:"Plentyn ar goll?",lostTitle:"Plentyn ar goll",lostSub:"Peidiwch â chynhyrfu – mae plant coll fel arfer yn cael eu canfod o fewn munudau.",
+  lost1:"Dywedwch wrth y stiward agosaf neu aelod o staff mewn dillad llachar ar unwaith. Byddan nhw'n radio'r ganolfan reoli.",
+  lost2:"Ewch i'r man plant coll yn y Cymorth Cyntaf yng Nghae 5.",
+  lost3:"Mae rhif eich ffôn symudol ar fand arddwrn eich plentyn – cadwch eich ffôn gyda chi ac ymlaen.",
+  lost4:"Wedi dod o hyd i blentyn ar ei ben ei hun? Arhoswch gyda nhw a dywedwch wrth stiward. Peidiwch â gadael y safle gyda nhw.",
+  lostCall:"Mewn argyfwng ffoniwch 999.",lostControl:"Rhif y ganolfan reoli – i'w ychwanegu gan y trefnwyr",showMap:"Dangos y Cymorth Cyntaf ar y map"}
+};
+const t=(k,v={})=>String((T[lang||"en"][k]??T.en[k]??k)).replace(/\{(\w+)\}/g,(_,x)=>v[x]);
+const RULES={en:["Stay behind the rope lines and barriers at every demonstration field.","Never approach a working machine. Wait until it has stopped and the operator signals it's safe.","Keep children with you and under close supervision at all times.","Dogs must be on a short lead and kept away from demonstration fields.","Watch for moving vehicles on the lanes between fields. Machinery has right of way.","Follow instructions from marshals in hi-vis.","No drones may be flown over the site.","Wear sturdy footwear. Fields can be uneven and wet.","In an emergency, tell any marshal or go to First Aid in Field 5."],
+ cy:["Arhoswch y tu ôl i'r rhaffau a'r rhwystrau ym mhob cae arddangos.","Peidiwch byth â mynd at beiriant sy'n gweithio. Arhoswch nes iddo stopio a'r gweithredwr yn dangos ei bod hi'n ddiogel.","Cadwch blant gyda chi ac o dan oruchwyliaeth agos bob amser.","Rhaid i gŵn fod ar dennyn byr a'u cadw draw o'r caeau arddangos.","Gwyliwch am gerbydau'n symud ar y lonydd rhwng caeau. Mae gan beiriannau'r flaenoriaeth.","Dilynwch gyfarwyddiadau'r stiwardiaid mewn dillad llachar.","Ni chaniateir hedfan dronau dros y safle.","Gwisgwch esgidiau cadarn. Gall y caeau fod yn anwastad ac yn wlyb.","Mewn argyfwng, dywedwch wrth unrhyw stiward neu ewch i'r Cymorth Cyntaf yng Nghae 5."]};
+const EXPECT={en:[["🚗","Arriving","Follow the signs from the A487 by the Rising Sun Inn. Parking is in Car Park 1 or 2."],["🎟️","The pay gate","Have your ticket QR code ready on your phone at the pay gate."],["🚜","Big, loud machines","Harvesters and mowers are very loud and move quickly. Everyone stays behind the rope lines."],["📱","Know what's on","The Map and Schedule show what's happening now and what's next."],["🍔","Food & toilets","The food village and toilets (including accessible) are in Field 5."],["🌿","Need a break?","There's a quiet area away from the machines, and free ear defenders to borrow at the information point."],["🌻","Here to help","Our staff recognise the Hidden Disabilities Sunflower lanyard – just ask if you need anything."]],
+ cy:[["🚗","Cyrraedd","Dilynwch yr arwyddion o'r A487 wrth dafarn y Rising Sun. Mae parcio ym Maes Parcio 1 neu 2."],["🎟️","Y gât dalu","Cadwch god QR eich tocyn yn barod ar eich ffôn wrth y gât dalu."],["🚜","Peiriannau mawr, swnllyd","Mae cynaeafwyr a pheiriannau torri gwair yn swnllyd iawn ac yn symud yn gyflym. Mae pawb yn aros y tu ôl i'r rhaffau."],["📱","Gwybod beth sy'n digwydd","Mae'r Map a'r Amserlen yn dangos beth sy'n digwydd nawr a beth sydd nesaf."],["🍔","Bwyd a thoiledau","Mae'r pentref bwyd a'r toiledau (gan gynnwys toiledau hygyrch) yng Nghae 5."],["🌿","Angen seibiant?","Mae ardal dawel i ffwrdd o'r peiriannau, ac amddiffynwyr clustiau am ddim i'w benthyg yn y man gwybodaeth."],["🌻","Yma i helpu","Mae ein staff yn adnabod laniard Blodyn yr Haul Anableddau Cudd – gofynnwch os oes angen unrhyw beth arnoch."]]};
 
-  <!-- Load our JavaScript last, so the page content appears first. -->
-  <script src="js/main.js"></script>
+/* ============ SITE / MAP DATA ============ */
+const W=895,H=1316;
+// GPS: two reference points from the site screenshots (Ninathe latitude estimated – confirm on site)
+// Projection of the 2027 site plan (built from the Marea field boundaries): x=a*lon+b*lat+c, y=d*lon+e*lat+f
+const GEO={x:[61945.4193,0,310000.1651],y:[0,-100188.0,5191297.2576]};
+const geoToPx=(lat,lon)=>[GEO.x[0]*lon+GEO.x[1]*lat+GEO.x[2],GEO.y[0]*lon+GEO.y[1]*lat+GEO.y[2]];
+const PL={1:{x:150,y:174,en:"Car Park 1",cy:"Maes Parcio 1"},2:{x:222,y:250,en:"Car Park 2",cy:"Maes Parcio 2"},3:{x:120,y:270,en:"Pay Gate",cy:"Gât Dalu"},4:{x:301,y:222,en:"Machinery Check Point (entrance)",cy:"Man Gwirio Peiriannau (mynedfa)"},5:{x:350,y:752,en:"Field 5 (main show field)",cy:"Cae 5 (prif gae'r sioe)"},6:{x:213,y:340},7:{x:259,y:485},8:{x:494,y:844},9:{x:318,y:911},10:{x:409,y:1028},11:{x:428,y:1156}};
+const plName=id=>PL[id][lang]||PL[id].en||`${t("field")} ${id}`;
+const AMEN=[{k:"food",ic:"🍔",bg:"#e8701a",x:474,y:648,en:"Food, drink and trade stands – north side of Field 5",cy:"Bwyd, diod a stondinau masnach – ochr ogleddol Cae 5"},{k:"food",ic:"🍺",bg:"#e8701a",x:430,y:40,en:"Rising Sun Inn",cy:"Tafarn y Rising Sun"},
+ {k:"wc",ic:"🚻",bg:"#2a6fb0",x:276,y:697,en:"Toilets – including accessible (Field 5)",cy:"Toiledau – gan gynnwys rhai hygyrch (Cae 5)"},{k:"wc",ic:"🚻",bg:"#2a6fb0",x:132,y:205,en:"Toilets – car parks",cy:"Toiledau – meysydd parcio"},
+ {k:"wc",ic:"🍼",bg:"#7a4fa8",x:300,y:712,en:"Baby change – next to the Field 5 toilets",cy:"Newid babanod – wrth ymyl toiledau Cae 5"},
+ {k:"aid",ic:"✚",bg:"#c8202a",x:500,y:697,en:"First aid & lost children (Field 5)",cy:"Cymorth cyntaf a phlant coll (Cae 5)"},
+ {k:"sens",ic:"🎧",bg:"#2a6fb0",x:92,y:296,en:"Information point – free ear defenders to borrow",cy:"Man gwybodaeth – amddiffynwyr clustiau am ddim"},
+ {k:"sens",ic:"🌿",bg:"#4f8a5f",x:118,y:140,en:"Quiet area – a calm space away from the machines",cy:"Ardal dawel – lle tawel i ffwrdd o'r peiriannau"}];
+const QUIET={x:118,y:140};
+
+/* ============ PROGRAMME (from the operations app) ============ */
+let OPS=null;
+function loadOps(){let d=store.get(OPS_KEY,null);if(!d||d.v!==1){d=seed();store.set(OPS_KEY,d)}OPS=d}
+const GENERAL=[{f:3,s:"10:00",e:"10:00",en:"Gates open",cy:"Gatiau'n agor",noise:"quiet"},{f:5,s:"10:00",e:"17:00",en:"Trade stands & static display",cy:"Stondinau masnach ac arddangosfa",noise:"quiet"},{f:5,s:"13:00",e:"13:30",en:"Talk: making better silage on a budget",cy:"Sgwrs: gwneud gwell silwair ar gyllideb",noise:"quiet"},{f:5,s:"17:00",e:"17:00",en:"Show closes",cy:"Y sioe'n cau",noise:"quiet"}];
+const noiseOf=name=>/harvest|chop|mow|forage|bal|wagon|buck/i.test(name)?"loud":/ted|rak|clamp/i.test(name)?"moderate":"quiet";
+const DEMO_CY={"Mowing":"Torri gwair","Tedding":"Chwalu gwair","Vintage raking":"Rhacanu hen beiriannau","Vintage harvesting":"Cynaeafu hen beiriannau","Forage harvesting":"Cynaeafu porthiant","Buckraking the clamp":"Bwcracio'r clamp"};
+let DEMOS=[];
+function buildDemos(){
+ const L=OPS.settings.len;
+ const g=GENERAL.map((d,i)=>({id:"g"+i,f:d.f,start:parseTime(d.s),end:parseTime(d.e),title:d[lang]||d.en,noise:d.noise,machines:[],general:true,state:null}));
+ const o=OPS.slots.map(s=>({id:s.id,f:s.field,start:s.start+(s.delay||0),end:s.start+L+(s.delay||0),delay:s.delay||0,state:s.state,title:(lang==="cy"&&DEMO_CY[s.demo])||s.demo,noise:noiseOf(s.demo),
+   machines:[...new Set(s.team.flatMap(tm=>[tm.power,...tm.impls]).filter(Boolean))].filter(id=>{const m=OPS.machines.find(x=>x.id===id);return m&&m.status==="approved"})}));
+ DEMOS=[...g,...o].sort((a,b)=>a.start-b.start);
+}
+// public machine record – no drivers, no contact details
+const pubMach=id=>{const m=OPS.machines.find(x=>x.id===id);if(!m||m.status!=="approved")return null;const ex=OPS.exhibitors.find(e=>e.id===m.exId);const md=(P3?P3.media:[]).filter(x=>x.mId===m.id&&x.status==="approved"),ph=md.filter(x=>x.kind==="photo"&&LOCAL_IMG(x.src)),h=P3&&P3.hist[m.id];
+ return{id:m.id,make:m.make,type:m.type,kind:m.kind,year:m.year,story:m.story,photo:ph.length?ph[0].src:null,photos:ph.map(x=>x.src),videos:md.filter(x=>x.kind==="video"&&ytId(x.src)).map(x=>({id:ytId(x.src),cap:x.caption})),hist:h&&h.status==="approved"?h:null,exhibitor:ex?ex.name:""}};
+const slotsOf=id=>DEMOS.filter(d=>d.machines.includes(id));
+const machIcon=m=>m.kind==="power"?"🚜":/harvest/i.test(m.type)?"🌾":/trailer|wagon/i.test(m.type)?"🚛":"⚙️";
+
+/* ============ TICKET ORDER ============ */
+const ORDER_DEFAULT={ref:"PSD27-ORD-1043",purchaser:"Sample Visitor",decl:null,tickets:[
+ {code:"PSD27-A-004817",type:"adult",transfer:null,used:null},{code:"PSD27-A-004818",type:"adult",transfer:null,used:null},
+ {code:"PSD27-C-004819",type:"child",transfer:null,used:null},{code:"PSD27-C-004820",type:"child",transfer:null,used:null},
+ {code:"PSD27-U-004821",type:"under5",transfer:null,used:null}]};
+let ORDER=store.get("psd_order",null)||JSON.parse(JSON.stringify(ORDER_DEFAULT));
+const saveOrder=()=>store.set("psd_order",ORDER);
+const tkType=k=>t("t_"+k);
+const recipCode=()=>{const h=location.hash.slice(1);return /^t-R-\d{4}-\d+$/.test(h)?h.slice(2):null};
+
+/* ============ STATE ============ */
+let now=690,zoom=1,tx=0,ty=0,amFilter="all",schedCat="all",mq="",viewName=null;
+let calm=store.get("psd_calm",null),easy=store.get("psd_easy",false),sens=store.get("psd_sens",false),accepted=store.get("psd_safe2",false);
+try{if(calm===null)calm=window.matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){calm=false}
+let mePx=null;
+const photos=[{c:"2026",ph:"🌾"},{c:"2026",ph:"🚜"},{c:"2026",ph:"🟢"}];
+let P3=loadP3(),SPONSORS=[];
+const LOCAL_IMG=v=>/^data:image\/(jpeg|png|webp);base64,/.test(v||"")||/^(news|sponsors)\/[\w.-]+$/.test(v||"");
+
+/* ============ STATUS ============ */
+function status(d){if(d.state==="cancel")return"cancel";if(d.state==="done")return"done";if(d.state==="live")return"live";
+ if(d.start===d.end)return now>=d.start?"done":d.start-now<=30?"soon":"next";if(now>=d.end)return"done";if(now>=d.start)return"live";if(d.start-now<=30)return"soon";return"next"}
+function stPill(d){const s=status(d);const m={live:["p-live","● "+t("live")],soon:["p-soon",t("soon",{n:d.start-now})],next:["p-next",t("next")],done:["p-done",t("done")],cancel:["p-bad",t("cancel")]}[s];
+ return`<span class="pill ${m[0]}">${m[1]}</span>${d.delay&&s!=="done"?` <span class="pill p-bad">${t("delay",{n:d.delay})}</span>`:""}`}
+const noisePill=n=>n==="loud"?`<span class="pill p-loud" title="${esc(t("loudTip"))}">🔊 ${t("loud")}</span>`:n==="moderate"?`<span class="pill p-next">🔉 ${t("moderate")}</span>`:"";
+const prog=d=>{if(status(d)!=="live"||d.end===d.start)return"";return`<div class="prog"><span style="width:${Math.min(100,(now-d.start)/(d.end-d.start)*100)}%"></span></div>`};
+const tm=d=>d.start===d.end?fmt(d.start):`${fmt(d.start)}<small>– ${fmt(d.end)}</small>`;
+
+/* ============ RENDER ============ */
+const VIEWS=["news","map","sched","mach","photos","ticket"],ICONS={news:"📰",map:"🗺️",sched:"🕒",mach:"🚜",photos:"📷",ticket:"🎟️"};
+function chrome(){
+ document.documentElement.lang=lang==="cy"?"cy":"en";
+ document.body.classList.toggle("calm",!!calm);document.body.classList.toggle("easy",!!easy);
+ $("#hdate").innerHTML=`${t("tagline")}<br><span>${t("date")}<br>${t("hours")}</span>`;
+ $("#accBtn").textContent=t("access");$("#accBtn").classList.toggle("on",!!(calm||easy||sens));$("#safeBtn").textContent=t("safety");
+ $("#nav").innerHTML=VIEWS.map(v=>`<button class="${v===viewName?"on":""}" data-act="go" data-v="${v}"><span class="ic">${ICONS[v]}</span>${t(v)}</button>`).join("");
+ $("#cyflag").textContent=lang==="cy"?"Cyfieithiad drafft – i'w wirio gan siaradwr Cymraeg rhugl cyn lansio. (Draft translation – to be checked by a fluent Welsh speaker.)":"";
+}
+function go(v){viewName=v;document.querySelectorAll(".view").forEach(s=>s.classList.toggle("on",s.id==="v-"+v));chrome();R[v]();window.scrollTo(0,0);if(v==="map")requestAnimationFrame(()=>{if(zoom<minZ())zoom=minZ();applyMap()})}
+function renderAll(){loadOps();P3=loadP3();SPONSORS=P3.sponsors.filter(x=>x.status==="approved");buildDemos();chrome();renderBanner();noticeToasts();if(viewName)R[viewName]()}
+/* --- announcements: live banner + scheduled notifications from the operations app --- */
+const ntxt=n=>(lang==="cy"&&n.cy)||n.en;
+const outNotices=()=>P3.notices.filter(n=>noticeOut(n,now)).sort((a,b)=>b.at-a.at);
+function renderBanner(){const b=$("#banner");const recent=outNotices().find(n=>now-n.at<=20);const m=P3.banner?{txt:"📣 "+ntxt(P3.banner),urgent:1}:recent?{txt:"🔔 "+ntxt(recent)}:null;
+ b.style.display=m?"":"none";b.textContent=m?m.txt:"";b.style.background=m&&m.urgent?"#b3261e":"";b.style.color=m&&m.urgent?"#fff":"";b.setAttribute("role","status")}
+let seenNotices=new Set();function noticeToasts(){const outs=outNotices();outs.forEach(n=>{if(!seenNotices.has(n.id)){if(seenNotices.size)toast(t("newNotice"),ntxt(n))}});seenNotices=new Set(outs.map(n=>n.id).concat(["_"]))}
+const R={};
+
+R.news=()=>{const today=new Date();today.setHours(0,0,0,0);const days=Math.round((new Date(2027,8,11)-today)/864e5);
+ $("#v-news").innerHTML=`<div class="pad" style="padding-bottom:6px"><div class="sec">${t("news")}</div></div>
+ <div class="count">${days>0?`<b>${days}</b><div>${t("daysTo")}<br><strong>${t("fullDate")}</strong></div>`:`<b>${t("today")}</b><div>${t("gates")}</div>`}</div>
+ ${outNotices().length||P3.banner?`<div class="card"><h3>${t("announce")}</h3>${P3.banner?`<div style="background:#b3261e;color:#fff;border-radius:9px;padding:8px 10px;margin-bottom:6px;font-weight:600">📣 ${esc(ntxt(P3.banner))}</div>`:""}${outNotices().map(n=>`<div style="display:flex;gap:10px;padding:6px 0;border-bottom:1px solid var(--line)"><b style="min-width:42px">${fmt(n.at)}</b><div>${esc(ntxt(n))}</div></div>`).join("")}</div>`:""}
+ ${P3.news.filter(n=>n.status==="published").sort((a,b)=>b.date.localeCompare(a.date)).map(n=>{const c=lang==="cy"&&n.cy.t?n.cy:n.en;const y=ytId(n.yt);let d="";try{d=new Date(n.date+"T12:00").toLocaleDateString(lang==="cy"?"cy-GB":"en-GB",{day:"numeric",month:"long",year:"numeric"})}catch(e){d=n.date}
+  return`<article class="post">${n.video&&/^news\/[\w.-]+$/.test(n.video)?`<video controls playsinline preload="metadata"${LOCAL_IMG(n.img)?` poster="${n.img}"`:""} src="${n.video}"></video>`:LOCAL_IMG(n.img)?`<img src="${n.img}" alt="">`:""}<div class="pb"><div class="pd">${esc(d)}</div><h3>${esc(c.t)}</h3><p>${esc(c.b)}</p>${y?`<a class="btn alt" href="https://youtu.be/${y}" target="_blank" rel="noopener">▶ ${t("watch")}</a>`:""}</div></article>`}).join("")}
+ <div class="card"><h3>${t("expect")}</h3>${EXPECT[lang||"en"].map(([i,h,x])=>`<div class="expect"><div class="n">${i}</div><div><b>${esc(h)}</b>${esc(x)}</div></div>`).join("")}</div>
+ <div class="card"><h3>🚜 ${t("exQ")}</h3><div>${t("exTxt")}</div><button class="btn" data-act="exApply">${t("exBtn")}</button><a href="ops.html" style="display:block;text-align:center;margin-top:8px;font-size:14px;color:var(--green);font-weight:600">${t("exIn")} →</a></div>
+ <div class="pad" style="padding-bottom:6px"><div class="sec">${t("sponsors")}</div></div>
+ <div class="sgrid">${SPONSORS.map((s,i)=>`<button class="scard" data-act="sponsor" data-i="${i}"><div class="slogo" style="background:${s.bg==="#000"?"#000":"#fff"}"><img src="${LOCAL_IMG(s.logo)?s.logo:""}" alt="${esc(s.n)}"></div><b>${esc(s.n)}</b></button>`).join("")}</div>
+ <div class="card"><h3>${t("sponsorQ")}</h3><div>${t("sponsorTxt")}</div><button class="btn" data-act="spInterest">${t("sponsorBtn")}</button><div style="font-size:12.5px;color:var(--muted);margin-top:6px">pembs.silage.day@gmail.com · 07974 947764</div></div>`;
+};
+
+/* --- map --- */
+function mapDims(){const w=$("#mapwrap");return{ww:w.clientWidth,wh:w.clientHeight,ch:w.clientWidth*H/W}}
+function minZ(){const d=mapDims();return d.ww&&d.wh?Math.min(1,d.wh/d.ch):1}
+function applyMap(anim){if(!isFinite(zoom)||zoom<=0)zoom=1;const d=mapDims();if(!d.ww)return;const cw=d.ww*zoom,ch=d.ch*zoom;
+ tx=cw<=d.ww?(d.ww-cw)/2:Math.min(0,Math.max(d.ww-cw,tx));ty=ch<=d.wh?(d.wh-ch)/2:Math.min(0,Math.max(d.wh-ch,ty));
+ const el=$("#mapinner");el.classList.toggle("anim",!!anim&&!calm);el.style.transform=`translate(${tx}px,${ty}px) scale(${zoom})`;el.style.setProperty("--inv",(1/zoom).toFixed(4))}
+function zoomAt(nz,cx,cy,anim){nz=Math.max(minZ(),Math.min(5,nz));const k=nz/zoom;tx=cx-(cx-tx)*k;ty=cy-(cy-ty)*k;zoom=nz;applyMap(anim)}
+function focusPx(x,y){const d=mapDims();zoom=Math.max(zoom,2.2);tx=d.ww/2-x/W*d.ww*zoom;ty=d.wh/2-y/H*d.ch*zoom;applyMap(true)}
+R.map=()=>{
+ $("#mapctl").innerHTML=[["all",t("all")],["food","🍔 "+t("food")],["wc","🚻 "+t("wc")],["aid","✚ "+t("aid")],["sens","🎧 "+t("sensory")]].map(([k,l])=>`<button class="chip ${amFilter===k?"on":""}" data-act="amen" data-k="${k}">${l}</button>`).join("")+`<button class="chip" data-act="locate">${t("locate")}</button><button class="chip" data-act="lost" style="background:#b3261e;color:#fff;border-color:#b3261e">🧒 ${t("lostBtn")}</button><div class="zoom"><button data-act="zin" aria-label="Zoom in">+</button><button data-act="zout" aria-label="Zoom out">−</button><button data-act="zreset" aria-label="Whole site" style="font-size:15px">⤢</button></div>`;
+ $("#maphint").textContent=t("hint");
+ const inner=$("#mapinner");inner.querySelectorAll(".pin,.amen,.zone,.me").forEach(n=>n.remove());
+ const showSens=sens||amFilter==="sens";
+ if(showSens){DEMOS.filter(d=>!d.general&&d.noise==="loud"&&["live","soon"].includes(status(d))).forEach(d=>{const p=PL[d.f];const z=document.createElement("div");z.className="zone loud";z.style.cssText=`left:${p.x/W*100}%;top:${p.y/H*100}%;width:34%;aspect-ratio:1`;inner.appendChild(z)});
+  const q=document.createElement("div");q.className="zone quiet";q.style.cssText=`left:${QUIET.x/W*100}%;top:${QUIET.y/H*100}%;width:22%;aspect-ratio:1`;inner.appendChild(q)}
+ Object.keys(PL).forEach(id=>{const p=PL[id];const ds=DEMOS.filter(d=>d.f==id&&!d.general);const live=ds.find(d=>status(d)==="live"),soon=ds.find(d=>status(d)==="soon");
+  const b=document.createElement("button");b.className="pin"+(live?" live":soon?" soon":"");b.style.left=p.x/W*100+"%";b.style.top=p.y/H*100+"%";b.setAttribute("aria-label",plName(id));
+  b.innerHTML=`<span class="ring"></span>`+(live?`<span class="badge">${calm?"●":"LIVE"}</span>`:soon?`<span class="badge">${soon.start-now}m</span>`:"");b.dataset.act="place";b.dataset.id=id;inner.appendChild(b)});
+ AMEN.forEach((a,i)=>{const b=document.createElement("button");b.className="amen"+(amFilter==="all"||amFilter===a.k||(showSens&&a.k==="sens")?"":" hide");b.style.cssText=`left:${a.x/W*100}%;top:${a.y/H*100}%;background:${a.bg}`;b.textContent=a.ic;b.setAttribute("aria-label",a[lang]||a.en);b.dataset.act="amenity";b.dataset.i=i;inner.appendChild(b)});
+ if(mePx){const m=document.createElement("div");m.className="me";m.style.cssText=`left:${mePx[0]/W*100}%;top:${mePx[1]/H*100}%`;inner.appendChild(m)}
+ $("#legend").innerHTML=`<span><i style="border:3px solid var(--live)"></i>${t("legLive")}</span><span><i style="border:3px dashed var(--amber)"></i>${t("legSoon")}</span>${showSens?`<span><i style="background:rgba(217,72,15,.5)"></i>${t("legLoud")}</span><span><i style="background:rgba(42,111,176,.5)"></i>${t("legQuiet")}</span>`:""}<span>${t("tapField")}</span>`;
+ const live=DEMOS.filter(d=>!d.general&&status(d)==="live"),soon=DEMOS.filter(d=>!d.general&&status(d)==="soon"),nxt=DEMOS.filter(d=>!d.general&&status(d)==="next").slice(0,2);
+ $("#nowList").innerHTML=`<div class="pad" style="padding-bottom:4px"><div class="sec" style="font-size:20px">${t("happening")}</div>${live.length?"":`<div style="color:var(--muted);font-size:14px">${t("none")}</div>`}</div>${[...live,...soon].map(item).join("")}${!live.length&&!soon.length&&nxt.length?`<div class="pad" style="padding:8px 16px 4px;font-weight:700">${t("nextUp")}</div>`+nxt.map(item).join(""):""}`;
+ applyMap();
+};
+function item(d){const s=status(d);return`<button class="item ${s==="done"||s==="cancel"?"done":""}" data-act="place" data-id="${d.f}"><div class="t">${tm(d)}</div><div class="b"><div class="ttl">${esc(d.title)}</div><div class="meta"><span class="fieldtag">${d.f}</span>${esc(plName(d.f))}${d.machines.length?" · "+t("machinesN",{n:d.machines.length}):""}</div>${stPill(d)} ${noisePill(d.noise)}${prog(d)}</div></button>`}
+function openPlace(id){
+ const ds=DEMOS.filter(d=>d.f==id);
+ openSheet(`<h2>${id}. ${esc(plName(id))}</h2><div class="kind">${+id>=6?(lang==="cy"?"Cae arddangos torri gwair":"Grass cutting demonstration field"):""}</div>
+ <div style="font-weight:700;margin:6px 0">${t("onHere")}</div>${ds.length?ds.map(d=>`<div style="padding:9px 0;border-bottom:1px solid var(--line)"><b>${fmt(d.start)}${d.end!==d.start?"–"+fmt(d.end):""}</b> ${esc(d.title)}<br>${stPill(d)} ${noisePill(d.noise)}${prog(d)}
+  ${d.machines.length?`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">${d.machines.map(pubMach).filter(Boolean).map(m=>`<button class="chip" data-act="machine" data-id="${m.id}">${machIcon(m)} ${esc(m.make)}</button>`).join("")}</div>`:""}</div>`).join(""):`<div style="color:var(--muted)">${t("noneHere")}</div>`}
+ ${ds.some(d=>d.noise==="loud")?`<div class="note">🎧 ${t("earInfo")}</div>`:""}`);
+ focusPx(PL[id].x,PL[id].y);
+}
+
+/* --- schedule --- */
+R.sched=()=>{const cats=[["all",t("all")],["loud","🔊 "+t("loud")],["quiet","🔇 "+t("quiet")],...[...new Set(DEMOS.filter(d=>!d.general).map(d=>d.f))].sort((a,b)=>a-b).map(f=>["f"+f,`${t("field")} ${f}`])];
+ const list=DEMOS.filter(d=>schedCat==="all"||(schedCat==="loud"&&d.noise==="loud")||(schedCat==="quiet"&&d.noise!=="loud")||schedCat==="f"+d.f);
+ $("#v-sched").innerHTML=`<div class="pad" style="padding-bottom:6px"><div class="sec">${t("schedIntro")}</div></div><div class="chips">${cats.map(([k,l])=>`<button class="chip ${schedCat===k?"on":""}" data-act="cat" data-k="${k}">${l}</button>`).join("")}</div>${list.map(item).join("")}`;
+};
+
+/* --- machines --- */
+function allPubMachines(){const ids=[...new Set(DEMOS.flatMap(d=>d.machines))];return ids.map(pubMach).filter(Boolean)}
+R.mach=()=>{const q=mq.toLowerCase();const ms=allPubMachines().filter(m=>!q||(m.make+m.type+m.exhibitor).toLowerCase().includes(q));
+ $("#v-mach").innerHTML=`<div class="pad" style="padding-bottom:4px"><div class="sec">${t("mach")}</div><div style="font-size:14px;color:var(--muted);margin-bottom:10px">${t("machIntro")}</div></div>
+ <input class="search" placeholder="${esc(t("search"))}" value="${esc(mq)}" id="mq"><div class="mgrid">${ms.map(m=>{const sl=slotsOf(m.id);const live=sl.some(d=>status(d)==="live");const fl=[...new Set(sl.map(d=>d.f))];
+  return`<button class="mcard" data-act="machine" data-id="${m.id}"><div class="mimg"${m.photo?` style="background:#000 url('${m.photo}') center/cover"`:""}>${m.photo?"":machIcon(m)}</div><div class="mb"><div class="mn">${esc(m.make)}</div><div class="mt">${esc(m.type)} · ${fl.length?`${t("field")} ${fl.join(", ")}`:t("notTimetabled")}</div>${live?`<span class="pill p-live">● ${t("live")}</span>`:""}</div></button>`}).join("")}</div>`;
+ const inp=$("#mq");inp.oninput=()=>{mq=inp.value;const p=inp.selectionStart;R.mach();const n=$("#mq");n.focus();try{n.setSelectionRange(p,p)}catch(e){}};
+};
+function openMachine(id){const m=pubMach(id);if(!m)return;const sl=slotsOf(id);
+ openSheet(`${m.photo?`<img src="${m.photo}" alt="" style="width:100%;border-radius:12px">`:`<div class="mimg" style="height:110px;border-radius:12px;font-size:54px">${machIcon(m)}</div>`}
+ <h2 style="margin-top:10px">${esc(m.make)}</h2><div class="kind">${esc(m.type)}${m.exhibitor?" · "+esc(m.exhibitor):""}</div>${m.year?`<div><b>${t("year")}:</b> ${esc(m.year)}</div>`:""}
+ ${m.photos.length>1?`<div style="display:flex;gap:6px;overflow-x:auto;margin-top:8px">${m.photos.slice(1).map(src=>`<img src="${src}" alt="" style="height:80px;border-radius:8px">`).join("")}</div>`:""}
+ ${m.story?`<div style="font-weight:700;margin-top:10px">${t("story")}</div><p style="margin:4px 0">${esc(m.story)}</p>`:""}
+ ${m.hist?`<div style="font-weight:700;margin-top:12px">${t("history")}</div><p style="margin:4px 0">${esc(m.hist.summary)}</p>${m.hist.tl.map(([y,x])=>`<div style="display:flex;gap:10px;padding:4px 0"><b style="min-width:70px;color:var(--green)">${esc(y)}</b><span>${esc(x)}</span></div>`).join("")}<div style="font-size:12px;color:var(--muted);margin-top:6px">✨ ${t("aiNote")}${m.hist.sources.length?` ${t("sources")}: ${m.hist.sources.map(x=>{const u=safeUrl(x[1]);return u?`<a href="${esc(u)}" target="_blank" rel="noopener">${esc(x[0])}</a>`:esc(x[0])}).join(" · ")}`:""}</div>`:""}
+ ${m.videos.length?`<div style="font-weight:700;margin-top:12px">${t("videos")}</div>${m.videos.map(v=>`<a class="btn alt" href="https://youtu.be/${v.id}" target="_blank" rel="noopener">▶ ${esc(v.cap||t("watch"))}</a>`).join("")}`:""}
+ <div style="font-weight:700;margin-top:12px">${t("seeWorking")}</div>${sl.length?sl.map(d=>`<div style="display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)"><div style="flex:1"><b>${fmt(d.start)}–${fmt(d.end)}</b> · <span class="fieldtag">${d.f}</span>${esc(plName(d.f))}<br>${esc(d.title)}<br>${stPill(d)} ${noisePill(d.noise)}</div><button class="chip" data-act="place" data-id="${d.f}">🗺️</button></div>`).join(""):`<div style="color:var(--muted)">${t("notTimetabled")}</div>`}`)}
+
+/* --- photos --- */
+R.photos=()=>{$("#v-photos").innerHTML=`<div class="pad" style="padding-bottom:10px"><div class="sec">${t("photosIntro")}</div></div><label class="upl">${t("addPhotos")}<br><span style="font-weight:500;font-size:13px">${t("addPhotosSub")}</span><input type="file" accept="image/*" multiple id="pin"></label>
+ <div class="pgrid">${photos.map(p=>`<figure>${p.url?`<img src="${p.url}" alt="">`:p.ph}</figure>`).join("")}</div><div class="pad"><div class="note">${t("photosNote")}</div></div>`;
+ $("#pin").onchange=e=>{[...e.target.files].filter(f=>/^image\//.test(f.type)&&f.size<15e6).slice(0,10).forEach(f=>photos.unshift({url:URL.createObjectURL(f)}));R.photos()}};
+
+/* --- pre-registration (free – pay at the gate) --- */
+const GKEY="psd_gate";
+const gGet=()=>{const g=store.get(GKEY,null)||{seq:0,rseq:140,signins:[],prices:{adults:10,children:5,under5:0}};g.prices=g.prices||{adults:10,children:5,under5:0};g.rseq=g.rseq||140;return g};
+const gSet=g=>store.set(GKEY,g);
+let MYREG=store.get("psd_myreg",null); // this phone's registration code (lead adult)
+const myReg=()=>{if(!MYREG)return null;return gGet().signins.find(x=>x.code===MYREG)||null};
+const memberById=id=>{for(const x of gGet().signins){const m=(x.members||[]).find(y=>y.id===id);if(m)return{reg:x,m}}return null};
+const TYPE_KEYS={adult:"t_adult",child:"t_child",under5:"t_under5"};
+let draft=null,regStep=0,regHasInk=false,regSigURL=null;
+function newDraft(){const r=myReg();return r?{name:r.name,email:r.email,mobile:r.mobile||"",members:r.members.map(m=>({id:m.id,name:m.name,type:m.type})),editing:true}:{name:"",email:"",mobile:"",members:[{name:"",type:"adult"}],editing:false}}
+function priceLine(){const p=gGet().prices;return`${t("t_adult")} £${p.adults} · ${t("t_child")} £${p.children} · ${t("t_under5")}${p.under5?" £"+p.under5:""}`}
+function regTicket(reg,m,shared){
+ const st=m.paid?`<div style="font-size:46px">✓</div><div class="state" style="color:var(--live)">${t("rPaid",{t:m.paid.at})}</div>`:`<div class="qrbox" data-code="${m.id}"></div><div class="state" style="color:#8a5300">${t("rPayGate")}</div>`;
+ const acts=shared?"":`<div class="acts">${m.share?`<button class="btn alt" data-act="rUnshare" data-id="${m.id}">${t("rStopShare")}</button>`:`<button class="btn alt" data-act="rShare" data-id="${m.id}">${t("rShare")}</button>`}</div>`;
+ return`<div class="tk"><div class="top"><img src="logo.png" alt=""><div class="ty">${esc(m.name)}</div><div style="font-size:13px;font-weight:700;color:var(--muted)">${t(TYPE_KEYS[m.type])}</div></div><div class="mid">${st}<div class="cond" style="font-size:17px;font-weight:700;margin-top:6px">${m.id}</div>${m.share&&!shared?`<div style="font-size:12.5px;color:var(--quiet);font-weight:700">${t("rSharedWith",{name:esc(m.share.to)})}</div>`:""}</div>${acts}</div>`}
+R.ticket=()=>{
+ const lost=`<button class="lostbtn" data-act="lost"><span>🧒</span>${t("lostBtn")}</button>`;
+ const info=`<div class="card"><h3>${t("getting")}</h3><div>${t("gettingTxt")}</div><a class="btn" href="https://www.google.com/maps/search/?api=1&query=SA61+2UX" target="_blank" rel="noopener">${t("openMaps")}</a></div>`;
+ const proto=`<div class="pad" style="padding-top:0"><a class="btn alt" href="ops.html" style="font-size:12.5px">🧪 ${t("rTestGate")}</a></div>`;
+ const rc=recipCode();
+ if(rc){const f=memberById(rc);
+  $("#v-ticket").innerHTML=`<div class="pad" style="padding-bottom:6px"><div class="sec">${t("yourTicket")}</div>${f?`<div style="font-size:14px;color:var(--muted)">${t("sharedBy",{name:esc(f.reg.name)})}</div>`:""}</div>
+  ${f&&f.m.share?`<div class="tix" style="justify-content:center">${regTicket(f.reg,f.m,true)}</div><div class="note" style="margin:0 16px 14px">✓ ${t("declByOther",{name:esc(f.reg.name)})} <a href="#" data-act="safety">${t("readRules")}</a><br>${t("rPayNote")}</div>`:`<div class="card">${t("rLinkGone")}</div>`}
+  ${lost}${info}<div class="pad" style="padding-top:0"><button class="btn alt" data-act="backAll" style="font-size:12.5px">Prototype: back to the lead adult's view</button></div>`;fillQRs();return}
+ const reg=myReg();
+ if(regStep===0&&reg){
+  const c={adult:0,child:0,under5:0};reg.members.forEach(m=>c[m.type]++);const due=reg.members.filter(m=>!m.paid);const p=gGet().prices;const tot=due.reduce((a,m)=>a+(m.type==="adult"?p.adults:m.type==="child"?p.children:p.under5),0);
+  $("#v-ticket").innerHTML=`<div class="pad" style="padding-bottom:6px"><div class="sec">${t("yourTickets")}</div></div>
+  <div class="osum"><b>${reg.code}</b> · ${reg.members.length} ${t("rPeople")}<div style="font-size:12.5px;opacity:.9;margin-top:2px">${[c.adult?`${c.adult} × ${t("t_adult")}`:"",c.child?`${c.child} × ${t("t_child")}`:"",c.under5?`${c.under5} × ${t("t_under5")}`:""].filter(Boolean).join(" · ")}<br>${esc(reg.name)} · ${t("date")}</div></div>
+  <div class="note" style="margin:0 16px 12px;background:#dcf5e3;color:#11713a;font-weight:700">✓ ${t("rDeclDone",{name:esc(reg.name)})}</div>
+  ${due.length?`<div class="card" style="border:2px solid var(--amber)"><b>💷 ${t("rDue",{amt:"£"+tot})}</b><div style="font-size:13.5px;color:var(--muted);margin-top:4px">${t("rDueNote")}</div><div style="font-size:12.5px;color:var(--muted);margin-top:4px">${priceLine()}</div></div>`:`<div class="note" style="margin:0 16px 12px;font-weight:700">✓ ${t("rAllPaid")}</div>`}
+  <div style="font-size:12.5px;color:var(--muted);padding:0 16px 4px">${t("swipe")} →</div>
+  <div class="tix">${reg.members.map(m=>regTicket(reg,m,false)).join("")}</div>
+  <div class="pad" style="padding-top:0;display:flex;gap:8px"><button class="btn alt" style="margin-top:0" data-act="rEdit">✏️ ${t("rEdit")}</button><button class="btn alt" style="margin-top:0" data-act="rCancelReg">${t("rCancelReg")}</button></div>
+  ${lost}${info}${proto}`;fillQRs();return}
+ if(regStep===0){
+  $("#v-ticket").innerHTML=`<div class="pad" style="padding-bottom:6px"><div class="sec">${t("rTitle")}</div></div>
+  <div class="card"><h3>${t("rFree")}</h3><div>${t("rIntro")}</div><ul style="padding-left:20px;margin:10px 0">${[t("rB1"),t("rB2"),t("rB3")].map(x=>`<li style="margin-bottom:5px">${x}</li>`).join("")}</ul><div style="font-size:13px;color:var(--muted)">${t("rPayAtGate")}: ${priceLine()}</div><button class="btn" data-act="rStart">${t("rStart")}</button></div>
+  ${lost}${info}${proto}`;return}
+ if(regStep===1){
+  $("#v-ticket").innerHTML=`<div class="pad" style="padding-bottom:6px"><div class="sec">${draft.editing?t("rEdit"):t("rTitle")}</div><div style="font-size:13px;color:var(--muted)">${t("rStep",{n:1})}</div></div>
+  <div class="card"><h3>${t("rLead")}</h3>
+   <label class="fl">${t("rLeadName")} *</label><input class="fi" id="rgName" value="${esc(draft.name)}" autocomplete="name">
+   <label class="fl">${t("rEmail")} *</label><input class="fi" id="rgEmail" type="email" value="${esc(draft.email)}" autocomplete="email">
+   <label class="fl">${t("rMobile")}</label><input class="fi" id="rgMob" type="tel" value="${esc(draft.mobile)}" autocomplete="tel"></div>
+  <div class="card"><h3>${t("rWho")}</h3><div style="font-size:13px;color:var(--muted);margin-bottom:6px">${t("rWhoSub")}</div>
+   <div id="rgMembers">${draft.members.map((m,i)=>`<div style="display:flex;gap:6px;align-items:center;margin-bottom:8px"><input class="fi rgM" data-i="${i}" placeholder="${esc(t("rFullName"))}" value="${esc(m.name)}" style="flex:1.4"><select class="fi rgT" data-i="${i}" style="flex:1">${["adult","child","under5"].map(k=>`<option value="${k}" ${m.type===k?"selected":""}>${t(TYPE_KEYS[k])}</option>`).join("")}</select>${i?`<button class="chip" data-act="rDel" data-i="${i}" aria-label="Remove">✕</button>`:'<span style="width:34px"></span>'}</div>`).join("")}</div>
+   <button class="btn alt" data-act="rAdd" style="margin-top:4px">＋ ${t("rAddPerson")}</button>
+   <div class="note">${t("rKidsNote")}</div></div>
+  <div class="pad" style="padding-top:0"><div id="rgErr" style="color:var(--red);font-weight:700;display:none">${t("rFix")}</div><button class="btn" data-act="rNext">${t("rNext")}</button><button class="btn alt" data-act="rBack0">${t("rCancel")}</button></div>`;
+  // first member = lead adult name by default
+  const ln=$("#rgName"),m0=document.querySelector('.rgM[data-i="0"]');ln.addEventListener("input",()=>{if(!m0.dataset.touched)m0.value=ln.value});m0.addEventListener("input",()=>m0.dataset.touched=1);
+  return}
+ if(regStep===2){
+  $("#v-ticket").innerHTML=`<div class="pad" style="padding-bottom:6px"><div class="sec">${t("declTitle")}</div><div style="font-size:13px;color:var(--muted)">${t("rStep",{n:2})} · ${t("rDeclFor",{n:draft.members.length})}</div></div>
+  <div class="card"><ol class="rules">${RULES[lang||"en"].map(x=>`<li>${esc(x)}</li>`).join("")}</ol><div class="note">${t("disclaimer")}</div>
+   <div style="font-size:13.5px;margin-top:6px"><b>${t("rWho")}:</b> ${draft.members.map(m=>`${esc(m.name)} (${t(TYPE_KEYS[m.type])})`).join(", ")}</div>
+   <label class="chk" id="rgAgL"><input type="checkbox" id="rgAg">${t("declAgree")}</label><label class="chk" id="rgKdL"><input type="checkbox" id="rgKd">${t("declKids")}</label>
+   <label class="fl">${t("rSignFinger")}</label>
+   <div class="sigbox" id="rgSigBox"><canvas id="rgSig"></canvas><span class="ph">${t("rSignHere")}</span><button class="cl" data-act="rSigClear">${t("rClear")}</button></div>
+   <label class="chk" style="font-weight:500;font-size:14.5px"><input type="checkbox" id="rgNews">${t("rNews")}</label>
+   <div class="note">${t("rPrivacy")}</div></div>
+  <div class="pad" style="padding-top:0"><div id="rgErr2" style="color:var(--red);font-weight:700;display:none">${t("rFix2")}</div><button class="btn" data-act="rSubmit">${draft.editing?t("rSave"):t("rRegister")}</button><button class="btn alt" data-act="rBack1">${t("rBack")}</button></div>`;
+  setupSig();return}
+};
+function setupSig(){const cv=$("#rgSig"),ctx=cv.getContext("2d");regHasInk=false;let d=false,last=null;
+ const size=()=>{const r=cv.getBoundingClientRect(),dp=window.devicePixelRatio||1;cv.width=r.width*dp;cv.height=r.height*dp;ctx.setTransform(dp,0,0,dp,0,0);ctx.lineWidth=2.4;ctx.lineCap="round";ctx.lineJoin="round";ctx.strokeStyle="#1b2419"};size();
+ const pos=e=>{const r=cv.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top}};
+ cv.addEventListener("pointerdown",e=>{d=true;last=pos(e);try{cv.setPointerCapture(e.pointerId)}catch(x){}});
+ cv.addEventListener("pointermove",e=>{if(!d)return;const p=pos(e);ctx.beginPath();ctx.moveTo(last.x,last.y);ctx.lineTo(p.x,p.y);ctx.stroke();last=p;if(!regHasInk){regHasInk=true;$("#rgSigBox .ph").style.display="none";$("#rgSigBox").classList.remove("bad")}});
+ ["pointerup","pointercancel","pointerleave"].forEach(ev=>cv.addEventListener(ev,()=>d=false));
+ window.__rgClear=()=>{ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,cv.width,cv.height);size();regHasInk=false;$("#rgSigBox .ph").style.display=""};
+ window.__rgImg=()=>{const s=document.createElement("canvas");s.width=360;s.height=110;const x=s.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,360,110);x.drawImage(cv,0,0,360,110);return s.toDataURL("image/jpeg",.6)};}
+function readDraft(){draft.name=$("#rgName").value.trim();draft.email=$("#rgEmail").value.trim();draft.mobile=$("#rgMob").value.trim();
+ document.querySelectorAll(".rgM").forEach(el=>{draft.members[+el.dataset.i].name=el.value.trim()});document.querySelectorAll(".rgT").forEach(el=>{draft.members[+el.dataset.i].type=el.value})}
+function shareSheet(id){const f=memberById(id);openSheet(`<h2>${t("rShareT",{name:esc(f.m.name)})}</h2><p style="font-size:14px">${t("rShareSub")}</p><label class="fl">${t("rShareTo")}</label><input class="fi" id="shN" value="${esc(f.m.name)}"><label class="fl">${t("trContact")}</label><input class="fi" id="shC"><button class="btn" data-act="rShareGo" data-id="${id}">${t("rShareBtn")}</button>`)}
+
+function fillQRs(){document.querySelectorAll(".qrbox[data-code]").forEach(el=>{el.innerHTML="";try{new QRCode(el,{text:el.dataset.code,width:160,height:160,colorDark:"#1b2419",colorLight:"#ffffff"})}catch(e){el.textContent="QR"}})}
+function lostSheet(){openSheet(`<h2>🧒 ${t("lostTitle")}</h2><div class="kind">${t("lostSub")}</div>${[t("lost1"),t("lost2"),t("lost3"),t("lost4")].map((x,i)=>`<div class="step"><b class="n">${i+1}</b><div>${esc(x)}</div></div>`).join("")}
+ <div class="note" style="font-weight:700">☎ ${t("lostCall")}<br><span style="font-weight:500">${t("lostControl")}</span></div><button class="btn red" data-act="lostMap">${t("showMap")}</button>`)}
+function declSheet(){const n=ORDER.tickets.length;openSheet(`<h2>${t("declTitle")}</h2><div class="kind">${t("declSub",{o:ORDER.ref,n})}</div><ol class="rules">${RULES[lang||"en"].map(x=>`<li>${esc(x)}</li>`).join("")}</ol><div class="note">${t("disclaimer")}</div>
+ <label class="chk"><input type="checkbox" id="dA">${t("declAgree")}</label><label class="chk"><input type="checkbox" id="dK">${t("declKids")}</label>
+ <label class="fl">${t("declName")}</label><input class="fi" id="dN" value=""><button class="btn" data-act="declSign">${t("declSign")}</button>`)}
+
+/* ============ SHEETS ============ */
+let sheetLock=false;
+function openSheet(h,lock){$("#sheetBody").innerHTML=h;$("#sheet").classList.add("on");$("#scrim").classList.add("on");sheetLock=!!lock;$(".close").style.display=lock?"none":"";$("#sheet").scrollTop=0}
+function closeSheet(force){if(sheetLock&&!force)return;$("#sheet").classList.remove("on");$("#scrim").classList.remove("on");sheetLock=false}
+function langSheet(){openSheet(`<h2>${T.en.welcome}</h2><div class="kind">${T.cy.choose} · ${T.en.choose}</div><div class="langpick"><button data-act="lang" data-l="cy" class="${lang==="cy"?"on":""}">Cymraeg</button><button data-act="lang" data-l="en" class="${lang==="en"?"on":""}">English</button></div>`,true)}
+function safetySheet(gate){openSheet(`${gate?"":`<button class="lostbtn" style="width:100%;margin:26px 0 12px" data-act="lost"><span>🧒</span>${t("lostBtn")}</button>`}<h2>${t("safetyTitle")}</h2><div class="kind">${t("safetySub")}</div><ol class="rules">${RULES[lang||"en"].map(r=>`<li>${esc(r)}</li>`).join("")}</ol><div class="note">${t("disclaimer")}</div>
+ ${accepted?`<p style="color:var(--live);font-weight:700">${t("accepted")}</p><button class="btn" data-act="closeSheetF">${t("closeB")}</button>`:`<label class="chk"><input type="checkbox" id="sAgree">${t("agree")}</label><button class="btn" data-act="acceptSafety" id="sOk" disabled>${t("accept")}</button>`}`,gate);
+ const c=$("#sAgree");if(c)c.onchange=()=>$("#sOk").disabled=!c.checked}
+function comfortSheet(){const sw=(k,on)=>`<button class="sw ${on?"on":""}" data-act="sw" data-k="${k}" role="switch" aria-checked="${!!on}"></button>`;
+ openSheet(`<h2>${t("comfort")}</h2>
+ <div class="toggle"><div class="b"><b>${t("calm")}</b><small>${t("calmSub")}</small></div>${sw("calm",calm)}</div>
+ <div class="toggle"><div class="b"><b>${t("easy")}</b><small>${t("easySub")}</small></div>${sw("easy",easy)}</div>
+ <div class="toggle"><div class="b"><b>${t("sensoryL")}</b><small>${t("sensorySub")}</small></div>${sw("sens",sens)}</div>
+ <div class="toggle"><div class="b"><b>${t("langL")}</b></div><button class="chip ${lang==="cy"?"on":""}" data-act="lang" data-l="cy">Cymraeg</button><button class="chip ${lang!=="cy"?"on":""}" data-act="lang" data-l="en">English</button></div>
+ <div class="note">🌻 ${lang==="cy"?"Rydym yn cefnogi cynllun laniard Blodyn yr Haul.":"We support the Hidden Disabilities Sunflower scheme."} ${t("earInfo")}</div>`)}
+let toastT;function toast(title,msg){if(calm){return}const el=$("#toast");el.innerHTML=`<b>${esc(title)}</b>${esc(msg)}`;el.classList.add("on");clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove("on"),5000)}
+
+/* ============ ACTIONS ============ */
+const A={
+ go:el=>go(el.dataset.v),
+ exApply:()=>{exRows=[{type:"Tractor",make:"",year:""}];exSheet()},
+ exAdd:()=>{exRead();if(exRows.length<12)exRows.push({type:"Tractor",make:"",year:""});exSheet(true)},
+ exDel:el=>{exRead();exRows.splice(+el.dataset.i,1);if(!exRows.length)exRows.push({type:"Tractor",make:"",year:""});exSheet(true)},
+ exSend:()=>{exRead();const g=k=>$(k).value.trim();const n=g("#exN"),b=g("#exB"),e=g("#exE"),ph=g("#exP");const ms=exRows.filter(r=>r.make.trim());
+   if(!n||!b||!/^\S+@\S+\.\S+$/.test(e)||!/^[0-9 +]{10,16}$/.test(ph)||!$("#exC").checked){$("#exErr").textContent=t("siReq");return}if(!ms.length){$("#exErr").textContent=t("exReqM");return}
+   const d=store.get(OPS_KEY,null)||OPS;d.apps=d.apps||[];d.apps.push({id:"AP-"+Date.now().toString(36).toUpperCase(),biz:b.slice(0,100),contact:n.slice(0,80),phone:ph,email:e.slice(0,120),at:new Date().toLocaleDateString("en-GB"),status:"new",note:g("#exNo").slice(0,600),machines:ms.map(r=>({type:KIND[r.type]?r.type:"Other implement",make:r.make.trim().slice(0,80),year:String(r.year).replace(/\D/g,"").slice(0,4)}))});
+   store.set(OPS_KEY,d);exRows=[];openSheet(`<h2>✓</h2><p style="font-size:17px">${t("exThanks")}</p><button class="btn" data-act="closeSheet">OK</button>`)},
+ spInterest:()=>openSheet(`<h2>${t("siTitle")}</h2><p>${t("siIntro")}</p><label class="fl">${t("siName")} *</label><input class="fi" id="siN" autocomplete="name"><label class="fl">${t("siBiz")} *</label><input class="fi" id="siB" autocomplete="organization"><label class="fl">${t("siEmail")} *</label><input class="fi" id="siE" type="email" autocomplete="email"><label class="fl">${t("siPhone")}</label><input class="fi" id="siP" type="tel" autocomplete="tel"><label class="fl">${t("siMsg")}</label><textarea class="fi" id="siM" rows="3"></textarea><label style="display:flex;gap:9px;margin-top:10px;align-items:flex-start"><input type="checkbox" id="siC" style="width:20px;height:20px;flex:none"> ${t("siConsent")} *</label><div id="siErr" style="color:var(--red);font-weight:600;margin-top:6px"></div><button class="btn" data-act="spInterestSend">${t("siSend")}</button>`),
+ spInterestSend:()=>{const g=k=>$(k).value.trim();const n=g("#siN"),b=g("#siB"),e=g("#siE");if(!n||!b||!/^\S+@\S+\.\S+$/.test(e)||!$("#siC").checked){$("#siErr").textContent=t("siReq");return}
+   const d=loadP3();d.interest.push({id:"SI-"+Date.now().toString(36),name:n.slice(0,80),biz:b.slice(0,100),email:e.slice(0,120),phone:g("#siP").slice(0,30),msg:g("#siM").slice(0,600),at:new Date().toLocaleDateString("en-GB"),status:"new"});store.set(P3_KEY,d);P3=d;
+   openSheet(`<h2>✓</h2><p style="font-size:17px">${t("siThanks")}</p><button class="btn" data-act="closeSheet">OK</button>`)},
+ rStart:()=>{draft=newDraft();regStep=1;R.ticket();window.scrollTo(0,0)},
+ rEdit:()=>{draft=newDraft();regStep=1;R.ticket();window.scrollTo(0,0)},
+ rBack0:()=>{regStep=0;draft=null;R.ticket()},
+ rBack1:()=>{regStep=1;R.ticket();window.scrollTo(0,0)},
+ rAdd:()=>{readDraft();if(draft.members.length<15)draft.members.push({name:"",type:"child"});R.ticket()},
+ rDel:el=>{readDraft();const i=+el.dataset.i,m=draft.members[i];if(m.id){const f=memberById(m.id);if(f&&f.m.paid)return}draft.members.splice(i,1);R.ticket()},
+ rNext:()=>{readDraft();let ok=true;const bad=(el,c)=>{el.style.borderColor=c?"var(--red)":"";if(c)ok=false};
+   bad($("#rgName"),draft.name.length<2);bad($("#rgEmail"),!/^\S+@\S+\.\S+$/.test(draft.email));document.querySelectorAll(".rgM").forEach(el=>bad(el,el.value.trim().length<2));
+   if(!draft.members.some(m=>m.type==="adult")){ok=false}
+   $("#rgErr").style.display=ok?"none":"block";if(ok){regStep=2;R.ticket();window.scrollTo(0,0)}},
+ rSigClear:()=>window.__rgClear&&window.__rgClear(),
+ rSubmit:()=>{const ag=$("#rgAg").checked,kd=$("#rgKd").checked;$("#rgAgL").style.color=ag?"":"var(--red)";$("#rgKdL").style.color=kd?"":"var(--red)";$("#rgSigBox").classList.toggle("bad",!regHasInk);
+   if(!ag||!kd||!regHasInk){$("#rgErr2").style.display="block";return}
+   const g=gGet();let reg=draft.editing?g.signins.find(x=>x.code===MYREG):null;
+   if(!reg){g.rseq++;const code="R-"+String(g.rseq).padStart(4,"0");reg={code,source:"app",status:"registered",members:[],pay:null,tickets:[]};g.signins.unshift(reg);MYREG=code;store.set("psd_myreg",code)}
+   const keep=reg.members.filter(m=>m.paid);let n=Math.max(0,...reg.members.map(m=>+m.id.split("-").pop()||0));
+   reg.members=draft.members.map(d=>{const old=d.id&&reg.members.find(m=>m.id===d.id);if(old)return{...old,name:d.name,type:old.paid?old.type:d.type};n++;return{id:`${reg.code}-${n}`,name:d.name,type:d.type,share:null,paid:null}});
+   keep.forEach(k=>{if(!reg.members.find(m=>m.id===k.id))reg.members.push(k)});
+   Object.assign(reg,{lang:lang||"en",name:draft.name,email:draft.email,mobile:draft.mobile,newsOptIn:$("#rgNews").checked,signature:window.__rgImg(),signedAt:new Date().toLocaleString("en-GB"),
+     adults:reg.members.filter(m=>m.type==="adult").length,children:reg.members.filter(m=>m.type==="child").length,under5:reg.members.filter(m=>m.type==="under5").length});
+   gSet(g);accepted=true;store.set("psd_safe2",true);regStep=0;draft=null;R.ticket();window.scrollTo(0,0);toast("✓",t("rDone"))},
+ rCancelReg:()=>{openSheet(`<h2>${t("rCancelReg")}</h2><p>${t("rCancelQ")}</p><button class="btn red" data-act="rCancelYes">${t("rCancelYes")}</button><button class="btn alt" data-act="closeSheet">${t("rKeep")}</button>`)},
+ rCancelYes:()=>{const g=gGet();const r=g.signins.find(x=>x.code===MYREG);if(r&&!r.members.some(m=>m.paid)){g.signins=g.signins.filter(x=>x.code!==MYREG)}else if(r){r.members=r.members.filter(m=>m.paid)}gSet(g);MYREG=null;store.set("psd_myreg",null);closeSheet(true);R.ticket()},
+ rShare:el=>shareSheet(el.dataset.id),
+ rShareGo:el=>{const nm=$("#shN").value.trim(),ct=$("#shC").value.trim();if(!nm){$("#shN").style.borderColor="var(--red)";return}if(!ct){$("#shC").style.borderColor="var(--red)";return}
+   const g=gGet();for(const r of g.signins){const m=(r.members||[]).find(y=>y.id===el.dataset.id);if(m){m.share={to:nm,contact:ct,at:new Date().toLocaleString("en-GB")}}}gSet(g);R.ticket();
+   const link=location.href.split("#")[0]+"#t-"+el.dataset.id;openSheet(`<h2>📤 ${t("rSharedWith",{name:esc(nm)})}</h2><div class="kind">${t("trLink")}</div><input class="fi" readonly value="${esc(link)}" id="trL"><button class="btn" data-act="copyLink">${t("copy")}</button><button class="btn alt" data-act="openAs" data-c="${el.dataset.id}">${t("openAs",{name:esc(nm)})}</button><div class="note">${t("rShareNote")}</div>`)},
+ rUnshare:el=>{const g=gGet();for(const r of g.signins){const m=(r.members||[]).find(y=>y.id===el.dataset.id);if(m)m.share=null}gSet(g);R.ticket()},
+ lost:()=>lostSheet(),
+ lostMap:()=>{closeSheet(true);go("map");setTimeout(()=>{amFilter="aid";R.map();focusPx(548,505)},150)},
+ decl:()=>declSheet(),
+ declSign:()=>{const nm=$("#dN").value.trim();let ok=true;["#dA","#dK"].forEach(x=>{const c=$(x);c.parentElement.style.color=c.checked?"":"var(--red)";if(!c.checked)ok=false});if(nm.length<3){$("#dN").style.borderColor="var(--red)";ok=false}if(!ok)return;
+   ORDER.decl={name:nm,at:new Date().toLocaleString("en-GB")};saveOrder();accepted=true;store.set("psd_safe2",true);closeSheet(true);R.ticket()},
+ transfer:el=>{const c=el.dataset.c;openSheet(`<h2>${t("trTitle")}</h2><div class="kind">${c}</div><p style="font-size:14px">${t("trSub")}</p><label class="fl">${t("trName")}</label><input class="fi" id="trN"><label class="fl">${t("trContact")}</label><input class="fi" id="trC"><button class="btn" data-act="trSend" data-c="${c}">${t("trSend")}</button>`)},
+ trSend:el=>{const k=ORDER.tickets.find(x=>x.code===el.dataset.c),nm=$("#trN").value.trim(),ct=$("#trC").value.trim();if(!nm){$("#trN").style.borderColor="var(--red)";return}if(!ct){$("#trC").style.borderColor="var(--red)";return}
+   k.transfer={name:nm,contact:ct,at:fmt(now)};saveOrder();R.ticket();const link=location.href.split("#")[0]+"#t-"+k.code;
+   openSheet(`<h2>📤 ${t("withX",{name:esc(nm)})}</h2><div class="kind">${t("trLink")}</div><input class="fi" readonly value="${esc(link)}" id="trL"><button class="btn" data-act="copyLink">${t("copy")}</button><button class="btn alt" data-act="openAs" data-c="${k.code}">${t("openAs",{name:esc(nm)})}</button>`)},
+ copyLink:async el=>{try{await navigator.clipboard.writeText($("#trL").value);el.textContent=t("copied")}catch(e){$("#trL").select()}},
+ takeBack:el=>{const k=ORDER.tickets.find(x=>x.code===el.dataset.c);if(k.used)return;k.transfer=null;saveOrder();R.ticket()},
+ scan:el=>{const k=ORDER.tickets.find(x=>x.code===el.dataset.c);let res,ok=false;
+   if(!ORDER.decl)res=t("scanInactive");else if(k.used)res=t("scanUsed",{t:k.used});else{k.used=fmt(now);saveOrder();ok=true;res=t("scanOk",{type:tkType(k.type)})}
+   R.ticket();openSheet(`<h2>${t("scanTitle")}</h2><div class="kind">${t("scanSub")}</div><div style="padding:18px;border-radius:12px;font-size:19px;font-weight:700;text-align:center;background:${ok?"#dcf5e3":"#fde2e2"};color:${ok?"#11713a":"#a01919"}">${res}</div><div class="cond" style="text-align:center;margin-top:8px">${k.code}</div>`)},
+ scanGroup:()=>{let res,ok=false;if(!ORDER.decl)res=t("scanInactive");else{const ks=ORDER.tickets.filter(k=>!k.used&&!k.transfer);
+   if(!ks.length)res=t("scanGroupNone");else{ks.forEach(k=>k.used=fmt(now));saveOrder();ok=true;const c={};ks.forEach(k=>c[k.type]=(c[k.type]||0)+1);res=t("scanGroupOk",{n:ks.length,list:Object.entries(c).map(([k,n])=>`${n} × ${tkType(k)}`).join(", ")})}}
+   R.ticket();openSheet(`<h2>${t("scanTitle")}</h2><div class="kind">${t("scanSub")}</div><div style="padding:18px;border-radius:12px;font-size:18px;font-weight:700;text-align:center;background:${ok?"#dcf5e3":"#fde2e2"};color:${ok?"#11713a":"#a01919"}">${res}</div>${ORDER.tickets.some(k=>k.transfer&&!k.used)?`<div class="note">${ORDER.tickets.filter(k=>k.transfer&&!k.used).map(k=>`${k.code}: ${t("scanTransferred")}`).join("<br>")}</div>`:""}`)},
+ openAs:el=>{closeSheet(true);location.hash="t-"+el.dataset.c},
+ backAll:()=>{history.replaceState(null,"",location.pathname+location.search);R.ticket();window.scrollTo(0,0)},
+ resetOrder:()=>{ORDER=JSON.parse(JSON.stringify(ORDER_DEFAULT));saveOrder();R.ticket()},
+
+ closeSheet:()=>closeSheet(),closeSheetF:()=>closeSheet(true),
+ access:()=>comfortSheet(),safety:()=>safetySheet(false),
+ lang:el=>{const first=!lang;lang=el.dataset.l;store.set("psd_lang",lang);buildDemos();chrome();if(viewName)R[viewName]();if(first){closeSheet(true);if(!accepted)setTimeout(()=>safetySheet(true),150)}else comfortSheet()},
+ acceptSafety:()=>{accepted=true;store.set("psd_safe2",true);closeSheet(true)},
+ sw:el=>{const k=el.dataset.k;if(k==="calm"){calm=!calm;store.set("psd_calm",calm)}if(k==="easy"){easy=!easy;store.set("psd_easy",easy)}if(k==="sens"){sens=!sens;store.set("psd_sens",sens)}chrome();if(viewName)R[viewName]();comfortSheet()},
+ amen:el=>{amFilter=el.dataset.k;R.map()},
+ amenity:el=>{const a=AMEN[+el.dataset.i];openSheet(`<h2>${a.ic} ${esc(a[lang]||a.en)}</h2>`)},
+ place:el=>{if(viewName!=="map"){closeSheet();go("map");setTimeout(()=>openPlace(el.dataset.id),120)}else openPlace(el.dataset.id)},
+ machine:el=>openMachine(el.dataset.id),
+ cat:el=>{schedCat=el.dataset.k;R.sched()},
+ sponsor:el=>{const s=SPONSORS[+el.dataset.i];if(!s)return;const u=safeUrl(s.web);openSheet(`<div class="slogo" style="height:90px;background:${s.bg==="#000"?"#000":"#fff"}"><img src="${LOCAL_IMG(s.logo)?s.logo:""}" alt="" style="max-height:80px"></div><h2>${esc(s.n)}</h2><p>${esc(s[lang]||s.en)}</p>${(()=>{const os=P3.offers.filter(o=>o.spId===s.id&&o.status==="approved");return os.length?`<div style="font-weight:700;margin-top:8px">🏷️ ${t("offers")}</div>${os.map(o=>`<div style="background:var(--light);border-radius:10px;padding:9px 11px;margin-top:6px">${esc((lang==="cy"&&o.cy)||o.en)}</div>`).join("")}`:""})()}${u?`<a class="btn alt" href="${esc(u)}" target="_blank" rel="noopener">${esc(u.replace(/^https?:\/\//,"").replace(/\/$/,""))}</a>`:""}`)},
+ zin:()=>{const d=mapDims();zoomAt(zoom*1.6,d.ww/2,d.wh/2,true)},zout:()=>{const d=mapDims();zoomAt(zoom/1.6,d.ww/2,d.wh/2,true)},zreset:()=>{zoom=minZ();tx=0;ty=0;applyMap(true)},
+ locate:()=>{try{if(!navigator.geolocation)throw 0;navigator.geolocation.getCurrentPosition(p=>{const px=geoToPx(p.coords.latitude,p.coords.longitude);
+   if(px[0]<-50||px[0]>W+50||px[1]<-50||px[1]>H+50){const km=Math.round(Math.hypot((p.coords.latitude-51.807)*111,(p.coords.longitude+4.9966)*69)*10)/10;openSheet(`<h2>📍</h2><p>${t("locFar",{d:km})}</p>`);return}
+   mePx=px;R.map();focusPx(px[0],px[1]);toast("📍",t("locHere"))},()=>openSheet(`<h2>📍</h2><p>${t("locNo")}</p>`),{enableHighAccuracy:true,timeout:8000})}catch(e){openSheet(`<h2>📍</h2><p>${t("locNo")}</p>`)}}
+};
+document.addEventListener("click",e=>{const el=e.target.closest("[data-act]");if(!el||!A[el.dataset.act])return;if(dragMoved>=6&&el.closest("#mapwrap"))return;e.preventDefault();A[el.dataset.act](el)});
+$("#scrim").onclick=()=>closeSheet();
+
+/* map gestures */
+let dragMoved=0;
+(function(){const wrap=$("#mapwrap"),pts=new Map();let st=null,lastTap=0;const rel=e=>{const b=wrap.getBoundingClientRect();return{x:e.clientX-b.left,y:e.clientY-b.top}};
+ wrap.addEventListener("pointerdown",e=>{pts.set(e.pointerId,rel(e));dragMoved=0;if(pts.size===1){const p=rel(e);st={x:p.x,y:p.y,tx,ty}}if(pts.size===2){const[a,b]=[...pts.values()];st={d:Math.hypot(a.x-b.x,a.y-b.y),z:zoom,mx:(a.x+b.x)/2,my:(a.y+b.y)/2,tx,ty}}});
+ window.addEventListener("pointermove",e=>{if(!pts.has(e.pointerId))return;pts.set(e.pointerId,rel(e));
+  if(pts.size===1&&st&&st.d===undefined){const p=rel(e);dragMoved=Math.max(dragMoved,Math.hypot(p.x-st.x,p.y-st.y));tx=st.tx+p.x-st.x;ty=st.ty+p.y-st.y;applyMap()}
+  else if(pts.size===2&&st&&st.d){const[a,b]=[...pts.values()];const d=Math.hypot(a.x-b.x,a.y-b.y),mx=(a.x+b.x)/2,my=(a.y+b.y)/2;dragMoved=99;const nz=Math.max(minZ(),Math.min(5,st.z*d/st.d)),k=nz/st.z;tx=mx-(st.mx-st.tx)*k;ty=my-(st.my-st.ty)*k;zoom=nz;applyMap()}});
+ const end=e=>{if(!pts.has(e.pointerId))return;pts.delete(e.pointerId);if(pts.size===1){const p=[...pts.values()][0];st={x:p.x,y:p.y,tx,ty}}else if(!pts.size){if(dragMoved<6&&e.type==="pointerup"&&!e.target.closest("button")){const n=Date.now(),p=rel(e);if(n-lastTap<320){zoomAt(zoom*2,p.x,p.y,true);lastTap=0}else lastTap=n}st=null;setTimeout(()=>dragMoved=0,0)}};
+ window.addEventListener("pointerup",end);window.addEventListener("pointercancel",end);
+ wrap.addEventListener("wheel",e=>{e.preventDefault();const p=rel(e);zoomAt(zoom*Math.exp(-e.deltaY*.0015),p.x,p.y)},{passive:false});
+ window.addEventListener("resize",()=>applyMap());})();
+
+/* live updates from the operations app (another tab) */
+window.addEventListener("storage",e=>{if(e.key===OPS_KEY){renderAll();toast("🔄",lang==="cy"?"Amserlen wedi'i diweddaru":"Programme updated")}});
+$("#slider").oninput=e=>{now=+e.target.value;$("#clock").textContent=fmt(now);renderBanner();noticeToasts();if(viewName)R[viewName]()};
+window.addEventListener("storage",e=>{if(e.key===P3_KEY){P3=loadP3();SPONSORS=P3.sponsors.filter(x=>x.status==="approved");renderBanner();noticeToasts();if(viewName&&!$("#sheet").classList.contains("on"))R[viewName]()}});
+
+/* --- exhibitor application form --- */
+let exRows=[],exKeep={};
+function exRead(){document.querySelectorAll(".exrow").forEach((el,i)=>{if(exRows[i])Object.assign(exRows[i],{type:el.querySelector("select").value,make:el.querySelector(".exm").value,year:el.querySelector(".exy").value})});["#exN","#exB","#exE","#exP","#exNo"].forEach(k=>{const el=$(k);if(el)exKeep[k]=el.value});const c=$("#exC");if(c)exKeep.c=c.checked}
+function exSheet(keep){if(!keep)exKeep={};const v=k=>esc(exKeep[k]||"");
+ openSheet(`<h2>${t("exTitle")}</h2><p>${t("exIntro")}</p><label class="fl">${t("exBiz")} *</label><input class="fi" id="exB" value="${v("#exB")}"><label class="fl">${t("siName")} *</label><input class="fi" id="exN" autocomplete="name" value="${v("#exN")}"><label class="fl">${t("siPhone")} *</label><input class="fi" id="exP" type="tel" autocomplete="tel" value="${v("#exP")}"><label class="fl">${t("siEmail")} *</label><input class="fi" id="exE" type="email" autocomplete="email" value="${v("#exE")}">
+ <div style="font-weight:700;margin-top:14px">${t("exMach")}</div>${exRows.map((r,i)=>`<div class="exrow" style="border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin-top:8px"><label class="fl" style="margin-top:0">${t("exType")}</label><select class="fi">${TYPES.map(([ty])=>`<option ${ty===r.type?"selected":""}>${ty}</option>`).join("")}</select><div style="display:flex;gap:8px"><div style="flex:2"><label class="fl">${t("exMake")} *</label><input class="fi exm" value="${esc(r.make)}"></div><div style="flex:1"><label class="fl">${t("exYear")}</label><input class="fi exy" inputmode="numeric" maxlength="4" value="${esc(r.year)}"></div></div>${exRows.length>1?`<button class="chip" data-act="exDel" data-i="${i}" style="margin-top:6px">✕</button>`:""}</div>`).join("")}
+ <button class="btn alt" data-act="exAdd">${t("exAdd")}</button><label class="fl">${t("exNote")}</label><textarea class="fi" id="exNo" rows="2">${v("#exNo")}</textarea>
+ <label style="display:flex;gap:9px;margin-top:10px;align-items:flex-start"><input type="checkbox" id="exC" style="width:20px;height:20px;flex:none" ${exKeep.c?"checked":""}> ${t("exConsent")} *</label><div id="exErr" style="color:var(--red);font-weight:600;margin-top:6px"></div><button class="btn" data-act="exSend">${t("siSend")}</button>`)}
+
+/* ============ START ============ */
+loadOps();SPONSORS=P3.sponsors.filter(x=>x.status==="approved");buildDemos();go(recipCode()?"ticket":"news");renderBanner();noticeToasts();
+window.addEventListener("hashchange",()=>{if(recipCode())go("ticket");else if(viewName==="ticket")R.ticket()});
+window.addEventListener("storage",e=>{if(e.key==="psd_gate"&&viewName==="ticket"&&regStep===0)R.ticket();if(e.key==="psd_order"){ORDER=store.get("psd_order",ORDER);if(viewName==="ticket")R.ticket()}});
+if(!lang)setTimeout(langSheet,250);else if(!accepted)setTimeout(()=>safetySheet(true),250);
+</script>
 </body>
 </html>

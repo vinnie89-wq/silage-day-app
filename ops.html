@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Silage Day 2027 – Operations</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="shared.js"></script>
+<style>
+:root{--green:#2c4a1c;--green2:#3f6b25;--grass:#7fa83a;--light:#f1edd8;--paper:#fbf8ee;--brown:#3a2614;--cream:#f6efcf;--ink:#2a1e12;--muted:#6b6250;--line:#e2dcc4;--yellow:#f5c518;--red:#c8202a;--amber:#e08a00;--live:#19a34a;--blue:#2a6fb0}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--paper);color:var(--ink);font-family:Barlow,system-ui,sans-serif;font-size:15px}
+h1,h2,h3,.cond{font-family:"Barlow Condensed",Barlow,sans-serif}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+header{position:sticky;top:0;z-index:30;background:var(--cream);border-bottom:3px solid var(--brown);padding:8px 14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+header img{height:46px}
+header .t{line-height:1.1}
+header .t b{font:800 18px "Barlow Condensed";color:var(--green);display:block}
+header .t span{font-size:12px;color:var(--muted)}
+.hctl{margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.rolesel{background:var(--yellow);border:0;border-radius:8px;padding:6px 10px;font-weight:700;color:var(--brown)}
+.clock{display:flex;align-items:center;gap:6px;background:var(--green);color:var(--cream);border-radius:8px;padding:4px 10px;font-size:12px}
+.clock b{font:700 17px "Barlow Condensed";min-width:40px}
+.clock input{width:120px;accent-color:var(--yellow)}
+.layout{display:flex;min-height:calc(100vh - 66px)}
+nav{width:200px;flex:none;background:#fff;border-right:1px solid var(--line);padding:10px 0}
+nav button{display:flex;align-items:center;gap:8px;width:100%;border:0;background:none;text-align:left;padding:10px 16px;font-weight:600;color:var(--muted);font-size:14.5px}
+nav button.on{background:var(--light);color:var(--green);box-shadow:inset 3px 0 0 var(--green)}
+nav button .n{margin-left:auto;background:var(--red);color:#fff;border-radius:999px;font-size:11px;padding:1px 7px}
+nav .vlink{display:block;margin:14px 16px 0;font-size:13px;color:var(--green)}
+main{flex:1;min-width:0;padding:16px 18px 90px}
+@media (max-width:760px){
+  .layout{display:block}
+  nav{position:fixed;bottom:0;left:0;right:0;width:auto;z-index:30;display:flex;border-right:0;border-top:1px solid var(--line);padding:0;overflow-x:auto}
+  nav button{flex:1;flex-direction:column;gap:2px;padding:8px 6px 10px;font-size:11px;text-align:center;min-width:70px}
+  nav button.on{box-shadow:inset 0 3px 0 var(--green)}
+  nav button .n{position:absolute;margin:0 0 0 22px}
+  nav .vlink{display:none}
+  main{padding:12px 12px 90px}
+  header img{height:34px}
+  header{position:static;padding:6px 10px}
+  header .t span{display:none}
+  .banner{font-size:11.5px;padding:5px 10px}
+  .clock input{width:90px}
+}
+h2.pg{font-size:26px;margin:2px 0 4px;color:var(--brown)}
+.sub{color:var(--muted);font-size:13.5px;margin-bottom:14px}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:14px}
+.card h3{margin:0 0 10px;font-size:20px;color:var(--green)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:14px}
+.stats div{background:var(--green);color:var(--cream);border-radius:12px;padding:10px 12px;font-size:12.5px}
+.stats b{display:block;font:800 28px "Barlow Condensed";color:var(--yellow)}
+.pill{display:inline-block;font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.ok{background:#dcf5e3;color:#11713a}.wait{background:#fff0d6;color:#8a5300}.bad{background:#fde2e2;color:#a01919}.grey{background:#eee;color:#666}.info{background:#e3eefa;color:#1d5590}
+.btn{border:0;border-radius:9px;background:var(--green);color:#fff;font-weight:700;padding:9px 14px}
+.btn.alt{background:var(--light);color:var(--green)}
+.btn.red{background:var(--red)}
+.btn.sm{padding:5px 10px;font-size:13px;border-radius:7px}
+.btn.y{background:var(--yellow);color:var(--brown)}
+.btn:disabled{opacity:.4}
+.tbl{width:100%;border-collapse:collapse;font-size:13.5px}.tbl th,.tbl td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}.tbl th{font-size:12px;color:var(--muted)}
+.appr{grid-template-columns:repeat(auto-fit,minmax(380px,1fr))}.appr .it{flex-wrap:wrap}.appr .it .b{flex:1 1 220px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.list .it{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line)}
+.list .it:last-child{border-bottom:0}
+.it .b{flex:1;min-width:0}
+.it .b b{font-size:15px}
+.small{font-size:12.5px;color:var(--muted)}
+.code{font:700 12px ui-monospace,monospace;background:var(--light);border-radius:5px;padding:1px 5px;color:var(--brown)}
+.fl{display:block;font-size:12.5px;font-weight:700;margin:10px 0 4px}
+.fl i{color:var(--red);font-style:normal}
+.fi{width:100%;border:1px solid #cfc7aa;border-radius:8px;padding:8px 10px;background:#fffdf6;font-size:15px}
+.fi.badf{border-color:var(--red);background:#fff4f4}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:0 10px}
+.chk{display:flex;gap:9px;align-items:flex-start;margin:10px 0;font-size:14.5px}
+.chk input{width:20px;height:20px;accent-color:var(--green);flex:none;margin-top:1px}
+.iss{border-radius:8px;padding:7px 10px;margin:5px 0;font-size:13.5px}
+.iss.e{background:#fde2e2;color:#8a1515}.iss.w{background:#fff4d6;color:#7a5200}
+.iss a{color:inherit;font-weight:700;cursor:pointer;text-decoration:underline}
+/* timetable grid */
+.ttwrap{overflow:auto;border:1px solid var(--line);border-radius:12px;background:#fff;max-height:70vh}
+table.tt{border-collapse:separate;border-spacing:0;min-width:900px;width:100%;table-layout:fixed}
+.tt col.tc{width:74px}
+.tt th,.tt td{border-bottom:1px solid var(--line);border-right:1px solid var(--line);padding:5px;vertical-align:top}
+.tt thead th{position:sticky;top:0;background:var(--cream);z-index:2;font:700 15px "Barlow Condensed";color:var(--brown)}
+.tt tbody th{position:sticky;left:0;background:#fffdf6;z-index:1;font:700 14px "Barlow Condensed";color:var(--green);white-space:nowrap;width:70px}
+.cell{display:block;width:100%;min-height:62px;text-align:left;border:1px dashed #d9d0b2;border-radius:8px;background:#fffdf6;padding:5px 6px;font-size:12px;color:var(--muted)}
+.cell.f{border:1px solid #c9d8b8;background:#f4f9ee;color:var(--ink)}
+.cell.e{border-color:var(--red);background:#fff1f1}
+.cell.w{border-color:var(--amber);background:#fff9ea}
+.cell b{display:block;font-size:12.5px;color:var(--green)}
+.cell .tm{display:block;line-height:1.3}
+/* modal */
+.scrim{position:fixed;inset:0;background:rgba(10,20,10,.45);z-index:50;display:none}
+.modal{position:fixed;z-index:51;left:50%;top:50%;transform:translate(-50%,-50%);width:min(640px,94vw);max-height:90vh;overflow:auto;background:#fff;border-radius:16px;padding:16px 18px;display:none}
+.modal.on,.scrim.on{display:block}
+.modal h2{margin:0 0 4px;font-size:24px}
+.mclose{position:absolute;right:12px;top:10px;border:0;background:var(--light);width:32px;height:32px;border-radius:50%;font-size:18px}
+.team{border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin:8px 0;background:#fffdf6}
+.team .row select{flex:1;min-width:140px}
+.toast{position:fixed;left:50%;top:12px;transform:translateX(-50%);z-index:60;width:min(520px,94vw);background:var(--brown);color:var(--cream);border-radius:12px;padding:11px 14px;box-shadow:0 8px 24px rgba(0,0,0,.35);display:none;font-size:14px}
+.toast.on{display:block}
+.toast b{display:block;color:var(--yellow);font-size:11.5px;text-transform:uppercase;letter-spacing:.4px}
+.brief h4{margin:14px 0 4px;font:700 18px "Barlow Condensed";color:var(--green)}
+.brief ul{margin:4px 0;padding-left:20px}.brief li{margin-bottom:4px}
+.qopt{display:block;width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:9px;padding:10px 12px;margin:6px 0}
+.qopt.sel{border-color:var(--green);background:var(--light);font-weight:600}
+.qopt.right{border-color:var(--live);background:#e6f7ec}.qopt.wrong{border-color:var(--red);background:#fdeaea}
+.ckrow{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
+.ckrow span{flex:1}
+.ckrow button{border:1px solid var(--line);background:#fff;border-radius:7px;padding:4px 9px;font-size:12.5px;font-weight:700}
+.ckrow button.p.on{background:var(--live);color:#fff;border-color:var(--live)}
+.ckrow button.f.on{background:var(--red);color:#fff;border-color:var(--red)}
+.ckrow button.n.on{background:#888;color:#fff;border-color:#888}
+.ready{display:inline-flex;gap:4px;align-items:center;font-size:12px;margin-right:8px}
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block}
+.d-ok{background:var(--live)}.d-wait{background:var(--amber)}.d-bad{background:var(--red)}.d-grey{background:#bbb}
+.banner{background:var(--yellow);color:var(--brown);padding:8px 14px;font-weight:600;font-size:13.5px}
+.search{margin-bottom:10px}
+details summary{cursor:pointer;font-weight:700}
+</style>
+</head>
+<body>
+<header>
+  <img src="logo.png" alt="Pembrokeshire Silage Day">
+  <div class="t"><b>Operations app</b><span>Organisers · exhibitors · drivers · staff — prototype</span></div>
+  <div class="hctl">
+    <select class="rolesel" id="roleSel" aria-label="View as (prototype only)">
+      <option value="admin">🛠️ Organiser</option>
+      <option value="exhibitor">🚜 Exhibitor (sample)</option>
+      <option value="driver">🧑‍🌾 Driver (sample)</option>
+      <option value="scrut">🔧 Scrutineer</option>
+      <option value="marshal">🦺 Field marshal</option>
+      <option value="gate">💷 Gate cashier</option>
+      <option value="sponsor">🤝 Sponsor (sample)</option>
+      <option value="catering">🍔 Catering</option>
+      <option value="staffm">🦺 Staff / volunteer</option>
+    </select>
+    <div class="clock">Event time <b id="clock">09:00</b><input type="range" id="slider" min="390" max="1050" step="5" value="540" aria-label="Simulated time on the day"></div>
+  </div>
+</header>
+<div class="banner">Prototype: the “view as” picker and time slider are for testing only. In the live app each person signs in and sees only their own screens – organisers give access under People &amp; access.</div>
+<div class="layout">
+  <nav id="nav"></nav>
+  <main id="main"></main>
+</div>
+<div class="scrim" id="scrim"></div>
+<div class="modal" id="modal"><button class="mclose" data-act="closeModal" aria-label="Close">×</button><div id="mbody"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============ UTILITIES ============ */
+const $=s=>document.querySelector(s);
+const esc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt=m=>m==null?"–":String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0");
+const parseTime=v=>{const m=String(v||"").trim().match(/^(\d{1,2})[:.]?(\d{2})/);if(!m)return null;const h=+m[1],mi=+m[2];return h>23||mi>59?null:h*60+mi};
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const nowStamp=()=>{const d=new Date();return d.toLocaleDateString("en-GB")+" "+d.toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"})};
+let toastT;function toast(t,m){const el=$("#toast");el.innerHTML=`<b>${esc(t)}</b>${esc(m)}`;el.classList.add("on");clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove("on"),5000)}
+
+/* ============ REFERENCE DATA ============ */
+const FIELDS={6:"Field 6",7:"Field 7",8:"Field 8",9:"Field 9",10:"Field 10",11:"Field 11"};
+const FIELD_IDS=[6,7,8,9,10,11];
+// kind: power = tractor (pulls/carries implements) · self = self-propelled (one vehicle) · impl = needs a power unit
+const BRIEFING_VERSION="Draft v0.1";
+const BRIEF=[
+ ["Before you drive",["You must be 18 or over and hold a licence for the vehicle you are driving.","Every machine must have passed scrutineering at the Machinery Check Point (4) before it enters a field.","Machines must be in the fields by 9:30am.","Zero tolerance for alcohol or drugs. Anyone unfit to drive will be stood down."]],
+ ["In the demonstration fields",["Only start when the field marshal signals – the app will also tell you when your slot starts.","Stay inside your demo area. Members of the public are behind the rope line – if anyone crosses it, stop immediately and wait for a marshal.","No passengers in cabs or on any part of a machine, at any time.","No mobile phone use while driving."]],
+ ["Moving between fields",["Drive at walking pace on lanes and anywhere near the public.","Follow marshals at crossing points. Machinery has right of way only when a marshal says so.","Load and unload away from the demonstration areas."]],
+ ["Leaving a machine",["Never leave a machine with the engine running.","Unattended machines must be braked or chocked and immobilised at all times.","Remove keys when you leave the cab."]],
+ ["Emergencies",["Stop, shut down and raise your hand to the nearest marshal.","First aid is at the Main Show Field (5).","For a serious incident call 999, then tell a marshal."]]
+];
+const QUIZ=[
+ {q:"A member of the public walks under the rope line while you're working. What do you do?",o:["Sound the horn and carry on slowly","Stop immediately and wait for a marshal","Drive around them"],a:1,why:"Stop immediately and wait for a marshal to clear the area."},
+ {q:"Can you carry a passenger in the cab during a demo?",o:["Yes, if they're over 18","Only between fields","No – never"],a:2,why:"No passengers are allowed in cabs or on any part of a machine, at any time."},
+ {q:"When can you start your demonstration?",o:["When the field marshal signals","As soon as you arrive at the field","When the previous machine leaves"],a:0,why:"Only start when the field marshal gives the signal."},
+ {q:"You need to leave your tractor for a few minutes. What must you do?",o:["Leave it idling so it's ready","Shut it down, brake or chock it and take the keys","Ask the public to keep clear"],a:1,why:"Never leave a machine running – brake or chock it, immobilise it and take the keys."},
+ {q:"How fast should you drive on the lanes between fields?",o:["Walking pace","20 mph","As fast as is safe"],a:0,why:"Walking pace on lanes and anywhere near the public."}
+];
+
+/* ============ DATABASE ============ */
+let db=store.get("psd_ops1",null);
+if(!db||db.v!==1)db=seed();
+const save=()=>store.set("psd_ops1",db);
+const log=(cat,action,detail)=>{db.audit.unshift({ts:nowStamp(),ev:fmt(now),cat,action,detail:String(detail||""),by:ROLES[role].who});if(db.audit.length>800)db.audit.length=800;save()};
+
+/* ============ STATE ============ */
+let role=store.get("psd_ops_role","admin"),view=null,now=540;
+const ME={sponsor:"SP-1",exhibitor:"EX-03",driver:"D-04",marshal:[8,9,10,11]};
+const ROLES={
+ admin:{who:"Organiser",nav:[["overview","📊","Overview"],["approvals","☑️","Needs approval"],["news","📣","News & alerts"],["entries","🚜","Entries"],["drivers","🧑‍🌾","Drivers"],["timetable","🗓️","Timetable"],["checks","✅","Checklists"],["mpages","📸","Machine pages"],["sponsors","🤝","Sponsors & vouchers"],["access","🔑","People & access"],["staff","🦺","Staff"],["sms","💬","Texts"],["audit","📜","Audit log"]]},
+ exhibitor:{who:"Exhibitor – Sample Vintage Club",nav:[["myentry","🚜","My entry"],["myphotos","📸","Photos"],["myslots","🗓️","My slots"],["alerts","🔔","Alerts"]]},
+ driver:{who:"Driver – Sample Driver 4",nav:[["briefing","📋","Safety briefing"],["myday","🗓️","My day"],["alerts","🔔","Alerts"]]},
+ scrut:{who:"Scrutineer",nav:[["arrivals","🔧","Machines"],["sdrivers","🪪","Drivers & ID"]]},
+ marshal:{who:"Field marshal – Fields 8–11",nav:[["fields","🦺","My fields"]]},
+ gate:{who:"Gate cashier",nav:[["gatesales","💷","Gate sales"]]},
+ sponsor:{who:"Sponsor – Gwili Jones",nav:[["spprofile","🤝","Profile"],["spoffers","🏷️","Offers"],["spvouchers","🍔","Meal vouchers"]]},
+ catering:{who:"Catering",nav:[["vcheck","🍔","Voucher check"]]},
+ staffm:{who:"Staff member",nav:[["myjob","🦺","My job"]]}
+};
+
+/* ============ LOOKUPS ============ */
+const mach=id=>db.machines.find(m=>m.id===id);
+const drv=id=>db.drivers.find(d=>d.id===id);
+const exh=id=>db.exhibitors.find(e=>e.id===id);
+const slotLen=()=>db.settings.len;
+const sStart=s=>s.start+(s.delay||0), sEnd=s=>s.start+slotLen()+(s.delay||0);
+const mLabel=m=>m?`${m.make} (${m.type})`:"–";
+const memberMachines=t=>[t.power,...t.impls].filter(Boolean);
+const slotGrid=()=>{const st=db.settings;return Array.from({length:st.count},(_,i)=>st.first+i*(st.len+st.gap))};
+const checksFor=m=>db.checks[m.type]||db.checks["*"];
+const scrutStatus=m=>m.scrut?m.scrut.status:"todo";
+const driverReady=d=>!!(d&&d.briefing&&d.id18);
+const SCR_PILL={todo:'<span class="pill grey">Not checked</span>',pass:'<span class="pill ok">Passed</span>',advisory:'<span class="pill info">Passed – advisory</span>',fail:'<span class="pill bad">Failed</span>'};
+const ST_PILL={approved:'<span class="pill ok">Approved</span>',pending:'<span class="pill wait">Awaiting approval</span>',declined:'<span class="pill bad">Declined</span>'};
+
+/* ============ VALIDATION ============ */
+function slotIssues(){
+ const out=[];const L=slotLen(),co=db.settings.changeover;
+ const uses={machine:{},driver:{}};
+ db.slots.forEach(s=>{
+  const fld=`Field ${s.field} ${fmt(s.start)}`;
+  if(!s.team.length)out.push({lvl:"w",slot:s.id,msg:`${fld}: "${s.demo}" has no team yet.`});
+  s.team.forEach(t=>{
+   const pm=mach(t.power);const im=t.impls.map(mach).filter(Boolean);
+   if(!t.driver)out.push({lvl:"e",slot:s.id,msg:`${fld}: ${t.role||"team member"} has no driver.`});
+   if(!pm&&!im.length)out.push({lvl:"e",slot:s.id,msg:`${fld}: ${t.role||"team member"} has no machine.`});
+   if(pm&&pm.kind==="impl")out.push({lvl:"e",slot:s.id,msg:`${fld}: ${pm.make} is an implement and can't be the power unit.`});
+   if(im.length&&!pm)out.push({lvl:"e",slot:s.id,msg:`${fld}: ${im[0].make} needs a tractor to pull or carry it.`});
+   if(pm&&pm.kind==="self"&&im.length)out.push({lvl:"w",slot:s.id,msg:`${fld}: ${pm.make} is self-propelled – check the implement pairing.`});
+   [pm,...im].filter(Boolean).forEach(m=>{
+    (uses.machine[m.id]=uses.machine[m.id]||[]).push({s,t});
+    if(m.status!=="approved")out.push({lvl:"w",slot:s.id,msg:`${fld}: ${m.make} (${m.id}) isn't approved yet.`});
+    if(m.scrut&&m.scrut.status==="fail")out.push({lvl:"e",slot:s.id,msg:`${fld}: ${m.make} FAILED scrutineering.`});
+   });
+   if(t.driver){const d=drv(t.driver);(uses.driver[t.driver]=uses.driver[t.driver]||[]).push({s,t});
+     if(d&&!d.declared18&&!d.id18)out.push({lvl:"w",slot:s.id,msg:`${fld}: ${d.name} hasn't been confirmed as 18+.`});}
+  });
+  const hasHarv=s.team.some(t=>memberMachines(t).map(mach).some(m=>m&&/forage harvester/i.test(m.type)));
+  const hasTrailer=s.team.some(t=>memberMachines(t).map(mach).some(m=>m&&/trailer|wagon/i.test(m.type)));
+  if(hasHarv&&!hasTrailer)out.push({lvl:"w",slot:s.id,msg:`${fld}: harvesting team has no trailer to fill.`});
+ });
+ const clash=(kind,id,list)=>{
+  list.sort((a,b)=>sStart(a.s)-sStart(b.s));
+  for(let i=0;i<list.length;i++)for(let j=i+1;j<list.length;j++){
+   const a=list[i],b=list[j];if(a.s.id===b.s.id&&kind==="driver"&&a.t!==b.t){out.push({lvl:"e",slot:a.s.id,msg:`${(drv(id)||{name:id}).name} is driving two machines in the same slot (Field ${a.s.field} ${fmt(a.s.start)}).`});continue}
+   if(a.s.id===b.s.id)continue;
+   const gap=a.s.field===b.s.field?0:co;
+   if(sStart(b.s)<sEnd(a.s)+gap&&sStart(a.s)<sEnd(b.s)+gap){
+     const name=kind==="machine"?`${(mach(id)||{make:id}).make} (${id})`:(drv(id)||{name:id}).name;
+     const overlap=sStart(b.s)<sEnd(a.s)&&sStart(a.s)<sEnd(b.s);
+     out.push({lvl:"e",slot:b.s.id,msg:overlap?`Clash: ${name} is in Field ${a.s.field} (${fmt(sStart(a.s))}) and Field ${b.s.field} (${fmt(sStart(b.s))}) at the same time.`:`Changeover too short: ${name} finishes in Field ${a.s.field} at ${fmt(sEnd(a.s))} and starts in Field ${b.s.field} at ${fmt(sStart(b.s))} (needs ${co} min).`});
+   }
+  }
+ };
+ Object.entries(uses.machine).forEach(([id,l])=>clash("machine",id,l));
+ Object.entries(uses.driver).forEach(([id,l])=>clash("driver",id,l));
+ const seen=new Set();return out.filter(x=>{const k=x.slot+x.msg;if(seen.has(k))return false;seen.add(k);return true}).sort((a,b)=>a.lvl.localeCompare(b.lvl));
+}
+
+/* ============ ALERTS ============ */
+function alertsFor({driverId,exId}){
+ const out=[];
+ db.slots.forEach(s=>s.team.forEach(t=>{
+  const mine=driverId?t.driver===driverId:memberMachines(t).some(id=>{const m=mach(id);return m&&m.exId===exId});
+  if(!mine)return;
+  const ms=memberMachines(t).map(id=>mach(id)?.make).filter(Boolean).join(" + ");const st=sStart(s);const who=driverId?"":` (driver: ${drv(t.driver)?.name||"TBC"})`;
+  if(s.state==="cancel"){out.push({at:now,msg:`Cancelled: ${s.demo} in Field ${s.field}. Please speak to the organisers.`,k:"bad"});return}
+  out.push({at:st-30,msg:`${fmt(st)} – ${s.demo}, Field ${s.field}, ${t.role}: ${ms}${who}. Head to the field gate.`});
+  out.push({at:st-10,msg:`Get ready – Field ${s.field} starts in 10 minutes with ${ms}.`});
+  out.push({at:st,msg:`Start now – Field ${s.field}, ${s.demo}. Wait for the marshal's signal.`,k:"go"});
+  if(s.delay)out.push({at:s.start-30,msg:`Delay: ${s.demo} in Field ${s.field} moved back ${s.delay} min to ${fmt(st)}.`,k:"bad"});
+  db.calls.filter(c=>c.slot===s.id).forEach(c=>out.push({at:c.at,msg:`📣 Called by marshal: Field ${s.field}, ${t.role} (${ms}) – proceed now.`,k:"go"}));
+ }));
+ return out.sort((a,b)=>a.at-b.at);
+}
+let prevNow=now;
+function checkToasts(){
+ const me=role==="driver"?{driverId:ME.driver}:role==="exhibitor"?{exId:ME.exhibitor}:null;
+ if(me){const a=alertsFor(me).filter(x=>x.at>prevNow&&x.at<=now).pop();if(a)toast(role==="driver"?"Driver alert":"Exhibitor alert",a.msg)}
+ prevNow=now;
+}
+
+/* ============ RENDER SHELL ============ */
+function setRole(r){role=r;store.set("psd_ops_role",r);$("#roleSel").value=r;view=ROLES[r].nav[0][0];render()}
+function renderNav(){
+ const iss=slotIssues().filter(x=>x.lvl==="e").length,pend=db.machines.filter(m=>m.status==="pending").length;
+ const badge={timetable:iss,entries:pend,approvals:approvalCount()};
+ $("#nav").innerHTML=ROLES[role].nav.map(([k,ic,l])=>`<button class="${k===view?"on":""}" data-act="nav" data-v="${k}"><span>${ic}</span>${l}${badge[k]?`<span class="n">${badge[k]}</span>`:""}</button>`).join("")+`<a class="vlink" href="index.html">← Visitor app</a><a class="vlink" href="kiosk.html">📱 Gate kiosk (iPad)</a><a class="vlink" href="legacy.html" style="font-size:12px;color:var(--muted)">Old prototype (v1)</a>`;
+}
+function render(){renderNav();$("#main").innerHTML=(VIEWS[view]||(()=>""))();(AFTER[view]||(()=>{}))();}
+function openModal(h){$("#mbody").innerHTML=h;$("#modal").classList.add("on");$("#scrim").classList.add("on");$("#modal").scrollTop=0}
+function closeModal(){$("#modal").classList.remove("on");$("#scrim").classList.remove("on")}
+
+/* ============ VIEWS ============ */
+const VIEWS={},AFTER={};
+
+/* ----- Organiser: overview ----- */
+VIEWS.overview=()=>{
+ const iss=slotIssues(),M=db.machines,D=db.drivers;
+ const used=new Set(db.slots.flatMap(s=>s.team.flatMap(memberMachines)));
+ return`<h2 class="pg">Overview</h2><div class="sub">Saturday 11 September 2027 · Slade Hall Farm</div>
+ <div class="stats"><div><b>${db.exhibitors.length}</b>Exhibitors</div><div><b>${M.length}</b>Machines entered</div><div><b>${M.filter(m=>m.status==="pending").length}</b>Awaiting approval</div><div><b>${D.length}</b>Drivers</div><div><b>${db.slots.length}</b>Slots planned</div><div><b>${M.filter(m=>scrutStatus(m)==="pass"||scrutStatus(m)==="advisory").length}/${used.size}</b>Timetabled machines scrutineered</div><div><b>${D.filter(driverReady).length}/${D.length}</b>Drivers briefed & ID checked</div></div>
+ <div class="grid2"><div class="card"><h3>Timetable issues</h3>${iss.length?iss.map(i=>`<div class="iss ${i.lvl}">${i.lvl==="e"?"✗":"⚠"} ${esc(i.msg)} <a data-act="editSlot" data-id="${i.slot}">Open</a></div>`).join(""):'<div class="pill ok">No issues</div>'}</div>
+ <div class="card"><h3>Needs approval</h3>${approvalCount()?`<div style="font-size:15px"><b>${approvalCount()}</b> item(s) waiting – machine entries, photos, AI histories, sponsor offers and enquiries.</div><button class="btn sm" data-act="nav" data-v="approvals" style="margin-top:8px">Open the approvals queue</button>`:'<div class="pill ok">Nothing waiting</div>'}</div></div>`;
+};
+
+/* ----- Organiser: entries ----- */
+let entryQ="";
+VIEWS.entries=()=>`<h2 class="pg">Exhibitors & machines</h2><div class="sub">Every machine is its own entry. Implements show the tractor they're usually paired with – the real pairing is confirmed at scrutineering on the morning.</div>
+ <input class="fi search" placeholder="Search exhibitors, machines, IDs…" value="${esc(entryQ)}" data-inp="entryQ">
+ ${db.exhibitors.filter(e=>!entryQ||JSON.stringify([e,db.machines.filter(m=>m.exId===e.id)]).toLowerCase().includes(entryQ.toLowerCase())).map(e=>{
+  const ms=db.machines.filter(m=>m.exId===e.id),ds=db.drivers.filter(d=>d.exId===e.id);
+  return`<div class="card"><div class="row"><h3 style="margin:0">${esc(e.name)}</h3><span class="code">${e.id}</span><span class="small">${esc(e.contact)} · ${esc(e.phone)}</span></div>
+  <div class="list" style="margin-top:6px">${ms.map(m=>machineRow(m,true)).join("")}</div>
+  <div class="small" style="margin-top:6px">Drivers: ${ds.map(d=>esc(d.name)).join(", ")||"none yet"}</div></div>`}).join("")}`;
+function machineRow(m,admin){
+ const pw=m.pairWith?mach(m.pairWith):null;
+ return`<div class="it"><div style="font-size:22px">${m.kind==="power"?"🚜":m.kind==="self"?"🌾":"⚙️"}</div><div class="b"><b>${esc(m.make)}</b> <span class="code">${m.id}</span><br><span class="small">${esc(m.type)} · ${KIND_LABEL[m.kind]}${m.year?" · "+esc(m.year):""}${m.reg?" · "+esc(m.reg):""}${pw?` · usually with ${esc(pw.make)}`:""}</span><br>${ST_PILL[m.status]} ${SCR_PILL[scrutStatus(m)]}</div>
+ ${admin&&m.status!=="approved"?`<button class="btn sm" data-act="mStatus" data-id="${m.id}" data-s="approved">Approve</button>`:""}${admin&&m.status!=="declined"?`<button class="btn sm alt" data-act="mStatus" data-id="${m.id}" data-s="declined">Decline</button>`:""}</div>`;
+}
+
+/* ----- Organiser: drivers ----- */
+VIEWS.drivers=()=>`<h2 class="pg">Drivers</h2><div class="sub">Drivers are added by exhibitors, or by scrutineers on the morning. Each must have photo ID checked (18+) and pass the safety briefing quiz on the day.</div>
+ <div class="card"><div class="list">${db.drivers.map(d=>{const n=db.slots.filter(s=>s.team.some(t=>t.driver===d.id)).length;
+  return`<div class="it"><div class="b"><b>${esc(d.name)}</b> <span class="code">${d.id}</span>${d.onDay?' <span class="pill info">Added on the day</span>':""}<br><span class="small">${esc(exh(d.exId)?.name||"")} · ${esc(d.phone)} · ${n} slot${n===1?"":"s"}</span><br>
+  ${d.id18?`<span class="pill ok">18+ ID checked by ${esc(d.id18.by)} ${esc(d.id18.at)}</span>`:d.declared18?'<span class="pill wait">18+ declared – ID check on the day</span>':'<span class="pill bad">Not confirmed 18+</span>'}
+  ${d.briefing?`<span class="pill ok">Briefing passed ${esc(d.briefing.at)} (${esc(d.briefing.version)})</span>`:'<span class="pill grey">Briefing not done</span>'}</div></div>`}).join("")}</div></div>`;
+
+/* ----- Organiser: timetable ----- */
+let ttMode="grid";
+VIEWS.timetable=()=>{
+ const st=db.settings,times=slotGrid(),iss=slotIssues();
+ const bySlot={};iss.forEach(i=>{(bySlot[i.slot]=bySlot[i.slot]||[]).push(i)});
+ return`<h2 class="pg">Demo timetable</h2><div class="sub">Each field is divided into ${st.count} slots of ${st.len} min. A slot can need a whole team – e.g. a harvester plus tractors and trailers. Click any cell to plan it.</div>
+ <div class="card"><div class="row">
+  <label class="small">First slot <input class="fi" style="width:90px" type="time" value="${fmt(st.first)}" data-set="first"></label>
+  <label class="small">Slot length (min) <input class="fi" style="width:70px" type="number" min="10" max="120" value="${st.len}" data-set="len"></label>
+  <label class="small">Gap (min) <input class="fi" style="width:60px" type="number" min="0" max="60" value="${st.gap}" data-set="gap"></label>
+  <label class="small">Slots per field <input class="fi" style="width:60px" type="number" min="1" max="16" value="${st.count}" data-set="count"></label>
+  <label class="small">Changeover between fields (min) <input class="fi" style="width:60px" type="number" min="0" max="60" value="${st.changeover}" data-set="changeover"></label>
+ </div></div>
+ ${iss.length?`<div class="card"><h3>Checks <span class="pill bad">${iss.filter(i=>i.lvl==="e").length} error${iss.filter(i=>i.lvl==="e").length===1?"":"s"}</span> <span class="pill wait">${iss.filter(i=>i.lvl==="w").length} warning${iss.filter(i=>i.lvl==="w").length===1?"":"s"}</span></h3>${iss.map(i=>`<div class="iss ${i.lvl}">${i.lvl==="e"?"✗":"⚠"} ${esc(i.msg)} <a data-act="editSlot" data-id="${i.slot}">Open</a></div>`).join("")}</div>`:'<div class="card"><span class="pill ok">✓ No clashes or gaps found</span></div>'}
+ <div class="ttwrap"><table class="tt"><colgroup><col class="tc">${FIELD_IDS.map(()=>"<col>").join("")}</colgroup><thead><tr><th>Time</th>${FIELD_IDS.map(f=>`<th>${FIELDS[f]}</th>`).join("")}</tr></thead><tbody>
+ ${times.map(tm=>`<tr><th>${fmt(tm)}<br><span class="small">to ${fmt(tm+st.len)}</span></th>${FIELD_IDS.map(f=>{const s=db.slots.find(x=>x.field===f&&x.start===tm);
+   if(!s)return`<td><button class="cell" data-act="newSlot" data-f="${f}" data-t="${tm}">＋ Plan</button></td>`;
+   const li=bySlot[s.id]||[],cls=li.some(i=>i.lvl==="e")?"e":li.length?"w":"f";
+   return`<td><button class="cell ${cls}" data-act="editSlot" data-id="${s.id}"><b>${esc(s.demo)}</b>${s.team.map(t=>`<span class="tm">${esc(t.role)}: ${esc(memberMachines(t).map(id=>mach(id)?.make||id).join(" + ")||"–")}${t.driver?` · ${esc(drv(t.driver)?.name.replace("Sample ",""))}`:""}</span>`).join("")}${li.length?`<span class="tm" style="color:${cls==="e"?"var(--red)":"var(--amber)"};font-weight:700">${li.length} issue${li.length>1?"s":""}</span>`:""}</button></td>`}).join("")}</tr>`).join("")}
+ </tbody></table></div>
+ ${db.slots.filter(s=>!times.includes(s.start)).length?`<div class="iss w">⚠ ${db.slots.filter(s=>!times.includes(s.start)).length} slot(s) don't fit the current grid times – change the settings back, or re-plan them.</div>`:""}
+ <div class="card" style="margin-top:14px"><h3>Google Sheet</h3><div class="small">Plan in Sheets if you prefer: one row per team member. Copy the rows and paste them here, or copy the current timetable out to a Sheet.</div>
+  <div class="row" style="margin:8px 0"><button class="btn sm alt" data-act="ttExport">Copy timetable for Sheets</button></div>
+  <textarea class="fi" id="ttIn" rows="4" style="font-family:monospace;font-size:12px;white-space:pre" placeholder="Paste rows: Field · Start · Demo · Role · Power unit ID · Implement IDs · Driver ID"></textarea>
+  <div id="ttRep"></div><button class="btn sm" data-act="ttImport" style="margin-top:8px">Check & import</button></div>`;
+};
+
+function slotEditor(s,isNew){
+ const opts=(kinds,sel,blank)=>`<option value="">${blank}</option>`+db.machines.filter(m=>kinds.includes(m.kind)&&m.status!=="declined").map(m=>`<option value="${m.id}" ${m.id===sel?"selected":""}>${esc(m.make)} – ${esc(m.type)} (${m.id})${m.status==="pending"?" ⏳":""}</option>`).join("");
+ const dopts=sel=>`<option value="">Driver…</option>`+db.drivers.map(d=>`<option value="${d.id}" ${d.id===sel?"selected":""}>${esc(d.name)} – ${esc(exh(d.exId)?.name||"")}</option>`).join("");
+ const iss=slotIssues().filter(i=>i.slot===s.id);
+ openModal(`<h2>${isNew?"Plan":"Edit"} slot</h2><div class="small">${FIELDS[s.field]} · ${fmt(s.start)}–${fmt(s.start+slotLen())}</div>
+ <label class="fl">Demo</label><input class="fi" id="sDemo" value="${esc(s.demo)}" placeholder="e.g. Forage harvesting" list="demoNames"><datalist id="demoNames">${[...new Set(db.slots.map(x=>x.demo))].map(d=>`<option value="${esc(d)}">`).join("")}</datalist>
+ <div id="teamBox">${s.team.map((t,i)=>`<div class="team" data-i="${i}"><div class="row"><input class="fi" style="flex:1" data-k="role" value="${esc(t.role)}" placeholder="Role e.g. Harvester, Trailer 1"><button class="btn sm alt" data-act="tDel" data-i="${i}">Remove</button></div>
+  <div class="row" style="margin-top:6px"><select class="fi" data-k="power">${opts(["power","self"],t.power,"Tractor / self-propelled…")}</select></div>
+  <div class="row" style="margin-top:6px"><select class="fi" data-k="impl0">${opts(["impl"],t.impls[0],"Implement (optional)…")}</select><select class="fi" data-k="impl1">${opts(["impl"],t.impls[1],"2nd implement (optional)…")}</select></div>
+  <div class="row" style="margin-top:6px"><select class="fi" data-k="driver">${dopts(t.driver)}</select></div>
+  ${t.confirmed?`<div class="small" style="margin-top:4px">✓ Pairing confirmed by ${esc(t.confirmed.by)} at ${esc(t.confirmed.at)}</div>`:""}</div>`).join("")}</div>
+ <button class="btn sm alt" data-act="tAdd">＋ Add team member</button>
+ ${iss.length?`<div style="margin-top:10px">${iss.map(i=>`<div class="iss ${i.lvl}">${i.lvl==="e"?"✗":"⚠"} ${esc(i.msg)}</div>`).join("")}</div>`:""}
+ <div class="row" style="margin-top:14px"><button class="btn" data-act="sSave" data-id="${s.id}">Save slot</button>${isNew?"":`<button class="btn red" data-act="sDel" data-id="${s.id}">Delete slot</button>`}<button class="btn alt" data-act="closeModal">Cancel</button></div>`);
+ editing=JSON.parse(JSON.stringify(s));editingNew=isNew;
+}
+let editing=null,editingNew=false;
+function readTeam(){
+ editing.demo=$("#sDemo").value.trim();
+ editing.team=[...document.querySelectorAll("#teamBox .team")].map((el,i)=>{const g=k=>el.querySelector(`[data-k="${k}"]`).value;return{...editing.team[i],role:g("role").trim()||"Team member",power:g("power"),impls:[g("impl0"),g("impl1")].filter(Boolean),driver:g("driver")}});
+}
+
+/* ----- Organiser: checklists ----- */
+VIEWS.checks=()=>`<h2 class="pg">Scrutineering checklists</h2><div class="sub">Every machine type uses the default list until you add a list for that type. Keep the lists in a Google Sheet (columns: Machine type · Check) and paste them here.</div>
+ <div class="grid2"><div class="card"><h3>Lists in use</h3>${Object.entries(db.checks).map(([k,v])=>`<details ${k==="*"?"open":""} style="margin-bottom:8px"><summary>${k==="*"?"Default (all types)":esc(k)} – ${v.length} checks</summary><ol class="small">${v.map(c=>`<li>${esc(c)}</li>`).join("")}</ol>${k!=="*"?`<button class="btn sm alt" data-act="ckDel" data-k="${esc(k)}">Remove – use default</button>`:""}</details>`).join("")}
+ <div class="small">Machine types: ${TYPES.map(t=>esc(t[0])).join(", ")}.</div></div>
+ <div class="card"><h3>Paste from Google Sheets</h3><textarea class="fi" id="ckIn" rows="9" style="font-family:monospace;font-size:12px;white-space:pre" placeholder="Machine type&#9;Check&#10;Silage trailer&#9;Brakes working on both axles&#10;Silage trailer&#9;Tailgate rams and locks sound"></textarea><div id="ckRep"></div><button class="btn sm" data-act="ckImport" style="margin-top:8px">Import lists</button></div></div>`;
+
+/* ----- Organiser: audit ----- */
+VIEWS.audit=()=>`<h2 class="pg">Audit log</h2><div class="sub">Every action is recorded. In the live version each row is also added to a locked Google Sheet.</div>
+ <div class="card"><button class="btn sm alt" data-act="auditCopy">Copy for Google Sheets (${db.audit.length} rows)</button><div class="list" style="margin-top:8px">${db.audit.slice(0,80).map(a=>`<div class="it"><div class="small" style="min-width:110px">${esc(a.ts)}<br>Event ${esc(a.ev)} · ${esc(a.cat)}</div><div class="b"><b>${esc(a.action)}</b><br><span class="small">${esc(a.detail)} – by ${esc(a.by)}</span></div></div>`).join("")||'<div class="small">Nothing yet.</div>'}</div></div>`;
+
+/* ----- Exhibitor ----- */
+VIEWS.myentry=()=>{const e=exh(ME.exhibitor),ms=db.machines.filter(m=>m.exId===e.id),ds=db.drivers.filter(d=>d.exId===e.id);
+ return`<h2 class="pg">${esc(e.name)}</h2><div class="sub">Exhibitor ${e.id} · Add each machine separately – tractors, implements and self-propelled machines are all individual entries.</div>
+ <div class="grid2"><div class="card"><h3>Your machines</h3><div class="list">${ms.map(m=>machineRow(m,false)).join("")}</div><button class="btn sm" data-act="addMachine">＋ Add a machine</button></div>
+ <div class="card"><h3>Your drivers</h3><div class="list">${ds.map(d=>`<div class="it"><div class="b"><b>${esc(d.name)}</b> <span class="code">${d.id}</span><br><span class="small">${esc(d.phone)}</span><br>${d.briefing?'<span class="pill ok">Briefing passed</span>':'<span class="pill grey">Briefing on the day</span>'} ${d.id18?'<span class="pill ok">ID checked</span>':'<span class="pill wait">ID check on the day</span>'}</div></div>`).join("")}</div><button class="btn sm" data-act="addDriver">＋ Add a driver</button>
+ <div class="small" style="margin-top:8px">Drivers must be 18 or over (insurance requirement). Photo ID is checked on the morning, and each driver completes the safety briefing and quiz on their phone on the day.</div></div></div>`};
+VIEWS.myslots=()=>{const e=exh(ME.exhibitor);const rows=[];db.slots.forEach(s=>s.team.forEach(t=>{if(memberMachines(t).some(id=>mach(id)?.exId===e.id))rows.push({s,t})}));rows.sort((a,b)=>sStart(a.s)-sStart(b.s));
+ return`<h2 class="pg">Your slots</h2><div class="sub">Where each of your machines is working, and who's driving.</div><div class="card"><div class="list">${rows.map(({s,t})=>`<div class="it"><div class="cond" style="font-size:20px;color:var(--green);min-width:56px">${fmt(sStart(s))}</div><div class="b"><b>${esc(s.demo)}</b> · Field ${s.field} · ${esc(t.role)}<br>${esc(memberMachines(t).map(id=>mach(id)?.make).join(" + "))}<br><span class="small">Driver: ${esc(drv(t.driver)?.name||"TBC")}</span></div></div>`).join("")||'<div class="small">The organisers haven\'t timetabled your machines yet.</div>'}</div></div>`};
+VIEWS.alerts=()=>{const me=role==="driver"?{driverId:ME.driver}:{exId:ME.exhibitor};const al=alertsFor(me);
+ return`<h2 class="pg">Alerts</h2><div class="sub">Sent as push notifications in the live app${role==="exhibitor"?" – you get the same alerts as your drivers":""}. Move the event-time slider to see them arrive.</div><div class="card"><div class="list">${al.slice().reverse().map(a=>`<div class="it" style="${a.at>now?"opacity:.45":""}"><div class="cond" style="font-size:18px;min-width:50px;color:${a.k==="go"?"var(--live)":a.k==="bad"?"var(--red)":"var(--green)"}">${fmt(a.at)}</div><div class="b">${a.k==="go"&&a.at<=now?`<b>${esc(a.msg)}</b>`:esc(a.msg)}${a.at>now?'<br><span class="small">Scheduled</span>':""}</div></div>`).join("")||'<div class="small">No alerts yet.</div>'}</div></div>`};
+
+/* ----- Driver ----- */
+let bStep=0,qAns={},qChecked=false;
+VIEWS.briefing=()=>{const d=drv(ME.driver);
+ if(d.briefing)return`<h2 class="pg">Safety briefing</h2><div class="card"><span class="pill ok" style="font-size:14px">✓ Completed</span><p>Signed by <b>${esc(d.briefing.signedName)}</b> at ${esc(d.briefing.at)} · ${esc(d.briefing.version)} · quiz ${d.briefing.score}/${QUIZ.length}</p>${d.id18?'<span class="pill ok">ID checked – 18+</span>':'<span class="pill wait">Show photo ID at the Machinery Check Point (4)</span>'}<p class="small">You'll get alerts for each of your slots. See "My day".</p></div>`;
+ if(now<420)return`<h2 class="pg">Safety briefing</h2><div class="card">The briefing opens at <b>07:00</b> on the morning of the show, so the information is fresh. You'll need about 5 minutes. <div class="small" style="margin-top:6px">Prototype: move the event-time slider past 07:00.</div></div>`;
+ if(bStep===0)return`<h2 class="pg">Safety briefing</h2><div class="sub">${esc(d.name)} · ${BRIEFING_VERSION} – <b>draft wording for the organisers to finalise</b></div><div class="card brief">${BRIEF.map(([h,l])=>`<h4>${esc(h)}</h4><ul>${l.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`).join("")}<button class="btn" data-act="bNext" style="margin-top:10px">I've read this – start the quiz</button></div>`;
+ if(bStep===1){const all=Object.keys(qAns).length===QUIZ.length;const score=QUIZ.filter((q,i)=>qAns[i]===q.a).length;
+  return`<h2 class="pg">Quick quiz</h2><div class="sub">Answer all ${QUIZ.length} correctly to continue. You can try again.</div>${QUIZ.map((q,i)=>`<div class="card"><b>${i+1}. ${esc(q.q)}</b>${q.o.map((o,j)=>`<button class="qopt ${qAns[i]===j?"sel":""} ${qChecked&&qAns[i]===j?(j===q.a?"right":"wrong"):""}" data-act="qPick" data-i="${i}" data-j="${j}">${esc(o)}</button>`).join("")}${qChecked&&qAns[i]!==q.a?`<div class="small" style="color:var(--red)">${esc(q.why)}</div>`:""}</div>`).join("")}
+  ${qChecked&&score<QUIZ.length?`<div class="iss e">${score}/${QUIZ.length} correct – read the notes above and change your answers.</div>`:""}
+  <button class="btn" data-act="qCheck" ${all?"":"disabled"}>Check answers</button> <button class="btn alt" data-act="bBack">Back to briefing</button>`}
+ return`<h2 class="pg">Sign the briefing</h2><div class="card"><span class="pill ok">Quiz passed ${QUIZ.length}/${QUIZ.length}</span>
+  <label class="chk"><input type="checkbox" id="bAgree">I have read and understood the safety briefing (${BRIEFING_VERSION}) and will follow it and the instructions of the marshals at all times.</label>
+  <label class="chk"><input type="checkbox" id="bAge">I am 18 or over and hold a valid licence for every vehicle I will drive today.</label>
+  <label class="fl">Type your full name to sign <i>*</i></label><input class="fi" id="bName" value="">
+  <button class="btn" data-act="bSign" style="margin-top:10px">Sign</button></div>`;
+};
+VIEWS.myday=()=>{const d=drv(ME.driver);const rows=[];db.slots.forEach(s=>s.team.forEach(t=>{if(t.driver===d.id)rows.push({s,t})}));rows.sort((a,b)=>sStart(a.s)-sStart(b.s));
+ return`<h2 class="pg">My day</h2><div class="sub">${esc(d.name)} · ${esc(exh(d.exId)?.name||"")}</div>
+ ${!d.briefing?'<div class="iss w">⚠ Complete the safety briefing before your first slot.</div>':""}${!d.id18?'<div class="iss w">⚠ Show photo ID at the Machinery Check Point (4) – you must be 18+.</div>':""}
+ <div class="card"><div class="list">${rows.map(({s,t})=>{const st=sStart(s),live=now>=st&&now<sEnd(s);return`<div class="it"><div class="cond" style="font-size:22px;color:var(--green);min-width:56px">${fmt(st)}</div><div class="b"><b>${esc(s.demo)} – Field ${s.field}</b>${live?' <span class="pill ok">Now</span>':now>=sEnd(s)?' <span class="pill grey">Done</span>':""}${s.delay?` <span class="pill bad">+${s.delay} min</span>`:""}<br>${esc(t.role)}: ${esc(memberMachines(t).map(id=>{const m=mach(id);return m?`${m.make} (${m.id})`:id}).join(" + "))}<br>${memberMachines(t).map(id=>mach(id)).filter(Boolean).map(m=>`<span class="ready"><span class="dot ${scrutStatus(m)==="pass"||scrutStatus(m)==="advisory"?"d-ok":scrutStatus(m)==="fail"?"d-bad":"d-grey"}"></span>${esc(m.make)} scrutineered</span>`).join("")}</div></div>`}).join("")||'<div class="small">No slots yet.</div>'}</div></div>`};
+
+/* ----- Scrutineer ----- */
+let scrQ="",scrOpen=null;
+VIEWS.arrivals=()=>{const list=db.machines.filter(m=>m.status==="approved"&&(!scrQ||(m.make+m.id+m.type+(m.reg||"")+exh(m.exId).name).toLowerCase().includes(scrQ.toLowerCase())));
+ const order={todo:0,fail:1,advisory:2,pass:3};list.sort((a,b)=>order[scrutStatus(a)]-order[scrutStatus(b)]);
+ return`<h2 class="pg">Machinery Check Point</h2><div class="sub">Scan a machine's QR code (live version) or search by ID, registration or exhibitor. Each machine gets the checklist for its type.</div>
+ <div class="stats"><div><b>${db.machines.filter(m=>m.status==="approved"&&scrutStatus(m)==="todo").length}</b>To check</div><div><b>${db.machines.filter(m=>["pass","advisory"].includes(scrutStatus(m))).length}</b>Passed</div><div><b>${db.machines.filter(m=>scrutStatus(m)==="fail").length}</b>Failed</div></div>
+ <input class="fi search" placeholder="Search ID, reg, make, exhibitor…" value="${esc(scrQ)}" data-inp="scrQ">
+ <div class="card"><div class="list">${list.map(m=>`<div class="it"><div style="font-size:22px">${m.kind==="power"?"🚜":m.kind==="self"?"🌾":"⚙️"}</div><div class="b"><b>${esc(m.make)}</b> <span class="code">${m.id}</span><br><span class="small">${esc(m.type)} · ${esc(exh(m.exId).name)}${m.reg?" · "+esc(m.reg):""}</span><br>${SCR_PILL[scrutStatus(m)]}</div><button class="btn sm" data-act="scrOpen" data-id="${m.id}">${scrutStatus(m)==="todo"?"Inspect":"View"}</button></div>`).join("")}</div></div>`};
+function scrutModal(id){const m=mach(id),c=m.scrut||{status:"todo",items:{},note:""};const checks=checksFor(m);scrOpen=JSON.parse(JSON.stringify({id,items:c.items||{},note:c.note||""}));
+ const pairs=[];db.slots.forEach(s=>s.team.forEach((t,i)=>{if(memberMachines(t).includes(id))pairs.push({s,t,i})}));
+ openModal(`<h2>${esc(m.make)}</h2><div class="small">${m.id} · ${esc(m.type)} · ${esc(exh(m.exId).name)}${m.reg?" · "+esc(m.reg):""} · ${checks===db.checks["*"]?"default checklist":"checklist for "+esc(m.type)}</div>
+ <div id="ckList" style="margin-top:8px">${checks.map((c,i)=>{const v=scrOpen.items[i];return`<div class="ckrow"><span>${esc(c)}</span><button class="p ${v==="p"?"on":""}" data-act="ck" data-i="${i}" data-v="p">✓</button><button class="f ${v==="f"?"on":""}" data-act="ck" data-i="${i}" data-v="f">✗</button><button class="n ${v==="n"?"on":""}" data-act="ck" data-i="${i}" data-v="n">N/A</button></div>`}).join("")}</div>
+ <label class="fl">Notes / advisories</label><input class="fi" id="ckNote" value="${esc(scrOpen.note)}" placeholder="e.g. nearside indicator lens cracked – advisory">
+ <div class="small" style="margin-top:6px">Live version: take a photo of any defect.</div>
+ ${pairs.length?`<h3 style="margin:14px 0 4px;font-size:18px;color:var(--green)">Pairings today – confirm what's actually turned up</h3>${pairs.map(({s,t,i})=>`<div class="team"><b>${fmt(sStart(s))} Field ${s.field}</b> · ${esc(s.demo)} · ${esc(t.role)}<br>${esc(memberMachines(t).map(x=>mach(x)?.make).join(" + "))} · driver ${esc(drv(t.driver)?.name||"TBC")}<br>${t.confirmed?`<span class="pill ok">Confirmed by ${esc(t.confirmed.by)} ${esc(t.confirmed.at)}</span>`:`<button class="btn sm alt" data-act="pairOk" data-s="${s.id}" data-i="${i}">Confirm this pairing</button>`}</div>`).join("")}`:""}
+ <div class="row" style="margin-top:14px"><button class="btn" data-act="scrSave" data-v="pass">Pass</button><button class="btn y" data-act="scrSave" data-v="advisory">Pass with advisory</button><button class="btn red" data-act="scrSave" data-v="fail">Fail</button></div><div id="scrMsg" class="small" style="color:var(--red);margin-top:6px"></div>`);
+}
+VIEWS.sdrivers=()=>`<h2 class="pg">Drivers & ID</h2><div class="sub">Check photo ID (18+) for every driver. Add unexpected drivers here – they then complete the briefing and quiz on their own phone.</div>
+ <div class="grid2"><div class="card"><h3>Drivers</h3><div class="list">${db.drivers.map(d=>`<div class="it"><div class="b"><b>${esc(d.name)}</b> <span class="code">${d.id}</span>${d.onDay?' <span class="pill info">On the day</span>':""}<br><span class="small">${esc(exh(d.exId)?.name||"")}</span><br>${d.briefing?'<span class="pill ok">Briefing ✓</span>':'<span class="pill grey">Briefing not done</span>'} ${d.id18?`<span class="pill ok">ID ✓ ${esc(d.id18.at)}</span>`:""}</div>${d.id18?"":`<button class="btn sm" data-act="id18" data-id="${d.id}">ID seen – 18+</button>`}</div>`).join("")}</div></div>
+ <div class="card"><h3>Add a driver on the day</h3><label class="fl">Full name <i>*</i></label><input class="fi" id="ndName"><label class="fl">Mobile <i>*</i></label><input class="fi" id="ndPhone" type="tel"><label class="fl">Exhibitor <i>*</i></label><select class="fi" id="ndEx">${db.exhibitors.map(e=>`<option value="${e.id}">${esc(e.name)}</option>`).join("")}</select>
+ <label class="chk"><input type="checkbox" id="ndId">I have seen photo ID and the driver is 18 or over.</label><div class="small">We record that ID was checked, by whom and when – not the ID details or date of birth.</div>
+ <button class="btn" data-act="ndAdd" style="margin-top:10px">Add driver & send briefing link</button><div id="ndMsg" style="margin-top:8px"></div></div></div>`;
+
+/* ----- Marshal ----- */
+VIEWS.fields=()=>{const mine=db.slots.filter(s=>ME.marshal.includes(s.field)).sort((a,b)=>sStart(a)-sStart(b));
+ return`<h2 class="pg">My fields: ${ME.marshal.join(", ")}</h2><div class="sub">Check each team is ready, then call them in. Calls go to every driver and exhibitor in the team.</div>
+ ${mine.map(s=>{const st=sStart(s),live=s.state==="live"||(now>=st&&now<sEnd(s)&&s.state!=="done"&&s.state!=="cancel"),done=s.state==="done"||now>=sEnd(s);
+  return`<div class="card" style="${done?"opacity:.6":""}"><div class="row"><h3 style="margin:0">${fmt(st)} · Field ${s.field} · ${esc(s.demo)}</h3>${s.state==="cancel"?'<span class="pill bad">Cancelled</span>':live?'<span class="pill ok">● Live</span>':done?'<span class="pill grey">Finished</span>':now>=st-30?'<span class="pill wait">Starting soon</span>':""}${s.delay?`<span class="pill bad">+${s.delay} min</span>`:""}</div>
+  ${s.team.map(t=>{const d=drv(t.driver),ms=memberMachines(t).map(mach).filter(Boolean),mOk=ms.every(m=>["pass","advisory"].includes(scrutStatus(m)));
+   return`<div class="team"><b>${esc(t.role)}</b>: ${esc(ms.map(m=>m.make).join(" + "))} · ${esc(d?.name||"no driver")}<br>
+   <span class="ready"><span class="dot ${mOk?"d-ok":ms.some(m=>scrutStatus(m)==="fail")?"d-bad":"d-wait"}"></span>Scrutineered</span>
+   <span class="ready"><span class="dot ${d&&d.briefing?"d-ok":"d-wait"}"></span>Briefing</span>
+   <span class="ready"><span class="dot ${d&&d.id18?"d-ok":"d-wait"}"></span>ID 18+</span>
+   <span class="ready"><span class="dot ${t.confirmed?"d-ok":"d-grey"}"></span>Pairing confirmed</span></div>`}).join("")}
+  <div class="row" style="margin-top:8px"><button class="btn sm y" data-act="call" data-id="${s.id}">📣 Call team to start</button><button class="btn sm alt" data-act="sState" data-id="${s.id}" data-v="live">Started</button><button class="btn sm alt" data-act="sState" data-id="${s.id}" data-v="done">Finished</button><button class="btn sm alt" data-act="sDelay" data-id="${s.id}">+10 min</button><button class="btn sm alt" data-act="sState" data-id="${s.id}" data-v="cancel">Cancel</button></div></div>`}).join("")||'<div class="card">No slots in your fields.</div>'}`};
+
+/* ----- Gate cashier ----- */
+const GATE_DEF={seq:0,rseq:140,signins:[],prices:{adults:10,children:5,under5:0}};
+const gateGet=()=>{const g=store.get("psd_gate",null)||JSON.parse(JSON.stringify(GATE_DEF));g.prices=g.prices||{...GATE_DEF.prices};return g};
+const gateSave=g=>store.set("psd_gate",g);
+const PKEY={adult:"adults",child:"children",under5:"under5"};
+const priceOf=(type,p)=>p[PKEY[type]]||0;
+const gTotal=(x,p)=>x.adults*p.adults+x.children*p.children+x.under5*p.under5;
+const gPeople=x=>x.adults+x.children+x.under5;
+const gList=x=>[x.adults?`${x.adults} adult${x.adults>1?"s":""}`:"",x.children?`${x.children} child${x.children>1?"ren":""}`:"",x.under5?`${x.under5} under 5`:""].filter(Boolean).join(" · ");
+const money=n=>"£"+(+n).toFixed(2).replace(/\.00$/,"");
+const payments=x=>x.payments||(x.pay?[{...x.pay,people:gPeople(x)}]:[]);
+const isApp=x=>x.source==="app";
+const unpaidMembers=x=>(x.members||[]).filter(m=>!m.paid);
+let gateQ="",gateOpen=null;
+VIEWS.gatesales=()=>{const g=gateGet(),p=g.prices,S=g.signins;
+ const W=S.filter(x=>!isApp(x)&&x.status==="waiting");
+ const pays=S.flatMap(payments),card=pays.filter(y=>y.method==="card").reduce((a,y)=>a+y.amount,0),cash=pays.filter(y=>y.method==="cash").reduce((a,y)=>a+y.amount,0),admitted=pays.reduce((a,y)=>a+(y.people||0),0);
+ const preReg=S.filter(isApp),preRegPeople=preReg.reduce((a,x)=>a+unpaidMembers(x).length,0);
+ const q=gateQ.trim().toLowerCase();
+ const hits=q?S.filter(x=>isApp(x)&&unpaidMembers(x).length&&(x.code.toLowerCase().includes(q)||x.name.toLowerCase().includes(q)||x.members.some(m=>m.id.toLowerCase().includes(q)||m.name.toLowerCase().includes(q)))):[];
+ const w=W.filter(x=>!q||(x.code+x.name).toLowerCase().includes(q));
+ return`<h2 class="pg">Gate sales</h2><div class="sub">Scan a pre-registered visitor's QR code (or type the code), or serve walk-ups who signed in on the <a href="kiosk.html">iPad kiosk</a>. Take payment and hand out wristbands.</div>
+ <div class="stats"><div><b>${preRegPeople}</b>Pre-registered, not yet arrived</div><div><b>${W.length}</b>Kiosk sign-ins waiting</div><div><b>${admitted}</b>People admitted</div><div><b>${money(card)}</b>Card</div><div><b>${money(cash)}</b>Cash</div></div>
+ <div class="card"><h3>Scan or search</h3><div class="row"><input class="fi" style="flex:1" placeholder="Scan QR or type a code (R-0141, R-0141-2, G-005) or a name" value="${esc(gateQ)}" data-inp="gateQ"><button class="btn sm alt" data-act="gScanDemo">📷 Scan (live version)</button></div>
+  ${q?`<div class="list" style="margin-top:8px">${hits.map(x=>{const m=x.members.find(y=>y.id.toLowerCase()===q);return`<div class="it"><div class="cond" style="font-size:24px;color:var(--green);min-width:96px">${x.code}</div><div class="b"><b>${esc(x.name)}</b> <span class="pill info">Pre-registered</span><br><span class="small">${x.members.map(y=>`${esc(y.name)}${y.paid?" ✓":""}`).join(", ")}</span></div><button class="btn sm" data-act="gOpen" data-c="${x.code}" data-m="${m?m.id:""}">${m?"Pay for "+esc(m.name):"Take payment"}</button></div>`}).join("")}${w.map(x=>gRow(x,p)).join("")}${!hits.length&&!w.length?'<div class="small">No unpaid registration or sign-in matches.</div>':""}</div>`:""}</div>
+ <div class="card"><h3>Kiosk sign-ins waiting to pay</h3><div class="list">${W.map(x=>gRow(x,p)).join("")||'<div class="small">Nobody waiting. New kiosk sign-ins appear here automatically.</div>'}</div></div>
+ <div class="card"><h3>Prices on the day</h3><div class="row"><label class="small">Adult £<input class="fi" style="width:70px" type="number" min="0" step="0.5" value="${p.adults}" data-price="adults"></label><label class="small">Child £<input class="fi" style="width:70px" type="number" min="0" step="0.5" value="${p.children}" data-price="children"></label><label class="small">Under 5 £<input class="fi" style="width:70px" type="number" min="0" step="0.5" value="${p.under5}" data-price="under5"></label><span class="small">Sample prices – set your own.</span></div></div>
+ <div class="card"><h3>Payments today</h3><div class="list">${S.filter(x=>payments(x).length).slice(0,40).map(x=>`<div class="it"><div class="cond" style="font-size:20px;min-width:86px">${x.code}</div><div class="b"><b>${esc(x.name)}</b>${isApp(x)?' <span class="pill info">Pre-registered</span>':' <span class="pill grey">Kiosk</span>'}${isApp(x)&&unpaidMembers(x).length?` <span class="pill wait">${unpaidMembers(x).length} still to arrive</span>`:""}<br><span class="small">${payments(x).map(y=>`${money(y.amount)} ${y.method} at ${esc(y.at)} (${y.people} ${y.people===1?"person":"people"})`).join(" · ")}</span></div></div>`).join("")||'<div class="small">No payments yet.</div>'}</div>
+ <button class="btn sm alt" data-act="gCopy" style="margin-top:8px">Copy gate sales for Google Sheets</button></div>`};
+const gRow=(x,p)=>`<div class="it"><div class="cond" style="font-size:30px;color:var(--green);min-width:86px">${x.code}</div><div class="b"><b>${esc(x.name)}</b> <span class="pill grey">Kiosk</span><br><span class="small">${gList(x)} · signed ${esc((x.signedAt||"").split(" ")[1]||x.signedAt)}${x.lang==="cy"?" · Cymraeg":""}</span></div><div class="cond" style="font-size:20px">${money(gTotal(x,p))}</div><button class="btn sm" data-act="gOpen" data-c="${x.code}">Take payment</button></div>`;
+function gateModal(code,memberId){const g=gateGet(),x=g.signins.find(v=>v.code===code);if(!x)return;
+ gateOpen=isApp(x)?{code,sel:Object.fromEntries(x.members.filter(m=>!m.paid).map(m=>[m.id,memberId?m.id===memberId:true]))}:{code,adults:x.adults,children:x.children,under5:x.under5};gateModalRender(x,g.prices)}
+function gateModalRender(x,p){const o=gateOpen;let body,tot,ppl;
+ if(isApp(x)){const sel=x.members.filter(m=>o.sel[m.id]);tot=sel.reduce((a,m)=>a+priceOf(m.type,p),0);ppl=sel.length;
+  body=`<div class="list">${x.members.map(m=>`<div class="it" style="align-items:center">${m.paid?'<span style="width:22px;text-align:center">✓</span>':`<input type="checkbox" style="width:22px;height:22px;accent-color:var(--green)" data-act="gSel" data-id="${m.id}" ${o.sel[m.id]?"checked":""}>`}<div class="b"><b>${esc(m.name)}</b> <span class="small">${m.type==="adult"?"Adult":m.type==="child"?"Child (5–15)":"Under 5"} · ${m.id}</span>${m.share?`<br><span class="small">Ticket shared with ${esc(m.share.to)}</span>`:""}</div>${m.paid?`<span class="pill ok">Paid ${esc(m.paid.at)}</span>`:`<span class="cond" style="font-size:18px">${money(priceOf(m.type,p))}</span>`}</div>`).join("")}</div><div class="small">Tick everyone who's here now. Anyone arriving later pays when they show their own ticket.</div>`}
+ else{tot=gTotal(o,p);ppl=gPeople(o);body=`<div class="row" style="margin-top:10px">${[["adults","Adults"],["children","Children (5–15)"],["under5","Under 5"]].map(([k,l])=>`<div class="team" style="flex:1;text-align:center;margin:0"><div class="small">${l}</div><div class="cond" style="font-size:30px;color:var(--green)">${o[k]}</div><button class="btn sm alt" data-act="gAdj" data-k="${k}" data-d="-1">−</button> <button class="btn sm alt" data-act="gAdj" data-k="${k}" data-d="1">+</button></div>`).join("")}</div><div class="small" style="margin-top:6px">Change the numbers if the group isn't what was entered on the kiosk.</div>`}
+ openModal(`<h2>${x.code} · ${esc(x.name)}</h2><div class="small">${isApp(x)?'<span class="pill info">Pre-registered in the app</span> ':'<span class="pill grey">Kiosk sign-in</span> '}${esc(x.email)}${x.mobile?" · "+esc(x.mobile):""} · signed ${esc(x.signedAt)}${x.newsOptIn?' · <span class="pill info">News opt-in</span>':""}</div>
+ <div class="team" style="margin-top:10px"><b>Safety declaration</b> – accepted for the whole group and signed:<br><img src="${x.signature}" alt="Signature" style="max-width:100%;height:70px;border:1px solid var(--line);border-radius:6px;margin-top:6px;background:#fff"></div>
+ ${body}
+ <div class="row" style="margin-top:12px;font-size:20px"><b>Total: ${money(tot)}</b><span class="small">${ppl} ${ppl===1?"person":"people"}</span></div>
+ <div class="row" style="margin-top:12px"><button class="btn" data-act="gPay" data-m="card" ${ppl?"":"disabled"}>💳 Paid by card</button><button class="btn y" data-act="gPay" data-m="cash" ${ppl?"":"disabled"}>💷 Paid by cash</button>${isApp(x)?"":`<button class="btn alt" data-act="gCancel">Cancel sign-in</button>`}</div>`)}
+
+/* ============ ACTIONS ============ */
+const ACT={
+ gOpen:el=>gateModal(el.dataset.c,el.dataset.m||null),
+ gScanDemo:()=>toast("Camera scanning","In the live version this opens the camera to scan the visitor's QR code. Here, type the code instead."),
+ gSel:el=>{gateOpen.sel[el.dataset.id]=!gateOpen.sel[el.dataset.id];const g=gateGet();gateModalRender(g.signins.find(v=>v.code===gateOpen.code),g.prices)},
+ gAdj:el=>{const k=el.dataset.k;gateOpen[k]=Math.max(k==="adults"?1:0,gateOpen[k]+ +el.dataset.d);const g=gateGet();gateModalRender(g.signins.find(v=>v.code===gateOpen.code),g.prices)},
+ gPay:el=>{const g=gateGet(),x=g.signins.find(v=>v.code===gateOpen.code);if(!x){closeModal();render();return}const m=el.dataset.m,at=fmt(now);let amt,people,kids,issued;
+   if(isApp(x)){const sel=x.members.filter(y=>!y.paid&&gateOpen.sel[y.id]);if(!sel.length)return;amt=sel.reduce((a,y)=>a+priceOf(y.type,g.prices),0);people=sel.length;kids=sel.filter(y=>y.type!=="adult").length;
+     sel.forEach(y=>y.paid={at,method:m});issued=sel.map(y=>`${y.name} (${y.id})`);x.status=unpaidMembers(x).length?"part":"paid"}
+   else{if(x.status!=="waiting"){closeModal();render();return}Object.assign(x,{adults:gateOpen.adults,children:gateOpen.children,under5:gateOpen.under5});amt=gTotal(gateOpen,g.prices);people=gPeople(x);kids=x.children+x.under5;
+     const num=x.code.slice(2);x.tickets=[...Array(x.adults).fill("A"),...Array(x.children).fill("C"),...Array(x.under5).fill("U")].map((k,i)=>`PSD27-${k}-G${num}-${i+1}`);issued=x.tickets;x.status="paid"}
+   x.payments=[...payments(x),{method:m,amount:amt,at,people,by:"Gate cashier"}];delete x.pay;gateSave(g);
+   log("Check-ins",isApp(x)?"Gate payment – pre-registered":"Gate sale – kiosk",`${x.code} · ${x.name} · ${people} ${people===1?"person":"people"} · ${money(amt)} ${m} · declaration signed ${x.signedAt}`);
+   openModal(`<h2>✓ ${x.code} – ${money(amt)} ${m}</h2><div class="team"><b>Hand out ${people} wristband${people>1?"s":""}.</b>${kids&&x.mobile?`<br>Write <b>${esc(x.mobile)}</b> on the ${kids} children's wristband${kids>1?"s":""}.`:kids?"<br>Ask for a mobile number to write on the children's wristbands.":""}</div>
+   <div class="small">${isApp(x)?`Paid: ${esc(issued.join(", "))}. Their tickets now show “Paid” in the app.${unpaidMembers(x).length?` Still to arrive: ${esc(unpaidMembers(x).map(y=>y.name).join(", "))}.`:""}`:`${issued.length} tickets issued and emailed to ${esc(x.email)} in the live version.`}</div><button class="btn" data-act="closeModal" style="margin-top:12px">Next customer</button>`);gateQ="";render()},
+ gCancel:()=>{const g=gateGet(),x=g.signins.find(v=>v.code===gateOpen.code);if(x){x.status="cancelled";gateSave(g);log("Check-ins","Gate sign-in cancelled",x.code)}closeModal();render()},
+ gCopy:async el=>{const g=gateGet();const rows=["Code\tSource\tLead name\tEmail\tMobile\tPerson\tType\tTicket\tPaid\tMethod\tPaid at\tDeclaration signed\tNews opt-in"];
+   g.signins.forEach(x=>{if(isApp(x))x.members.forEach(m=>rows.push([x.code,"App",x.name,x.email,x.mobile,m.name,m.type,m.id,m.paid?"Yes":"No",m.paid?m.paid.method:"",m.paid?m.paid.at:"",x.signedAt,x.newsOptIn?"Yes":"No"].map(v=>String(v??"").replace(/[\t\n]/g," ")).join("\t")));
+     else if(payments(x).length)rows.push([x.code,"Kiosk",x.name,x.email,x.mobile,"",gList(x),(x.tickets||[]).join(" "),"Yes",payments(x).map(y=>y.method).join("+"),payments(x).map(y=>y.at).join("+"),x.signedAt,x.newsOptIn?"Yes":"No"].map(v=>String(v??"").replace(/[\t\n]/g," ")).join("\t"))});
+   try{await navigator.clipboard.writeText(rows.join("\n"));el.textContent="Copied ✓"}catch(e){el.textContent="Couldn't copy"}},
+ nav:el=>{view=el.dataset.v;bStep=0;render();window.scrollTo(0,0)},
+ closeModal:()=>closeModal(),
+ mStatus:el=>{const m=mach(el.dataset.id);m.status=el.dataset.s;log("Entries",el.dataset.s==="approved"?"Machine approved":"Machine declined",`${m.id} · ${m.make} · ${exh(m.exId).name}`);save();render()},
+ newSlot:el=>slotEditor({id:"S"+Date.now().toString(36),field:+el.dataset.f,start:+el.dataset.t,demo:"",team:[{role:"Team member",power:"",impls:[],driver:"",confirmed:null}],delay:0,state:null},true),
+ editSlot:el=>{const s=db.slots.find(x=>x.id===el.dataset.id);if(s)slotEditor(s,false)},
+ tAdd:()=>{readTeam();editing.team.push({role:`Trailer ${editing.team.length}`,power:"",impls:[],driver:"",confirmed:null});slotEditor(editing,editingNew)},
+ tDel:el=>{readTeam();editing.team.splice(+el.dataset.i,1);slotEditor(editing,editingNew)},
+ sSave:()=>{readTeam();if(!editing.demo){$("#sDemo").classList.add("badf");return}const i=db.slots.findIndex(x=>x.id===editing.id);if(i>=0)db.slots[i]=editing;else db.slots.push(editing);
+   log("Timetable",editingNew?"Slot planned":"Slot changed",`Field ${editing.field} ${fmt(editing.start)} · ${editing.demo} · ${editing.team.length} in team`);save();
+   const iss=slotIssues().filter(x=>x.slot===editing.id);if(iss.length){slotEditor(editing,false);toast("Saved – with issues",iss[0].msg)}else{closeModal();render()}render()},
+ sDel:el=>{const s=db.slots.find(x=>x.id===el.dataset.id);db.slots=db.slots.filter(x=>x.id!==el.dataset.id);log("Timetable","Slot deleted",`Field ${s.field} ${fmt(s.start)} · ${s.demo}`);save();closeModal();render()},
+ ttExport:async el=>{const rows=["Field\tStart\tDemo\tRole\tPower unit ID\tImplement IDs\tDriver ID\tPower unit\tImplements\tDriver"];db.slots.slice().sort((a,b)=>a.field-b.field||a.start-b.start).forEach(s=>s.team.forEach(t=>rows.push([s.field,fmt(s.start),s.demo,t.role,t.power,t.impls.join(" "),t.driver,mach(t.power)?.make||"",t.impls.map(i=>mach(i)?.make).join(" + "),drv(t.driver)?.name||""].join("\t"))));
+   try{await navigator.clipboard.writeText(rows.join("\n"));el.textContent="Copied ✓ – paste into cell A1"}catch(e){$("#ttIn").value=rows.join("\n");el.textContent="Copy failed – text placed below"}},
+ ttImport:()=>{const lines=$("#ttIn").value.replace(/\r/g,"").split("\n").filter(l=>l.trim());const errs=[];const ns={};
+   lines.forEach((l,n)=>{const c=l.split("\t").map(x=>x.trim());if(n===0&&/field/i.test(c[0]))return;const f=+c[0],t=parseTime(c[1]);
+     if(!FIELD_IDS.includes(f)){errs.push(`Row ${n+1}: field "${c[0]}" isn't 6–11.`);return}if(t==null){errs.push(`Row ${n+1}: time "${c[1]}" not understood.`);return}
+     const p=(c[4]||"").toUpperCase(),im=(c[5]||"").toUpperCase().split(/[\s,+]+/).filter(Boolean),d=(c[6]||"").toUpperCase();
+     [p,...im].filter(Boolean).forEach(id=>{if(!mach(id))errs.push(`Row ${n+1}: machine ${id} not found.`)});if(d&&!drv(d))errs.push(`Row ${n+1}: driver ${d} not found.`);
+     const k=f+"|"+t;ns[k]=ns[k]||{id:"S"+f+"-"+t,field:f,start:t,demo:c[2]||"Demo",team:[],delay:0,state:null};ns[k].team.push({role:c[3]||"Team member",power:p,impls:im,driver:d,confirmed:null})});
+   if(errs.length||!Object.keys(ns).length){$("#ttRep").innerHTML=(errs.length?errs:["Nothing to import."]).map(e=>`<div class="iss e">✗ ${esc(e)}</div>`).join("");return}
+   db.slots=Object.values(ns);log("Timetable","Timetable imported from Sheet",`${db.slots.length} slots`);save();render();toast("Timetable imported",`${db.slots.length} slots – see the checks above the grid.`)},
+ ckImport:()=>{const lines=$("#ckIn").value.replace(/\r/g,"").split("\n").filter(l=>l.trim());const L={};const errs=[];
+   lines.forEach((l,n)=>{const c=l.split("\t").map(x=>x.trim());if(n===0&&/type/i.test(c[0])&&/check/i.test(c[1]||""))return;if(!c[1]){errs.push(`Row ${n+1}: needs two columns – type and check.`);return}
+     const ty=TYPES.find(t=>t[0].toLowerCase()===c[0].toLowerCase());const key=/^(all|default|\*)$/i.test(c[0])?"*":ty?ty[0]:null;if(!key){errs.push(`Row ${n+1}: "${c[0]}" isn't a known machine type.`);return}(L[key]=L[key]||[]).push(c[1])});
+   if(errs.length){$("#ckRep").innerHTML=errs.map(e=>`<div class="iss e">✗ ${esc(e)}</div>`).join("");return}Object.assign(db.checks,L);log("Scrutineering","Checklists imported",Object.keys(L).join(", "));save();render()},
+ ckDel:el=>{delete db.checks[el.dataset.k];save();render()},
+ auditCopy:async el=>{const t=["Date & time\tEvent time\tCategory\tAction\tDetails\tBy",...db.audit.map(a=>[a.ts,a.ev,a.cat,a.action,a.detail,a.by].map(v=>String(v).replace(/[\t\n]/g," ")).join("\t"))].join("\n");try{await navigator.clipboard.writeText(t);el.textContent="Copied ✓"}catch(e){el.textContent="Couldn't copy"}},
+ addMachine:()=>{const own=db.machines.filter(m=>m.exId===ME.exhibitor&&m.kind==="power");
+   openModal(`<h2>Add a machine</h2><div class="small">One entry per machine. If it's an implement, tell us which tractor usually pulls it – we'll confirm the pairing on the morning.</div>
+   <label class="fl">Machine type <i>*</i></label><select class="fi" id="amType">${TYPES.map(t=>`<option>${esc(t[0])}</option>`).join("")}</select>
+   <label class="fl">Make & model <i>*</i></label><input class="fi" id="amMake" placeholder="e.g. Claas Jaguar 75">
+   <div class="two"><div><label class="fl">Year</label><input class="fi" id="amYear" inputmode="numeric" maxlength="4"></div><div><label class="fl">Registration</label><input class="fi" id="amReg"></div></div>
+   <label class="fl">Usually paired with (implements only)</label><select class="fi" id="amPair"><option value="">Not sure / any tractor</option>${own.map(m=>`<option value="${m.id}">${esc(m.make)} (${m.id})</option>`).join("")}</select>
+   <label class="fl">Tell us about this machine (optional)</label><textarea class="fi" id="amStory" rows="3"></textarea>
+   <label class="fl">Photo (optional)</label><input type="file" accept="image/*" id="amPhoto">
+   <button class="btn" data-act="amSave" style="margin-top:12px">Add machine</button>`)},
+ amSave:()=>{const type=$("#amType").value,make=$("#amMake").value.trim();if(!make){$("#amMake").classList.add("badf");return}
+   const id="M-"+(Math.max(100,...db.machines.map(x=>+x.id.slice(2)||0))+1);const m={id,exId:ME.exhibitor,type,kind:KIND[type],make,year:$("#amYear").value.trim(),reg:$("#amReg").value.trim().toUpperCase(),pairWith:KIND[type]==="impl"?$("#amPair").value:"",story:$("#amStory").value.trim(),status:"pending",photo:null,scrut:null};
+   db.machines.push(m);log("Entries","Machine entered",`${id} · ${make} · ${type}`);save();closeModal();render();toast("Machine added",`${make} is waiting for approval.`)},
+ addDriver:()=>openModal(`<h2>Add a driver</h2><label class="fl">Full name <i>*</i></label><input class="fi" id="adName"><label class="fl">Mobile <i>*</i></label><input class="fi" id="adPhone" type="tel"><div class="small">We'll text them the safety briefing link on the morning of the show.</div>
+   <label class="chk"><input type="checkbox" id="ad18">I confirm this driver is 18 or over and holds a licence for the vehicles they will drive. Photo ID will be checked on the day.</label><button class="btn" data-act="adSave">Add driver</button>`),
+ adSave:()=>{const n=$("#adName").value.trim(),p=$("#adPhone").value.trim();let ok=true;[["#adName",n],["#adPhone",p]].forEach(([s,v])=>{$(s).classList.toggle("badf",!v);if(!v)ok=false});if(!$("#ad18").checked){$("#ad18").parentElement.style.color="var(--red)";ok=false}if(!ok)return;
+   const id="D-"+String(Math.max(0,...db.drivers.map(x=>+x.id.slice(2)||0))+1).padStart(2,"0");db.drivers.push({id,exId:ME.exhibitor,name:n,phone:p,declared18:true,onDay:false,id18:null,briefing:null});log("Drivers","Driver added by exhibitor",`${id} · ${n}`);save();closeModal();render()},
+ bNext:()=>{bStep=1;qAns={};qChecked=false;render();window.scrollTo(0,0)},
+ bBack:()=>{bStep=0;render()},
+ qPick:el=>{qAns[+el.dataset.i]=+el.dataset.j;qChecked=false;render()},
+ qCheck:()=>{qChecked=true;const score=QUIZ.filter((q,i)=>qAns[i]===q.a).length;log("Drivers",score===QUIZ.length?"Briefing quiz passed":"Briefing quiz attempt failed",`${drv(ME.driver).name} · ${score}/${QUIZ.length}`);if(score===QUIZ.length){bStep=2}render();window.scrollTo(0,0)},
+ bSign:()=>{const n=$("#bName").value.trim();let ok=true;["#bAgree","#bAge"].forEach(s=>{const c=$(s);c.parentElement.style.color=c.checked?"":"var(--red)";if(!c.checked)ok=false});if(n.length<3){$("#bName").classList.add("badf");ok=false}if(!ok)return;
+   const d=drv(ME.driver);d.briefing={version:BRIEFING_VERSION,score:QUIZ.length,signedName:n,at:fmt(now)+" on the day"};log("Drivers","Safety briefing signed",`${d.id} · ${d.name} · signed as "${n}" · ${BRIEFING_VERSION}`);save();bStep=0;render()},
+ scrOpen:el=>scrutModal(el.dataset.id),
+ ck:el=>{scrOpen.items[el.dataset.i]=el.dataset.v;el.parentElement.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b===el))},
+ pairOk:el=>{const s=db.slots.find(x=>x.id===el.dataset.s),t=s.team[+el.dataset.i];t.confirmed={by:"Scrutineer",at:fmt(now)};log("Scrutineering","Pairing confirmed",`Field ${s.field} ${fmt(s.start)} · ${t.role} · ${memberMachines(t).join(" + ")}`);save();el.outerHTML=`<span class="pill ok">Confirmed by Scrutineer ${fmt(now)}</span>`},
+ scrSave:el=>{const m=mach(scrOpen.id),checks=checksFor(m),v=el.dataset.v;const done=checks.every((c,i)=>scrOpen.items[i]);const anyFail=checks.some((c,i)=>scrOpen.items[i]==="f");const note=$("#ckNote").value.trim();
+   if(v!=="fail"&&!done){$("#scrMsg").textContent="Mark every check before passing.";return}if(v!=="fail"&&anyFail){$("#scrMsg").textContent="One or more checks failed – the machine can't pass.";return}if((v==="advisory"||v==="fail")&&!note){$("#scrMsg").textContent="Add a note explaining the advisory or failure.";$("#ckNote").classList.add("badf");return}
+   m.scrut={status:v,items:scrOpen.items,note,by:"Scrutineer",at:fmt(now)};log("Scrutineering",{pass:"Machine passed",advisory:"Machine passed with advisory",fail:"Machine failed"}[v],`${m.id} · ${m.make}${note?" · "+note:""}`);save();closeModal();render()},
+ id18:el=>{const d=drv(el.dataset.id);d.id18={by:"Scrutineer",at:fmt(now)};log("Drivers","Photo ID checked – 18+",`${d.id} · ${d.name}`);save();render()},
+ ndAdd:()=>{const n=$("#ndName").value.trim(),p=$("#ndPhone").value.trim();let ok=true;[["#ndName",n],["#ndPhone",p]].forEach(([s,v])=>{$(s).classList.toggle("badf",!v);if(!v)ok=false});if(!$("#ndId").checked){$("#ndId").parentElement.style.color="var(--red)";ok=false}if(!ok)return;
+   const id="D-"+String(Math.max(0,...db.drivers.map(x=>+x.id.slice(2)||0))+1).padStart(2,"0");db.drivers.push({id,exId:$("#ndEx").value,name:n,phone:p,declared18:true,onDay:true,id18:{by:"Scrutineer",at:fmt(now)},briefing:null});log("Drivers","Driver added on the day",`${id} · ${n} · ${exh($("#ndEx").value).name} · ID checked`);save();render();toast("Driver added",`${n} (${id}) – briefing link sent by text (live version).`)},
+ call:el=>{const s=db.slots.find(x=>x.id===el.dataset.id);db.calls.push({slot:s.id,at:now});log("Demos","Team called to start",`Field ${s.field} · ${s.demo} · ${s.team.map(t=>drv(t.driver)?.name).filter(Boolean).join(", ")}`);save();render();toast("Team called",`${s.team.length} driver(s) and their exhibitors notified.`)},
+ sState:el=>{const s=db.slots.find(x=>x.id===el.dataset.id);s.state=el.dataset.v;log("Demos",{live:"Slot started",done:"Slot finished",cancel:"Slot cancelled"}[el.dataset.v],`Field ${s.field} ${fmt(s.start)} · ${s.demo}`);save();render()},
+ sDelay:el=>{const s=db.slots.find(x=>x.id===el.dataset.id);s.delay=(s.delay||0)+10;log("Demos","Slot delayed 10 min",`Field ${s.field} ${fmt(s.start)} · ${s.demo} → ${fmt(sStart(s))}`);save();render();const iss=slotIssues().filter(i=>i.lvl==="e"&&/Clash|Changeover/.test(i.msg));if(iss.length)toast("Delay creates a knock-on clash",iss[0].msg)}
+};
+/* ============ PHASE 3: APPROVALS, NEWS & NOTIFICATIONS, SPONSORS, VOUCHERS, MACHINE PAGES ============ */
+let P3=loadP3();
+const saveP3=()=>store.set(P3_KEY,P3);
+const sp=id=>P3.sponsors.find(s=>s.id===id);
+const fdate=iso=>{try{return new Date(iso+"T12:00").toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"})}catch(e){return iso}};
+const tsv=rows=>rows.map(r=>r.map(v=>String(v??"").replace(/[\t\n]/g," ")).join("\t")).join("\n");
+let p3form=null,mpOpen=null;
+// Shrink a chosen photo so it fits comfortably in storage (the live version uploads to cloud storage instead)
+function resizeImg(file,max){return new Promise((res,rej)=>{if(!file||!/^image\//.test(file.type))return rej("not an image");const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,max/Math.max(im.width,im.height));const c=document.createElement("canvas");c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext("2d").drawImage(im,0,0,c.width,c.height);res(c.toDataURL("image/jpeg",.8))};im.onerror=()=>rej("bad image");im.src=r.result};r.onerror=()=>rej("read failed");r.readAsDataURL(file)})}
+const imgOk=s=>/^data:image\/(jpeg|png|webp);base64,/.test(s||"")||/^(news|sponsors)\/[\w.-]+$/.test(s||"");
+
+function approvalCount(){return db.machines.filter(m=>m.status==="pending").length+P3.offers.filter(o=>o.status==="pending").length+P3.sponsors.filter(s=>s.pending).length+P3.media.filter(x=>x.status==="pending").length+Object.values(P3.hist).filter(h=>h.status==="draft").length+P3.interest.filter(x=>x.status==="new").length+(db.apps||[]).filter(a=>a.status==="new").length}
+
+/* ----- Organiser: unified approvals queue ----- */
+const diffRow=(l,a,b)=>a===b?"":`<div class="small" style="margin-top:4px"><b>${l}:</b> <s>${esc(a||"–")}</s><br>→ ${esc(b||"–")}</div>`;
+VIEWS.approvals=()=>{
+ const pm=db.machines.filter(m=>m.status==="pending"),of=P3.offers.filter(o=>o.status==="pending"),pr=P3.sponsors.filter(s=>s.pending),md=P3.media.filter(x=>x.status==="pending"),hs=Object.entries(P3.hist).filter(([k,h])=>h.status==="draft"),si=P3.interest.filter(x=>x.status==="new"),ap=(db.apps||[]).filter(a=>a.status==="new");
+ const sec=(ttl,items,fn)=>`<div class="card"><h3>${ttl} <span class="pill ${items.length?"wait":"ok"}">${items.length||"All done"}</span></h3>${items.length?`<div class="list">${items.map(fn).join("")}</div>`:'<div class="small">Nothing waiting.</div>'}</div>`;
+ return`<h2 class="pg">Needs approval</h2><div class="sub">Everything that needs an organiser's OK before it reaches the visitor app, in one place. Every decision is recorded in the audit log.</div>
+ <div class="grid2 appr">
+ ${sec("📝 Exhibitor applications",ap,a=>`<div class="it"><div class="b"><b>${esc(a.biz)}</b> – ${esc(a.contact)}<br><span class="small">${esc(a.phone)} · ${esc(a.email)} · ${esc(a.at)}</span><div class="small" style="margin-top:4px">${a.machines.map(m=>`• ${esc(m.make)} <i>(${esc(m.type)}${m.year?", "+esc(m.year):""})</i>`).join("<br>")}</div>${a.note?`<div class="small">“${esc(a.note)}”</div>`:""}</div><button class="btn sm" data-act="apStatus" data-id="${a.id}" data-s="approved">Accept</button><button class="btn sm alt" data-act="apStatus" data-id="${a.id}" data-s="declined">Decline</button></div>`)}
+ ${sec("🚜 Machine entries",pm,m=>`<div class="it"><div class="b"><b>${esc(m.make)}</b> <span class="code">${m.id}</span><br><span class="small">${esc(m.type)} · ${esc(exh(m.exId)?.name||"")}</span></div><button class="btn sm" data-act="mStatus" data-id="${m.id}" data-s="approved">Approve</button><button class="btn sm alt" data-act="mStatus" data-id="${m.id}" data-s="declined">Decline</button></div>`)}
+ ${sec("📸 Machine photos",md,x=>{const m=mach(x.mId);return`<div class="it"><img src="${imgOk(x.src)?x.src:""}" alt="" style="width:96px;height:72px;object-fit:cover;border-radius:8px;background:var(--light)"><div class="b"><b>${esc(m?.make||x.mId)}</b> <span class="code">${esc(x.mId)}</span><br><span class="small">From ${esc(x.by)} · ${esc(x.at)}</span></div><button class="btn sm" data-act="mdStatus" data-id="${x.id}" data-s="approved">Approve</button><button class="btn sm alt" data-act="mdStatus" data-id="${x.id}" data-s="declined">Decline</button></div>`})}
+ ${sec("✨ AI machine histories to check",hs,([k,h])=>`<div class="it"><div class="b"><b>${esc(mach(k)?.make||k)}</b> <span class="code">${esc(k)}</span><br><span class="small">${esc((h.summary||"No summary yet – needs details from the exhibitor").slice(0,150))}</span></div><button class="btn sm" data-act="mpOpen" data-id="${esc(k)}">Check</button></div>`)}
+ ${sec("🏷️ Sponsor offers",of,o=>`<div class="it"><div class="b"><b>${esc(sp(o.spId)?.n||"")}</b><br><span class="small">${esc(o.en)}</span>${o.cy?`<br><span class="small"><i>${esc(o.cy)}</i></span>`:'<br><span class="pill grey">No Welsh yet – English shows in both</span>'}</div><button class="btn sm" data-act="ofStatus" data-id="${o.id}" data-s="approved">Approve</button><button class="btn sm alt" data-act="ofStatus" data-id="${o.id}" data-s="declined">Decline</button></div>`)}
+ ${sec("🤝 Sponsor profile changes",pr,s=>`<div class="it"><div class="b"><b>${esc(s.n)}</b>${diffRow("Description",s.en,s.pending.en)}${diffRow("Welsh",s.cy,s.pending.cy)}${diffRow("Website",s.web,s.pending.web)}</div><button class="btn sm" data-act="spProf" data-id="${s.id}" data-s="approved">Approve</button><button class="btn sm alt" data-act="spProf" data-id="${s.id}" data-s="declined">Decline</button></div>`)}
+ ${sec("📨 New sponsor enquiries",si,x=>`<div class="it"><div class="b"><b>${esc(x.biz)}</b> – ${esc(x.name)}<br><span class="small">${esc(x.email)} · ${esc(x.phone)} · ${esc(x.at)}</span>${x.msg?`<br><span class="small">“${esc(x.msg)}”</span>`:""}</div><button class="btn sm" data-act="siDone" data-id="${x.id}">Mark contacted</button></div>`)}
+ </div>`;
+};
+
+/* ----- Organiser: news, live banner & scheduled notifications ----- */
+VIEWS.news=()=>{
+ const ns=[...P3.news].sort((a,b)=>b.date.localeCompare(a.date)),nt=[...P3.notices].sort((a,b)=>(a.at??9999)-(b.at??9999)),bn=P3.banner;
+ return`<h2 class="pg">News & notifications</h2><div class="sub">Posts appear on the visitor app's News tab. Notifications pop up for everyone with the app (as push notifications in the live version) and stay listed under “Announcements”.</div>
+ <div class="grid2"><div class="card"><h3>📰 News posts</h3><button class="btn sm" data-act="nwNew">＋ New post</button><div class="list">${ns.map(n=>`<div class="it">${n.img&&imgOk(n.img)?`<img src="${n.img}" alt="" style="width:84px;height:58px;object-fit:cover;border-radius:8px">`:""}<div class="b"><b>${esc(n.en.t)}</b><br><span class="small">${esc(fdate(n.date))}${n.video||n.yt?" · 🎬 video":""}${n.cy.t?"":" · no Welsh yet"}</span><br>${n.status==="published"?'<span class="pill ok">Published</span>':'<span class="pill grey">Draft – not visible</span>'}</div><button class="btn sm alt" data-act="nwEdit" data-id="${n.id}">Edit</button></div>`).join("")||'<div class="small">No posts yet.</div>'}</div></div>
+ <div class="card"><h3>📣 Live banner</h3>${bn?`<div class="iss w"><b>Showing now (since ${esc(bn.at)}):</b> ${esc(bn.en)}${bn.cy?`<br><i>${esc(bn.cy)}</i>`:""}</div><button class="btn sm red" data-act="bnClear">Take banner down</button>`:`<div class="small">For urgent, on-the-day messages – e.g. a delay or a change of field. Stays at the top of every visitor's screen until you take it down.</div><label class="fl">Message (English) <i>*</i></label><input class="fi" id="bnEn" placeholder="e.g. Field 9 demo delayed by 15 minutes"><label class="fl">Neges (Cymraeg)</label><input class="fi" id="bnCy"><button class="btn sm red" data-act="bnSet" style="margin-top:8px">Put up banner & notify everyone</button>`}
+ <h3 style="margin-top:18px">⏰ Scheduled notifications</h3><div class="small">Sent automatically at the time shown (prototype clock: ${fmt(now)}).</div><div class="list">${nt.map(n=>{const out=noticeOut(n,now);return`<div class="it"><div style="font:700 17px 'Barlow Condensed';min-width:46px">${n.at!=null?fmt(n.at):"–"}</div><div class="b">${esc(n.en)}<br>${n.status==="cancelled"?'<span class="pill grey">Withdrawn</span>':out?'<span class="pill ok">Sent</span>':'<span class="pill info">Scheduled</span>'}${n.cy?"":' <span class="pill grey">No Welsh</span>'}</div>${!out&&n.status!=="cancelled"?`<button class="btn sm" data-act="ntSend" data-id="${n.id}">Send now</button>`:""}${n.status!=="cancelled"?`<button class="btn sm alt" data-act="ntCancel" data-id="${n.id}">${out?"Withdraw":"Cancel"}</button>`:""}</div>`}).join("")}</div>
+ <div class="team"><b>Add a notification</b><label class="fl">Send at (HH:MM) <i>*</i></label><input class="fi" id="ntAt" placeholder="14:00" style="max-width:120px"><label class="fl">Message (English) <i>*</i></label><input class="fi" id="ntEn"><label class="fl">Neges (Cymraeg)</label><input class="fi" id="ntCy"><div id="ntMsg" class="small" style="color:var(--red)"></div><button class="btn sm" data-act="ntAdd" style="margin-top:8px">Schedule</button></div></div></div>`;
+};
+function newsModal(n){p3form=JSON.parse(JSON.stringify(n));openModal(`<h2>${n.id?"Edit post":"New post"}</h2>
+ <label class="fl">Headline <i>*</i></label><input class="fi" id="nwTe" value="${esc(n.en.t)}">
+ <label class="fl">Story <i>*</i></label><textarea class="fi" id="nwBe" rows="4">${esc(n.en.b)}</textarea>
+ <label class="fl">Pennawd (Cymraeg)</label><input class="fi" id="nwTc" value="${esc(n.cy.t)}">
+ <label class="fl">Stori (Cymraeg)</label><textarea class="fi" id="nwBc" rows="4">${esc(n.cy.b)}</textarea>
+ <div class="small">Leave the Welsh blank and the English shows in both languages until a translation is added.</div>
+ <label class="fl">Date</label><input class="fi" type="date" id="nwD" value="${esc(n.date)}" style="max-width:180px">
+ <label class="fl">Photo</label><div class="row"><span id="nwImgP">${n.img&&imgOk(n.img)?`<img src="${n.img}" alt="" style="height:60px;border-radius:6px">`:'<span class="small">None</span>'}</span><label class="btn sm alt">Choose photo<input type="file" accept="image/*" data-upl="news" hidden></label></div>
+ ${n.video?`<div class="small" style="margin-top:6px">🎬 This post has an uploaded video.</div>`:""}
+ <label class="fl">YouTube link (optional)</label><input class="fi" id="nwYt" value="${esc(n.yt||"")}" placeholder="https://youtu.be/…">
+ <div id="nwMsg" class="small" style="color:var(--red)"></div>
+ <div class="row" style="margin-top:12px"><button class="btn" data-act="nwSave" data-s="published">Publish</button><button class="btn alt" data-act="nwSave" data-s="draft">Save as draft</button>${n.id?'<button class="btn red" style="margin-left:auto" data-act="nwDel">Delete</button>':""}</div>`)}
+
+/* ----- Organiser: sponsors, enquiries & meal vouchers ----- */
+VIEWS.sponsors=()=>{const V=P3.vouchers;
+ return`<h2 class="pg">Sponsors & meal vouchers</h2><div class="sub">Sponsors manage their own profile and offers from the Sponsor login – changes wait in “Needs approval”. Meal vouchers are single-use and checked by the catering team.</div>
+ <div class="grid2"><div class="card"><h3>🤝 Sponsors</h3><div class="list">${P3.sponsors.map(s=>`<div class="it"><div style="width:72px;height:46px;flex:none;display:grid;place-items:center;background:${s.bg==="#000"?"#000":"#fff"};border:1px solid var(--line);border-radius:8px"><img src="${imgOk(s.logo)?s.logo:""}" alt="" style="max-width:64px;max-height:38px"></div><div class="b"><b>${esc(s.n)}</b> <span class="pill info">${esc(s.tier)}</span>${s.pending?' <span class="pill wait">Changes to approve</span>':""}<br><span class="small">${esc(s.contact)} · ${P3.offers.filter(o=>o.spId===s.id&&o.status==="approved").length} live offer(s) · ${V.filter(v=>v.spId===s.id).length} meal voucher(s)</span></div></div>`).join("")}</div></div>
+ <div class="card"><h3>📨 Sponsorship enquiries</h3><div class="small">From the “Register interest” form in the visitor app.</div><div class="list">${P3.interest.map(x=>`<div class="it"><div class="b"><b>${esc(x.biz)}</b> – ${esc(x.name)} ${x.status==="new"?'<span class="pill wait">New</span>':'<span class="pill ok">Contacted</span>'}<br><span class="small">${esc(x.email)} · ${esc(x.phone)} · ${esc(x.at)}</span>${x.msg?`<br><span class="small">“${esc(x.msg)}”</span>`:""}</div>${x.status==="new"?`<button class="btn sm" data-act="siDone" data-id="${x.id}">Mark contacted</button>`:""}</div>`).join("")||'<div class="small">None yet.</div>'}</div></div></div>
+ <div class="card"><h3>🍔 Meal vouchers</h3><div class="stats"><div><b>${V.length}</b>Issued</div><div><b>${V.filter(v=>v.used&&!v.void).length}</b>Used</div><div><b>${V.filter(v=>!v.used&&!v.void).length}</b>Still to use</div></div>
+ <div class="team"><b>Issue vouchers</b><div class="two"><div><label class="fl">For</label><select class="fi" id="vcFor"><option value="staff">Staff / volunteer</option>${P3.sponsors.map(s=>`<option value="${s.id}">Sponsor – ${esc(s.n)}</option>`).join("")}</select></div><div><label class="fl">How many</label><input class="fi" id="vcN" type="number" min="1" max="20" value="1"></div></div><label class="fl">Name (staff / volunteer)</label><input class="fi" id="vcName" placeholder="Full name"><div id="vcMsg" class="small" style="color:var(--red)"></div><button class="btn sm" data-act="vcIssue" style="margin-top:8px">Issue</button> <span class="small">Sponsors see theirs in the Sponsor login; staff get theirs by text/email in the live version.</span></div>
+ <div class="list">${V.map(v=>`<div class="it"><div class="b"><span class="code">${esc(v.code)}</span> <b>${esc(v.holder)}</b> <span class="small">· ${esc(v.group)}</span><br>${v.void?'<span class="pill grey">Cancelled</span>':v.used?`<span class="pill ok">Used ${esc(v.used.at)}</span>`:'<span class="pill info">Ready to use</span>'}</div>${!v.used&&!v.void?`<button class="btn sm alt" data-act="vcVoid" data-c="${esc(v.code)}">Cancel</button>`:""}</div>`).join("")}</div>
+ <button class="btn sm alt" data-act="vcCopy" style="margin-top:8px">Copy for Google Sheets</button></div>`;
+};
+const vNext=pre=>pre+String(Math.max(0,...P3.vouchers.filter(v=>v.code.startsWith(pre)).map(v=>+v.code.slice(pre.length)||0))+1).padStart(2,"0");
+
+/* ----- Organiser: machine pages (AI history, photos, videos) ----- */
+function aiDraft(m){
+ if(/jaguar\s*75\b/i.test(m.make))return{status:"draft",summary:"A trailed (tractor-pulled) forage harvester from Claas's Jaguar range. Claas built the Jaguar only as a trailed machine until 1973, when it launched its first self-propelled Jaguar.",
+  tl:[["Pre-1973","Claas builds the Jaguar range only as trailed forage harvesters, pulled by a tractor."],["1973","Claas starts building its first self-propelled Jaguar, the 60 SF, using parts from the trailed Jaguar 60 and its combines."],["1976/77","The self-propelled Jaguar 70 SF arrives, rated at up to 75 t per hour."],[m.year||"?","This machine built (from the owner's entry)."]],
+  unconfirmed:["Production years and specifications for the trailed Jaguar 75 itself could not be confirmed online – please check with the owner or a Claas dealer."],
+  sources:[["CLAAS – current JAGUAR topics","https://www.claas.com/en-ae/discover/stories/current-JAGUAR-topics"],["Agriland – Where did Claas self-propelled foragers come from?","https://www.agriland.co.uk/farming-news/looking-back-where-did-claas-self-propelled-foragers-come-from/"]]};
+ return{status:"draft",summary:"",tl:m.year?[[m.year,"This machine built (from the owner's entry)."]]:[],unconfirmed:["Prototype: only the Claas Jaguar 75 has a researched example. In the live version the AI searches the web for this make and model, writes a short history and lists its sources for you to check. Write or edit the history yourself below."],sources:[]};
+}
+VIEWS.mpages=()=>{const ms=db.machines.filter(m=>m.status==="approved");
+ return`<h2 class="pg">Machine pages</h2><div class="sub">What visitors see when they tap a machine: photos, videos and a short history. Exhibitor photos and AI-drafted histories only go live once you approve them.</div>
+ <div class="card"><div class="list">${ms.map(m=>{const h=P3.hist[m.id],ph=P3.media.filter(x=>x.mId===m.id&&x.kind==="photo"),vd=P3.media.filter(x=>x.mId===m.id&&x.kind==="video"),cover=ph.find(x=>x.status==="approved");
+  return`<div class="it"><div style="width:64px;height:48px;flex:none;border-radius:8px;background:var(--light) ${cover&&imgOk(cover.src)?`url('${cover.src}') center/cover`:""};display:grid;place-items:center;font-size:22px">${cover?"":m.kind==="power"?"🚜":"⚙️"}</div><div class="b"><b>${esc(m.make)}</b> <span class="code">${m.id}</span><br><span class="small">${esc(exh(m.exId)?.name||"")}</span><br>
+  ${!h?'<span class="pill grey">No history</span>':h.status==="approved"?'<span class="pill ok">History live</span>':h.status==="draft"?'<span class="pill wait">History to check</span>':h.status==="loading"?'<span class="pill info">Researching…</span>':'<span class="pill bad">History rejected</span>'}
+  <span class="pill ${ph.some(x=>x.status==="approved")?"ok":"grey"}">📸 ${ph.filter(x=>x.status==="approved").length}${ph.some(x=>x.status==="pending")?` (+${ph.filter(x=>x.status==="pending").length} to check)`:""}</span> <span class="pill ${vd.length?"ok":"grey"}">🎬 ${vd.length}</span></div><button class="btn sm" data-act="mpOpen" data-id="${m.id}">Open</button></div>`}).join("")}</div></div>`;
+};
+function mpModal(id){mpOpen=id;const m=mach(id);if(!m)return;const h=P3.hist[id],ph=P3.media.filter(x=>x.mId===id&&x.kind==="photo"),vd=P3.media.filter(x=>x.mId===id&&x.kind==="video");
+ openModal(`<h2>${esc(m.make)}</h2><div class="small">${esc(m.type)} · ${m.id} · ${esc(exh(m.exId)?.name||"")}${m.year?" · "+esc(m.year):""}</div>
+ <h3 style="margin:14px 0 4px;color:var(--green)">✨ History</h3>
+ ${!h||h.status==="rejected"?`<div class="small">${h?"The last draft was rejected. ":""}Ask the AI to research this machine. You check every fact before it goes live.</div><button class="btn sm" data-act="aiGen" style="margin-top:6px">✨ Draft a history with AI</button>`:h.status==="loading"?`<div class="small">Researching ${esc(m.make)}… (prototype: a short wait)</div>`:`
+  ${h.status==="approved"?'<span class="pill ok">Live on the visitor app</span>':'<span class="pill wait">Draft – check before approving</span>'}
+  ${(h.unconfirmed||[]).map(u=>`<div class="iss w">⚠ ${esc(u)}</div>`).join("")}
+  <label class="fl">Summary</label><textarea class="fi" id="hSum" rows="3">${esc(h.summary)}</textarea>
+  <label class="fl">Timeline – one per line: year | event</label><textarea class="fi" id="hTl" rows="5">${esc(h.tl.map(x=>x[0]+" | "+x[1]).join("\n"))}</textarea>
+  <label class="fl">Sources – one per line: title | web address</label><textarea class="fi" id="hSrc" rows="3">${esc(h.sources.map(x=>x[0]+" | "+x[1]).join("\n"))}</textarea>
+  <div id="hMsg" class="small" style="color:var(--red)"></div>
+  <div class="row" style="margin-top:8px"><button class="btn sm" data-act="hSave" data-s="approved">${h.status==="approved"?"Save changes":"Approve & publish"}</button><button class="btn sm alt" data-act="hSave" data-s="draft">${h.status==="approved"?"Take down (back to draft)":"Save draft"}</button><button class="btn sm alt" data-act="hSave" data-s="rejected">Reject</button></div>`}
+ <h3 style="margin:16px 0 4px;color:var(--green)">📸 Photos</h3>
+ <div class="row">${ph.map(x=>`<div style="text-align:center"><img src="${imgOk(x.src)?x.src:""}" alt="" style="width:110px;height:80px;object-fit:cover;border-radius:8px;display:block"><span class="pill ${x.status==="approved"?"ok":x.status==="pending"?"wait":"bad"}">${x.status==="approved"?"Live":x.status==="pending"?"To check":"Declined"}</span><br>${x.status==="pending"?`<button class="btn sm" data-act="mdStatus" data-id="${x.id}" data-s="approved">✓</button>`:""}<button class="btn sm alt" data-act="mdDel" data-id="${x.id}">Remove</button></div>`).join("")||'<span class="small">No photos yet.</span>'}</div>
+ <label class="btn sm alt" style="display:inline-block;margin-top:8px">＋ Add a photo (goes live straight away)<input type="file" accept="image/*" data-upl="machOrg" hidden></label>
+ <h3 style="margin:16px 0 4px;color:var(--green)">🎬 Videos</h3>
+ <div class="list">${vd.map(x=>`<div class="it"><div class="b">▶ ${esc(x.caption||"Video")}<br><span class="small">${esc(x.src)}</span></div><button class="btn sm alt" data-act="mdDel" data-id="${x.id}">Remove</button></div>`).join("")||'<div class="small">No videos yet.</div>'}</div>
+ <div class="two"><div><label class="fl">YouTube link</label><input class="fi" id="vdUrl" placeholder="https://youtu.be/…"></div><div><label class="fl">Title</label><input class="fi" id="vdCap" placeholder="e.g. Working at the 2026 day"></div></div><div id="vdMsg" class="small" style="color:var(--red)"></div><button class="btn sm" data-act="vdAdd" style="margin-top:8px">Add video</button>
+ <div class="small" style="margin-top:8px">Organisers upload videos to the event's YouTube channel (free, and handles phone data well) and paste the link here.</div>`)}
+
+/* ----- Exhibitor: photos of their machines ----- */
+VIEWS.myphotos=()=>{const ms=db.machines.filter(m=>m.exId===ME.exhibitor&&m.status!=="declined");
+ return`<h2 class="pg">Machine photos</h2><div class="sub">Add a good photo of each machine – it appears on the machine's page in the visitor app once the organisers have checked it.</div>
+ ${ms.map(m=>{const ph=P3.media.filter(x=>x.mId===m.id&&x.kind==="photo");return`<div class="card"><div class="row"><b style="font-size:16px">${esc(m.make)}</b><span class="code">${m.id}</span></div>
+ <div class="row" style="margin-top:8px">${ph.map(x=>`<div style="text-align:center"><img src="${imgOk(x.src)?x.src:""}" alt="" style="width:120px;height:86px;object-fit:cover;border-radius:8px;display:block"><span class="pill ${x.status==="approved"?"ok":x.status==="pending"?"wait":"bad"}">${x.status==="approved"?"Live":x.status==="pending"?"Waiting for approval":"Not used"}</span></div>`).join("")}
+ <label class="btn sm alt">📷 Add photo<input type="file" accept="image/*" data-upl="machEx" data-id="${m.id}" hidden></label></div></div>`}).join("")}`;
+};
+
+/* ----- Sponsor login ----- */
+VIEWS.spprofile=()=>{const s=sp(ME.sponsor),cur=s.pending||s;
+ return`<h2 class="pg">${esc(s.n)}</h2><div class="sub">${esc(s.tier)} sponsor · Your profile appears on the visitor app's News tab. Changes are checked by the organisers before they go live.</div>
+ ${s.pending?'<div class="iss w">⏳ Your latest changes are waiting for approval. The current version stays live until then.</div>':""}
+ <div class="grid2"><div class="card"><h3>Edit profile</h3><label class="fl">About your business <i>*</i></label><textarea class="fi" id="spEn" rows="4">${esc(cur.en)}</textarea><label class="fl">Amdanoch chi (Cymraeg)</label><textarea class="fi" id="spCy" rows="4">${esc(cur.cy)}</textarea><label class="fl">Website</label><input class="fi" id="spWeb" value="${esc(cur.web)}"><div id="spMsg" class="small" style="color:var(--red)"></div><button class="btn" data-act="spSubmit" style="margin-top:10px">Send for approval</button></div>
+ <div class="card"><h3>Live now</h3><div style="height:80px;display:grid;place-items:center;background:${s.bg==="#000"?"#000":"#fff"};border:1px solid var(--line);border-radius:10px"><img src="${imgOk(s.logo)?s.logo:""}" alt="" style="max-height:66px;max-width:90%"></div><p>${esc(s.en)}</p><div class="small">${esc(s.web)}</div><div class="small" style="margin-top:8px">To change your logo, email it to the organisers.</div></div></div>`;
+};
+VIEWS.spoffers=()=>{const os=P3.offers.filter(o=>o.spId===ME.sponsor);
+ return`<h2 class="pg">Offers</h2><div class="sub">Show-day offers appear on your sponsor page in the visitor app once approved.</div>
+ <div class="grid2"><div class="card"><h3>Your offers</h3><div class="list">${os.map(o=>`<div class="it"><div class="b">${esc(o.en)}<br>${{approved:'<span class="pill ok">Live</span>',pending:'<span class="pill wait">Waiting for approval</span>',declined:'<span class="pill bad">Not approved – contact the organisers</span>',withdrawn:'<span class="pill grey">Withdrawn</span>'}[o.status]}</div>${o.status!=="withdrawn"&&o.status!=="declined"?`<button class="btn sm alt" data-act="ofWithdraw" data-id="${o.id}">Withdraw</button>`:""}</div>`).join("")||'<div class="small">No offers yet.</div>'}</div></div>
+ <div class="card"><h3>New offer</h3><label class="fl">Offer <i>*</i></label><textarea class="fi" id="ofEn" rows="3" placeholder="e.g. Free cup of tea on our stand for anyone showing this app"></textarea><label class="fl">Cynnig (Cymraeg)</label><textarea class="fi" id="ofCy" rows="3"></textarea><div id="ofMsg" class="small" style="color:var(--red)"></div><button class="btn" data-act="ofAdd" style="margin-top:10px">Send for approval</button></div></div>`;
+};
+const vCard=v=>`<div class="card" style="text-align:center;max-width:260px;${v.used||v.void?"opacity:.55":""}"><b style="font-size:17px">🍔 Meal voucher</b><div class="small">1 hot meal + 1 drink · Food & drink village</div><div class="vq" data-q="${esc(v.code)}" style="display:grid;place-items:center;min-height:150px;margin:8px 0">${v.used||v.void?'<div style="font-size:44px">✓</div>':""}</div><div class="code" style="font-size:15px">${esc(v.code)}</div><div style="margin-top:6px">${v.void?'<span class="pill grey">Cancelled</span>':v.used?`<span class="pill grey">Used ${esc(v.used.at)}</span>`:'<span class="pill ok">Ready to use</span>'}</div></div>`;
+VIEWS.spvouchers=()=>{const vs=P3.vouchers.filter(v=>v.spId===ME.sponsor);
+ return`<h2 class="pg">Meal vouchers</h2><div class="sub">Show the QR code at the food & drink village. Each voucher works once. Pass spare vouchers to your stand staff by sending them a screenshot.</div><div class="row" style="align-items:stretch">${vs.map(vCard).join("")||'<div class="small">No vouchers issued yet – the organisers will add them.</div>'}</div>`;
+};
+AFTER.spvouchers=()=>document.querySelectorAll(".vq").forEach(el=>{if(el.innerHTML.trim())return;try{new QRCode(el,{text:el.dataset.q,width:140,height:140})}catch(e){el.innerHTML='<div class="small">QR code</div>'}});
+
+/* ----- Catering: voucher check ----- */
+let vcRes="";
+VIEWS.vcheck=()=>{const used=P3.vouchers.filter(v=>v.used).sort((a,b)=>b.used.ts-a.used.ts);
+ return`<h2 class="pg">Meal voucher check</h2><div class="sub">Scan the QR code on the person's phone (the live version opens the camera). Each voucher can only be used once.</div>
+ <div class="card" style="max-width:520px"><div class="row"><input class="fi" id="vcCode" placeholder="Voucher code, e.g. MEAL-S1-01" autocapitalize="characters" style="flex:1;min-width:180px"><button class="btn" data-act="vcRedeem">Check & redeem</button><button class="btn alt" data-act="vcScan">📷 Scan</button></div><div id="vcOut" style="margin-top:12px">${vcRes}</div></div>
+ <div class="card"><h3>Served today (${used.length})</h3><div class="list">${used.map(v=>`<div class="it"><div class="b"><span class="code">${esc(v.code)}</span> ${esc(v.holder)} <span class="small">· ${esc(v.group)}</span></div><span class="small">${esc(v.used.at)}</span></div>`).join("")||'<div class="small">None yet.</div>'}</div></div>`;
+};
+
+/* ----- Phase 3 actions ----- */
+Object.assign(ACT,{
+ mdStatus:el=>{const x=P3.media.find(y=>y.id===el.dataset.id);if(!x)return;x.status=el.dataset.s;saveP3();log("Machine pages",x.status==="approved"?"Machine photo approved":"Machine photo declined",`${x.mId} · ${mach(x.mId)?.make||""} · from ${x.by}`);if(mpOpen&&$("#modal").classList.contains("on"))mpModal(mpOpen);render()},
+ mdDel:el=>{const x=P3.media.find(y=>y.id===el.dataset.id);if(!x)return;P3.media=P3.media.filter(y=>y!==x);saveP3();log("Machine pages",x.kind==="video"?"Machine video removed":"Machine photo removed",`${x.mId} · ${mach(x.mId)?.make||""}`);mpModal(mpOpen);render()},
+ ofStatus:el=>{const o=P3.offers.find(y=>y.id===el.dataset.id);o.status=el.dataset.s;saveP3();log("Sponsors",o.status==="approved"?"Sponsor offer approved":"Sponsor offer declined",`${sp(o.spId)?.n} · ${o.en}`);render()},
+ spProf:el=>{const s=sp(el.dataset.id);if(!s.pending)return;if(el.dataset.s==="approved"){Object.assign(s,{en:s.pending.en,cy:s.pending.cy,web:s.pending.web})}s.pending=null;saveP3();log("Sponsors",el.dataset.s==="approved"?"Sponsor profile change approved":"Sponsor profile change declined",s.n);render()},
+ siDone:el=>{const x=P3.interest.find(y=>y.id===el.dataset.id);x.status="contacted";saveP3();log("Sponsors","Sponsor enquiry marked contacted",`${x.biz} · ${x.name}`);render()},
+ nwNew:()=>newsModal({id:"",date:new Date().toISOString().slice(0,10),status:"draft",img:"",video:"",yt:"",en:{t:"",b:""},cy:{t:"",b:""}}),
+ nwEdit:el=>newsModal(P3.news.find(n=>n.id===el.dataset.id)),
+ nwSave:el=>{const f=p3form,g=s=>$(s).value.trim();f.en={t:g("#nwTe"),b:g("#nwBe")};f.cy={t:g("#nwTc"),b:g("#nwBc")};f.date=g("#nwD")||f.date;const yt=g("#nwYt");
+   if(!f.en.t||!f.en.b){$("#nwMsg").textContent="Add an English headline and story.";return}if(yt&&!ytId(yt)){$("#nwMsg").textContent="That doesn't look like a YouTube link.";return}f.yt=yt;f.status=el.dataset.s;
+   const isNew=!f.id;if(isNew){f.id="N-"+Date.now().toString(36);P3.news.push(f)}else P3.news[P3.news.findIndex(n=>n.id===f.id)]=f;saveP3();log("News",f.status==="published"?(isNew?"News post published":"News post updated"):"News post saved as draft",f.en.t);closeModal();render()},
+ nwDel:()=>{if(!p3form||!p3form.id)return;P3.news=P3.news.filter(n=>n.id!==p3form.id);saveP3();log("News","News post deleted",p3form.en.t);closeModal();render()},
+ bnSet:()=>{const en=$("#bnEn").value.trim(),cy=$("#bnCy").value.trim();if(!en){$("#bnEn").classList.add("badf");return}P3.banner={en,cy,at:fmt(now),id:"B"+Date.now().toString(36)};saveP3();log("Notifications","Live banner put up",en);render();toast("Banner is up","Every visitor sees it at the top of the app (and gets a push notification in the live version).")},
+ bnClear:()=>{const b=P3.banner;P3.banner=null;saveP3();log("Notifications","Live banner taken down",b?b.en:"");render()},
+ ntAdd:()=>{const at=parseTime($("#ntAt").value),en=$("#ntEn").value.trim(),cy=$("#ntCy").value.trim();if(at==null||!en){$("#ntMsg").textContent="Add a time (HH:MM) and an English message.";return}
+   P3.notices.push({id:"NT-"+Date.now().toString(36),at,kind:"info",en,cy,status:"scheduled"});saveP3();log("Notifications","Notification scheduled",`${fmt(at)} · ${en}`);render()},
+ ntSend:el=>{const n=P3.notices.find(x=>x.id===el.dataset.id);n.status="sent";n.at=now;saveP3();log("Notifications","Notification sent now",n.en);render();toast("Sent","Visitors see it straight away.")},
+ ntCancel:el=>{const n=P3.notices.find(x=>x.id===el.dataset.id);n.status="cancelled";saveP3();log("Notifications","Notification withdrawn",n.en);render()},
+ vcIssue:()=>{const f=$("#vcFor").value,n=Math.max(1,Math.min(20,+$("#vcN").value||1)),name=$("#vcName").value.trim();if(f==="staff"&&!name){$("#vcMsg").textContent="Add the person's name.";return}
+   const s=f==="staff"?null:sp(f),pre=s?`MEAL-S${s.id.slice(3)}-`:"MEAL-ST-";const codes=[];for(let i=0;i<n;i++){const c=vNext(pre);codes.push(c);P3.vouchers.push({code:c,holder:s?s.n:name,group:s?"Sponsor":"Staff",spId:s?s.id:"",used:null})}
+   saveP3();log("Vouchers","Meal vouchers issued",`${n} × ${s?s.n:name} · ${codes.join(", ")}`);render()},
+ vcVoid:el=>{const v=P3.vouchers.find(x=>x.code===el.dataset.c);v.void=true;saveP3();log("Vouchers","Meal voucher cancelled",`${v.code} · ${v.holder}`);render()},
+ vcCopy:async el=>{try{await navigator.clipboard.writeText(tsv([["Code","Holder","Group","Status","Used at","Served by"],...P3.vouchers.map(v=>[v.code,v.holder,v.group,v.void?"Cancelled":v.used?"Used":"Ready",v.used?v.used.at:"",v.used?v.used.by:""])]));el.textContent="Copied ✓"}catch(e){el.textContent="Couldn't copy"}},
+ vcScan:()=>toast("Camera scanning","In the live version this opens the camera. Here, type the code instead (try MEAL-S1-01)."),
+ vcRedeem:()=>{const c=$("#vcCode").value.trim().toUpperCase(),v=P3.vouchers.find(x=>x.code===c);
+   if(!c)return;if(!v)vcRes='<div class="iss e" style="font-size:16px">✗ Voucher not found – check the code.</div>';
+   else if(v.void){vcRes=`<div class="iss e" style="font-size:16px">✗ This voucher was cancelled.</div>`;log("Vouchers","Voucher refused – cancelled",`${v.code} · ${v.holder}`)}
+   else if(v.used){vcRes=`<div class="iss e" style="font-size:16px">✗ Already used at ${esc(v.used.at)}</div><div class="small">${esc(v.holder)} (${esc(v.group)})</div>`;log("Vouchers","Voucher refused – already used",`${v.code} · ${v.holder}`)}
+   else{v.used={at:fmt(now),by:"Catering",ts:Date.now()};saveP3();vcRes=`<div class="iss" style="background:#dcf5e3;color:#11713a;font-size:17px;font-weight:700">✓ Redeemed – serve 1 hot meal + 1 drink</div><div class="small">${esc(v.holder)} (${esc(v.group)}) · ${esc(v.code)}</div>`;log("Vouchers","Voucher redeemed",`${v.code} · ${v.holder} (${v.group})`)}
+   render();const i=$("#vcCode");if(i)i.focus()},
+ mpOpen:el=>mpModal(el.dataset.id),
+ aiGen:()=>{const id=mpOpen,m=mach(id);P3.hist[id]={status:"loading",summary:"",tl:[],sources:[]};mpModal(id);setTimeout(()=>{P3.hist[id]=aiDraft(m);saveP3();log("Machine pages","AI history drafted",`${id} · ${m.make}`);if(mpOpen===id&&$("#modal").classList.contains("on"))mpModal(id);render()},1400)},
+ hSave:el=>{const id=mpOpen,h=P3.hist[id],s=el.dataset.s;const lines=v=>v.split("\n").map(x=>x.trim()).filter(Boolean).map(x=>{const i=x.indexOf("|");return i<0?["",x]:[x.slice(0,i).trim(),x.slice(i+1).trim()]});
+   const sum=$("#hSum").value.trim(),tl=lines($("#hTl").value),src=lines($("#hSrc").value);
+   if(s==="approved"){if(!sum){$("#hMsg").textContent="Add a summary before publishing.";return}const bad=src.find(x=>!safeUrl(x[1]));if(bad){$("#hMsg").textContent=`“${bad[1]||bad[0]}” isn't a web address.`;return}}
+   Object.assign(h,{summary:sum,tl,sources:src.map(x=>[x[0]||x[1],x[1]]),status:s});if(s==="approved")h.unconfirmed=[];saveP3();
+   log("Machine pages",{approved:"Machine history approved",draft:"Machine history saved as draft",rejected:"Machine history rejected"}[s],`${id} · ${mach(id)?.make}`);mpModal(id);render()},
+ vdAdd:()=>{const u=$("#vdUrl").value.trim(),c=$("#vdCap").value.trim(),y=ytId(u);if(!y){$("#vdMsg").textContent="Paste a YouTube link (youtube.com/watch?v=… or youtu.be/…).";return}
+   P3.media.push({id:"MD-"+Date.now().toString(36),mId:mpOpen,kind:"video",src:"https://youtu.be/"+y,caption:c,by:"Organiser",status:"approved",at:dstampNow()});saveP3();log("Machine pages","Machine video added",`${mpOpen} · ${c||y}`);mpModal(mpOpen);render()},
+ spSubmit:()=>{const s=sp(ME.sponsor),en=$("#spEn").value.trim(),cy=$("#spCy").value.trim(),web=$("#spWeb").value.trim();if(!en){$("#spMsg").textContent="Tell visitors about your business.";return}if(web&&!safeUrl(web)){$("#spMsg").textContent="That website address doesn't look right.";return}
+   if(en===s.en&&cy===s.cy&&web===s.web&&!s.pending){$("#spMsg").textContent="Nothing has changed.";return}s.pending={en,cy,web};saveP3();log("Sponsors","Sponsor profile change submitted",s.n);render();toast("Sent for approval","The organisers will check your changes.")},
+ ofAdd:()=>{const en=$("#ofEn").value.trim(),cy=$("#ofCy").value.trim();if(!en){$("#ofMsg").textContent="Describe your offer.";return}P3.offers.push({id:"OF-"+Date.now().toString(36),spId:ME.sponsor,en,cy,status:"pending",at:dstampNow()});saveP3();log("Sponsors","Sponsor offer submitted",`${sp(ME.sponsor).n} · ${en}`);render()},
+ ofWithdraw:el=>{const o=P3.offers.find(y=>y.id===el.dataset.id);o.status="withdrawn";saveP3();log("Sponsors","Sponsor offer withdrawn",`${sp(o.spId).n} · ${o.en}`);render()}
+});
+const dstampNow=()=>new Date().toLocaleDateString("en-GB");
+const safeUrl=u=>{try{const s=String(u).trim(),x=new URL(/^https?:\/\//i.test(s)?s:"https://"+s);return /^https?:$/.test(x.protocol)&&x.hostname.includes(".")?x.href:""}catch(e){return""}};
+// photo uploads (news photo, exhibitor photo, organiser photo)
+document.addEventListener("change",async e=>{const k=e.target.dataset&&e.target.dataset.upl;if(!k)return;const f=e.target.files[0];if(!f)return;
+ let src;try{src=await resizeImg(f,k==="news"?1200:1000)}catch(err){toast("Couldn't use that file","Please choose a photo (JPEG or PNG).");return}
+ if(k==="news"){p3form.img=src;$("#nwImgP").innerHTML=`<img src="${src}" alt="" style="height:60px;border-radius:6px">`;return}
+ const mId=k==="machEx"?e.target.dataset.id:mpOpen,byEx=k==="machEx";
+ P3.media.push({id:"MD-"+Date.now().toString(36),mId,kind:"photo",src,by:byEx?exh(ME.exhibitor).name:"Organiser",status:byEx?"pending":"approved",at:dstampNow()});
+ try{saveP3()}catch(err){}log("Machine pages",byEx?"Machine photo uploaded – waiting for approval":"Machine photo added by organiser",`${mId} · ${mach(mId)?.make||""}`);
+ if(!byEx)mpModal(mId);render();if(byEx)toast("Photo uploaded","The organisers will check it before it appears in the visitor app.")});
+window.addEventListener("storage",e=>{if(e.key===P3_KEY){P3=loadP3();if(!$("#modal").classList.contains("on"))render()}});
+
+/* ============ PHASE 3b: STAFF INVITATIONS, EXHIBITOR APPLICATIONS, SMS LOG ============ */
+const JOBS=["Car park","Pay gate","Field marshal","Scrutineer","Catering","First aid","Information point","Litter & site","General helper"];
+if(!db.staff){db.staff=[
+ {id:"ST-01",name:"Sample Staff 1",phone:"07700 900201",job:"Car park",where:"Car Park 1",shift:"08:30–13:00",code:"482193",status:"accepted",acceptedAt:"02/11/2026"},
+ {id:"ST-02",name:"Sample Staff 2",phone:"07700 900202",job:"Pay gate",where:"Pay Gate (3)",shift:"09:00–15:00",code:"730514",status:"invited"},
+ {id:"ST-03",name:"Sample Staff 3",phone:"07700 900203",job:"Field marshal",where:"Fields 8–11",shift:"10:00–17:00",code:"265870",status:"invited"}]}
+if(!db.apps)db.apps=[{id:"AP-01",biz:"Sample Haulage & Ag",contact:"Sample Name G",phone:"07700 900007",email:"g@example.com",at:"04/11/2026",status:"new",note:"",machines:[{type:"Tractor",make:"Valtra T235",year:"2023"},{type:"Silage trailer",make:"Sample 16 t silage trailer",year:"2020"}]}];
+if(!db.sms)db.sms=[];
+save();
+function sendSms(name,phone,text,kind){db.sms.unshift({at:fmt(now),ts:nowStamp(),name,phone:phone||"",text,kind,status:phone?"Sent (simulated)":"No mobile number"});if(db.sms.length>500)db.sms.length=500;save()}
+const smsLen=t=>Math.max(1,Math.ceil(t.length/(t.length>160?153:160)));
+const newCode=()=>{const a=new Uint32Array(1);crypto.getRandomValues(a);return String(100000+a[0]%900000)};
+const nextId=(arr,pre)=>pre+String(Math.max(0,...arr.map(x=>+String(x.id).slice(pre.length)||0))+1).padStart(2,"0");
+let staffMe=store.get("psd_staff_me",null),staffErr="";
+
+/* ----- Organiser: staff & volunteers ----- */
+VIEWS.staff=()=>`<h2 class="pg">Staff & volunteers</h2><div class="sub">Invite helpers by text. Each person gets a 6-digit code to sign in and see their job, where to go, their shift and their meal voucher.</div>
+ <div class="stats"><div><b>${db.staff.length}</b>Invited</div><div><b>${db.staff.filter(s=>s.status==="accepted").length}</b>Accepted</div><div><b>${db.staff.filter(s=>s.status==="invited").length}</b>Waiting to reply</div></div>
+ <div class="grid2"><div class="card"><h3>Team</h3><div class="list">${db.staff.map(s=>`<div class="it"><div class="b"><b>${esc(s.name)}</b> <span class="code">${s.id}</span> ${s.status==="accepted"?`<span class="pill ok">Accepted ${esc(s.acceptedAt||"")}</span>`:s.status==="declined"?'<span class="pill bad">Can\'t make it</span>':'<span class="pill wait">Invited</span>'}<br><span class="small">${esc(s.job)} · ${esc(s.where)} · ${esc(s.shift)} · ${esc(s.phone)}</span></div>${s.status!=="accepted"?`<button class="btn sm alt" data-act="stResend" data-id="${s.id}">Resend</button>`:""}<button class="btn sm alt" data-act="stDel" data-id="${s.id}">Remove</button></div>`).join("")||'<div class="small">No one yet.</div>'}</div>
+ <button class="btn sm alt" data-act="stCopy" style="margin-top:8px">Copy for Google Sheets</button></div>
+ <div class="card"><h3>Invite someone</h3><label class="fl">Name <i>*</i></label><input class="fi" id="stName"><label class="fl">Mobile <i>*</i></label><input class="fi" id="stPhone" type="tel">
+ <div class="two"><div><label class="fl">Job</label><select class="fi" id="stJob">${JOBS.map(j=>`<option>${j}</option>`).join("")}</select></div><div><label class="fl">Where</label><input class="fi" id="stWhere" placeholder="e.g. Car Park 2"></div></div>
+ <label class="fl">Shift</label><input class="fi" id="stShift" placeholder="e.g. 09:00–13:00"><label class="chk"><input type="checkbox" id="stMeal" checked> Issue a meal voucher</label><div id="stMsg" class="small" style="color:var(--red)"></div>
+ <button class="btn" data-act="stInvite">Send invitation by text</button></div></div>`;
+
+/* ----- Staff member's own view (mock sign-in) ----- */
+VIEWS.myjob=()=>{const s=staffMe&&db.staff.find(x=>x.id===staffMe);
+ if(!s)return`<h2 class="pg">Staff sign-in</h2><div class="sub">Enter the mobile number and 6-digit code from your invitation text.</div><div class="card" style="max-width:420px"><label class="fl">Mobile</label><input class="fi" id="siPh" type="tel" placeholder="07700 900202"><label class="fl">Code</label><input class="fi" id="siCode" inputmode="numeric" placeholder="6 digits"><div class="small" style="color:var(--red)">${esc(staffErr)}</div><button class="btn" data-act="stSignIn" style="margin-top:10px">Sign in</button><div class="small" style="margin-top:10px">Prototype: try 07700 900202 with code 730514.</div></div>`;
+ const v=P3.vouchers.filter(x=>x.holder===s.name&&x.group==="Staff");
+ return`<h2 class="pg">Hi ${esc(s.name.split(" ")[0])} 👋</h2><div class="sub">Thank you for helping at Pembrokeshire Silage Day.</div>
+ ${s.status==="invited"?`<div class="card" style="border:2px solid var(--yellow)"><h3>Can you make it?</h3><div>${esc(s.job)} · ${esc(s.where)} · ${esc(s.shift)}</div><div class="row" style="margin-top:10px"><button class="btn" data-act="stReply" data-v="accepted">Yes, I'll be there</button><button class="btn alt" data-act="stReply" data-v="declined">Sorry, I can't</button></div></div>`:""}
+ <div class="grid2"><div class="card"><h3>Your job</h3><div style="font:800 26px 'Barlow Condensed';color:var(--brown)">${esc(s.job)}</div><div><b>Where:</b> ${esc(s.where)}</div><div><b>Shift:</b> ${esc(s.shift)}</div><div><b>Sign in:</b> Information point (by the Pay Gate) – collect your hi-vis</div><div class="small" style="margin-top:8px">${s.status==="accepted"?'<span class="pill ok">Confirmed</span>':s.status==="declined"?'<span class="pill bad">You said you can\'t make it</span>':""}</div></div>
+ <div class="card"><h3>Key safety points</h3><div class="small" style="font-size:14px">• Machinery has right of way only when a marshal says so.<br>• Keep the public behind the rope lines – if anyone crosses, raise your hand and tell the field marshal.<br>• Lost child: walk them to First aid at the Main Show Field (5) – never leave them alone.<br>• Emergency: call 999, then tell an organiser.</div></div></div>
+ ${v.length?`<div class="row" style="align-items:stretch">${v.map(vCard).join("")}</div>`:""}
+ <button class="btn sm alt" data-act="stSignOut">Sign out</button>`;
+};
+AFTER.myjob=()=>AFTER.spvouchers();
+
+/* ----- Organiser: SMS log & group texts ----- */
+let smsQ="";
+VIEWS.sms=()=>{const L=db.sms.filter(x=>!smsQ||JSON.stringify(x).toLowerCase().includes(smsQ.toLowerCase()));const parts=db.sms.reduce((a,x)=>a+(x.phone?smsLen(x.text):0),0);
+ return`<h2 class="pg">Text messages</h2><div class="sub">Every text the system sends – invitations, driver calls, sign-up replies and group messages. In the prototype nothing is actually sent; the live version sends through an SMS provider and records delivery.</div>
+ <div class="stats"><div><b>${db.sms.length}</b>Texts</div><div><b>${parts}</b>Message parts (what providers charge for)</div></div>
+ <div class="grid2"><div class="card"><h3>Send a group text</h3><label class="fl">To</label><select class="fi" id="gtTo"><option value="drivers">All drivers (${db.drivers.length})</option><option value="exhibitors">All exhibitor contacts (${db.exhibitors.length})</option><option value="staff">Staff who accepted (${db.staff.filter(s=>s.status==="accepted").length})</option><option value="allstaff">All staff invited (${db.staff.length})</option></select>
+ <label class="fl">Message <i>*</i></label><textarea class="fi" id="gtTxt" rows="3" maxlength="459" placeholder="e.g. Reminder: all machines in the fields by 9:30am."></textarea><div class="small" id="gtCount">0 characters</div><div id="gtMsg" class="small" style="color:var(--red)"></div><button class="btn" data-act="gtSend" style="margin-top:8px">Send</button></div>
+ <div class="card"><h3>Log</h3><input class="fi" placeholder="Search name, number or message…" value="${esc(smsQ)}" data-inp="smsQ"><div class="list" style="margin-top:6px">${L.slice(0,100).map(x=>`<div class="it"><div class="small" style="min-width:76px">${esc(x.ts)}<br>${esc(x.kind)}</div><div class="b"><b>${esc(x.name)}</b> <span class="small">${esc(x.phone||"–")}</span><br><span style="font-size:13.5px">${esc(x.text)}</span><br><span class="pill ${x.phone?"ok":"bad"}">${esc(x.status)}</span></div></div>`).join("")||'<div class="small">No texts yet.</div>'}</div>
+ <button class="btn sm alt" data-act="smsCopy" style="margin-top:8px">Copy for Google Sheets</button></div></div>`;
+};
+AFTER.sms=()=>{const t=$("#gtTxt");if(t)t.oninput=()=>{$("#gtCount").textContent=`${t.value.length} characters · ${smsLen(t.value)} part(s) per person`}};
+
+Object.assign(ACT,{
+ stInvite:()=>{const g=s=>$(s).value.trim();const name=g("#stName"),phone=g("#stPhone");if(!name||!/^[0-9 +]{10,16}$/.test(phone)){$("#stMsg").textContent="Add a name and a valid mobile number.";return}
+   const s={id:nextId(db.staff,"ST-"),name,phone,job:$("#stJob").value,where:g("#stWhere")||"Information point",shift:g("#stShift")||"TBC",code:newCode(),status:"invited"};db.staff.push(s);
+   sendSms(name,phone,`Hi ${name.split(" ")[0]}, thank you for helping at Pembrokeshire Silage Day, Sat 11 Sept 2027. Your job: ${s.job}, ${s.where}, ${s.shift}. Sign in to see details: [link] code ${s.code}`,"Staff invite");
+   if($("#stMeal").checked){const c=vNext("MEAL-ST-");P3.vouchers.push({code:c,holder:name,group:"Staff",spId:"",used:null});saveP3()}
+   log("Staff","Staff member invited",`${s.id} · ${name} · ${s.job}`);save();render();toast("Invitation sent",`${name} will get a text with their code (${s.code}).`)},
+ stResend:el=>{const s=db.staff.find(x=>x.id===el.dataset.id);sendSms(s.name,s.phone,`Reminder: please let us know if you can help at Pembrokeshire Silage Day. Sign in: [link] code ${s.code}`,"Staff invite");log("Staff","Invitation resent",`${s.id} · ${s.name}`);render()},
+ stDel:el=>{const s=db.staff.find(x=>x.id===el.dataset.id);db.staff=db.staff.filter(x=>x!==s);P3.vouchers.filter(v=>v.holder===s.name&&v.group==="Staff"&&!v.used).forEach(v=>v.void=true);saveP3();log("Staff","Staff member removed",`${s.id} · ${s.name} (meal voucher cancelled)`);save();render()},
+ stCopy:async el=>{try{await navigator.clipboard.writeText(tsv([["ID","Name","Mobile","Job","Where","Shift","Status"],...db.staff.map(s=>[s.id,s.name,s.phone,s.job,s.where,s.shift,s.status])]));el.textContent="Copied ✓"}catch(e){el.textContent="Couldn't copy"}},
+ stSignIn:()=>{const ph=$("#siPh").value.replace(/\s/g,""),c=$("#siCode").value.trim();const s=db.staff.find(x=>x.phone.replace(/\s/g,"")===ph&&x.code===c);
+   if(!s){staffErr="That number and code don't match an invitation.";log("Staff","Staff sign-in failed",ph.slice(-3).padStart(ph.length,"•"));render();return}staffErr="";staffMe=s.id;store.set("psd_staff_me",s.id);log("Staff","Staff signed in",`${s.id} · ${s.name}`);render()},
+ stSignOut:()=>{staffMe=null;store.set("psd_staff_me",null);render()},
+ stReply:el=>{const s=db.staff.find(x=>x.id===staffMe);s.status=el.dataset.v;s.acceptedAt=dstampNow();log("Staff",s.status==="accepted"?"Staff accepted invitation":"Staff declined invitation",`${s.id} · ${s.name}`);save();render()},
+ apStatus:el=>{const a=db.apps.find(x=>x.id===el.dataset.id),ok=el.dataset.s==="approved";if(!a||a.status!=="new")return;a.status=ok?"approved":"declined";
+   if(ok){const exId=nextId(db.exhibitors,"EX-");db.exhibitors.push({id:exId,name:a.biz,contact:a.contact,phone:a.phone,email:a.email,status:"approved",at:dstampNow()});
+     a.machines.forEach(m=>{const id="M-"+(Math.max(...db.machines.map(x=>+x.id.slice(2)))+1);db.machines.push({id,exId,type:m.type,kind:KIND[m.type]||"impl",make:m.make,year:m.year||"",reg:"",pairWith:"",story:m.story||"",status:"approved",photo:null,scrut:null})});
+     a.exId=exId;sendSms(a.contact,a.phone,`Good news – ${a.biz} is confirmed as an exhibitor at Pembrokeshire Silage Day 2027. Sign in to your exhibitor portal to add drivers and photos: [link]`,"Exhibitor sign-up");log("Entries","Exhibitor application approved",`${a.id} → ${exId} · ${a.biz} · ${a.machines.length} machine(s)`)}
+   else{sendSms(a.contact,a.phone,`Thank you for applying to exhibit at Pembrokeshire Silage Day 2027. Unfortunately we can't offer a place this time – we'll be in touch about next year.`,"Exhibitor sign-up");log("Entries","Exhibitor application declined",`${a.id} · ${a.biz}`)}
+   save();render()},
+ gtSend:()=>{const txt=$("#gtTxt").value.trim(),to=$("#gtTo").value;if(!txt){$("#gtMsg").textContent="Write a message first.";return}
+   const list=to==="drivers"?db.drivers.map(d=>[d.name,d.phone]):to==="exhibitors"?db.exhibitors.map(e=>[e.contact,e.phone]):db.staff.filter(s=>to==="allstaff"||s.status==="accepted").map(s=>[s.name,s.phone]);
+   list.forEach(([n,p])=>sendSms(n,p,txt,"Group text"));log("Notifications","Group text sent",`${$("#gtTo").selectedOptions[0].text} · ${list.length} people · ${txt}`);render();toast("Sent",`${list.length} texts queued.`)},
+ smsCopy:async el=>{try{await navigator.clipboard.writeText(tsv([["Sent","Kind","Name","Mobile","Message","Status"],...db.sms.map(x=>[x.ts,x.kind,x.name,x.phone,x.text,x.status])]));el.textContent="Copied ✓"}catch(e){el.textContent="Couldn't copy"}}
+});
+// texts for existing on-the-day actions
+{const oc=ACT.call;ACT.call=el=>{const s=db.slots.find(x=>x.id===el.dataset.id);s.team.forEach(t=>{const d=drv(t.driver);if(d)sendSms(d.name,d.phone,`Field ${s.field}: ${s.demo} – please go to the field gate now and wait for the marshal's signal.`,"Driver call")});oc(el)};
+ const on=ACT.ndAdd;ACT.ndAdd=el=>{const n=db.drivers.length;on(el);if(db.drivers.length>n){const d=db.drivers[db.drivers.length-1];sendSms(d.name,d.phone,`Welcome to Pembrokeshire Silage Day. Please complete the driver safety briefing before you drive: [link]`,"Driver briefing")}}}
+document.addEventListener("input",e=>{if(e.target.dataset.inp==="smsQ"){smsQ=e.target.value}},true);
+window.addEventListener("storage",e=>{if(e.key===OPS_KEY){const d=store.get(OPS_KEY,null);if(d&&d.v===1){db=d;if(!$("#modal").classList.contains("on"))render()}}});
+
+/* ============ PEOPLE & ACCESS (role assignment) ============ */
+const ACCESS_ROLES={admin:"Organiser",scrut:"Scrutineer",marshal:"Field marshal",gate:"Gate cashier",catering:"Catering"};
+const ROLE_DESC={admin:"Everything, including approvals, money, texts and the audit log",scrut:"Machine checks, pairings, driver ID checks",marshal:"Start, delay and call teams in their fields only",gate:"Find registrations and take payment at the gate",catering:"Redeem meal vouchers"};
+if(!db.access){db.access=[
+ {id:"AC-01",name:"Sample Organiser 1",contact:"organiser1@example.com",role:"admin",fields:[],status:"active",code:newCode(),at:"01/11/2026"},
+ {id:"AC-02",name:"Sample Organiser 2",contact:"organiser2@example.com",role:"admin",fields:[],status:"invited",code:newCode(),at:"05/11/2026"},
+ {id:"AC-03",name:"Sample Scrutineer",contact:"07700 900301",role:"scrut",fields:[],status:"active",code:newCode(),at:"02/11/2026"},
+ {id:"AC-04",name:"Sample Marshal A",contact:"07700 900302",role:"marshal",fields:[6,7],status:"active",code:newCode(),at:"02/11/2026"},
+ {id:"AC-05",name:"Sample Marshal B",contact:"07700 900303",role:"marshal",fields:[8,9,10,11],status:"active",code:newCode(),at:"02/11/2026"},
+ {id:"AC-06",name:"Sample Gate Cashier",contact:"07700 900304",role:"gate",fields:[],status:"active",code:newCode(),at:"03/11/2026"},
+ {id:"AC-07",name:"Sample Caterer",contact:"07700 900305",role:"catering",fields:[],status:"invited",code:newCode(),at:"06/11/2026"}];save()}
+const isPhone=v=>/^[0-9 +]{10,16}$/.test(v),isEmail=v=>/^\S+@\S+\.\S+$/.test(v);
+const accStatus=a=>a.status==="active"?'<span class="pill ok">Signed in</span>':a.status==="invited"?'<span class="pill wait">Invited – not signed in yet</span>':'<span class="pill grey">Access removed</span>';
+let accEdit=null;
+VIEWS.access=()=>{const A=db.access.filter(a=>a.status!=="removed"),gone=db.access.filter(a=>a.status==="removed");
+ const grp=r=>{const L=A.filter(a=>a.role===r);return`<div class="card"><h3>${ACCESS_ROLES[r]} <span class="pill info">${L.length}</span></h3><div class="small">${ROLE_DESC[r]}</div><div class="list">${L.map(a=>`<div class="it"><div class="b"><b>${esc(a.name)}</b> <span class="code">${a.id}</span><br><span class="small">${esc(a.contact)}${a.role==="marshal"?` · Fields ${a.fields.join(", ")||"none yet"}`:""}</span><br>${accStatus(a)}</div><button class="btn sm alt" data-act="accOpen" data-id="${a.id}">Change</button></div>`).join("")||'<div class="small">No one yet.</div>'}</div></div>`};
+ return`<h2 class="pg">People & access</h2><div class="sub">Who can sign in to the operations app and what they can do. Organisers give access here; nobody can give themselves access. Every change is in the audit log.</div>
+ <div class="card"><h3>Give someone access</h3><div class="two"><div><label class="fl">Name <i>*</i></label><input class="fi" id="acName"></div><div><label class="fl">Mobile or email <i>*</i></label><input class="fi" id="acContact" placeholder="Organisers: email · others: mobile"></div></div>
+ <label class="fl">Role</label><select class="fi" id="acRole" style="max-width:320px">${Object.entries(ACCESS_ROLES).map(([k,v])=>`<option value="${k}">${v} – ${ROLE_DESC[k]}</option>`).join("")}</select>
+ <div id="acFields" style="display:none"><label class="fl">Fields</label><div class="row">${FIELD_IDS.map(f=>`<label class="chk" style="margin:0 10px 0 0"><input type="checkbox" class="acF" value="${f}"> Field ${f}</label>`).join("")}</div></div>
+ <div id="acMsg" class="small" style="color:var(--red)"></div><button class="btn" data-act="accAdd" style="margin-top:10px">Send invitation</button>
+ <div class="small" style="margin-top:6px">They get a link by text or email. Organisers also set up a second sign-in step (live version).</div></div>
+ <div class="grid2">${Object.keys(ACCESS_ROLES).map(grp).join("")}</div>
+ <div class="card"><h3>Access that comes from elsewhere</h3><div class="small">These people get access automatically – you manage them on their own screens.</div><div class="list">
+ <div class="it"><div class="b"><b>Exhibitors</b> – ${db.exhibitors.length}<br><span class="small">When an application is accepted (Needs approval) · see Entries</span></div><button class="btn sm alt" data-act="nav" data-v="entries">Open</button></div>
+ <div class="it"><div class="b"><b>Drivers</b> – ${db.drivers.length}<br><span class="small">Added by their exhibitor, or by a scrutineer on the day · see Drivers</span></div><button class="btn sm alt" data-act="nav" data-v="drivers">Open</button></div>
+ <div class="it"><div class="b"><b>Sponsors</b> – ${P3.sponsors.length}<br><span class="small">One contact per sponsor · see Sponsors & vouchers</span></div><button class="btn sm alt" data-act="nav" data-v="sponsors">Open</button></div>
+ <div class="it"><div class="b"><b>Staff & volunteers</b> – ${db.staff.length}<br><span class="small">See their own job only · see Staff</span></div><button class="btn sm alt" data-act="nav" data-v="staff">Open</button></div></div></div>
+ ${gone.length?`<div class="card"><h3>Access removed</h3><div class="list">${gone.map(a=>`<div class="it"><div class="b"><b>${esc(a.name)}</b> · ${ACCESS_ROLES[a.role]}<br><span class="small">Removed ${esc(a.removedAt||"")}</span></div><button class="btn sm alt" data-act="accRestore" data-id="${a.id}">Give back</button></div>`).join("")}</div></div>`:""}`;
+};
+AFTER.access=()=>{const r=$("#acRole");if(r)r.onchange=()=>{$("#acFields").style.display=r.value==="marshal"?"":"none"}};
+function accModal(a){accEdit=a.id;openModal(`<h2>${esc(a.name)}</h2><div class="small">${esc(a.contact)} · ${a.id}</div><div style="margin-top:6px">${accStatus(a)}</div>
+ <label class="fl">Role</label><select class="fi" id="aeRole">${Object.entries(ACCESS_ROLES).map(([k,v])=>`<option value="${k}" ${k===a.role?"selected":""}>${v}</option>`).join("")}</select>
+ <label class="fl">Fields (marshals only)</label><div class="row">${FIELD_IDS.map(f=>`<label class="chk" style="margin:0 10px 0 0"><input type="checkbox" class="aeF" value="${f}" ${a.fields.includes(f)?"checked":""}> Field ${f}</label>`).join("")}</div>
+ <div id="aeMsg" class="small" style="color:var(--red)"></div>
+ <div class="row" style="margin-top:12px"><button class="btn" data-act="accSave">Save</button>${a.status==="invited"?'<button class="btn alt" data-act="accResend">Resend invitation</button>':""}<button class="btn red" data-act="accRemove" style="margin-left:auto">Remove access</button></div>
+ <div class="small" style="margin-top:8px">Changing a role or removing access signs the person out of every device straight away (live version).</div>`)}
+Object.assign(ACT,{
+ accOpen:el=>accModal(db.access.find(a=>a.id===el.dataset.id)),
+ accAdd:()=>{const n=$("#acName").value.trim(),c=$("#acContact").value.trim(),r=$("#acRole").value,f=[...document.querySelectorAll(".acF:checked")].map(x=>+x.value);
+   if(!n||!(isPhone(c)||isEmail(c))){$("#acMsg").textContent="Add a name and a valid mobile number or email.";return}
+   if(r==="admin"&&!isEmail(c)){$("#acMsg").textContent="Organisers sign in by email – please use their email address.";return}
+   if(r==="marshal"&&!f.length){$("#acMsg").textContent="Choose the fields this marshal looks after.";return}
+   if(db.access.some(a=>a.status!=="removed"&&a.contact.replace(/\s/g,"").toLowerCase()===c.replace(/\s/g,"").toLowerCase())){$("#acMsg").textContent="That mobile or email already has access – use Change instead.";return}
+   const a={id:nextId(db.access,"AC-"),name:n,contact:c,role:r,fields:r==="marshal"?f:[],status:"invited",code:newCode(),at:dstampNow()};db.access.push(a);
+   if(isPhone(c))sendSms(n,c,`Hi ${n.split(" ")[0]}, you've been given ${ACCESS_ROLES[r]} access to the Pembrokeshire Silage Day operations app. Sign in: [link] code ${a.code}`,"Access invite");
+   log("Access","Access given",`${a.id} · ${n} · ${ACCESS_ROLES[r]}${a.fields.length?" · Fields "+a.fields.join(", "):""}${isEmail(c)?" · invitation emailed":""}`);save();render();toast("Invitation sent",`${n} – ${ACCESS_ROLES[r]}`)},
+ accSave:()=>{const a=db.access.find(x=>x.id===accEdit),r=$("#aeRole").value,f=[...document.querySelectorAll(".aeF:checked")].map(x=>+x.value);
+   if(r==="marshal"&&!f.length){$("#aeMsg").textContent="Choose at least one field.";return}
+   if(a.role==="admin"&&r!=="admin"&&db.access.filter(x=>x.role==="admin"&&x.status==="active").length<=1&&a.status==="active"){$("#aeMsg").textContent="There must always be at least one signed-in organiser.";return}
+   const before=`${ACCESS_ROLES[a.role]}${a.fields.length?" (Fields "+a.fields.join(", ")+")":""}`;a.role=r;a.fields=r==="marshal"?f:[];a.changed=new Date().toLocaleString("en-GB",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"})+" in app";const after=`${ACCESS_ROLES[r]}${a.fields.length?" (Fields "+a.fields.join(", ")+")":""}`;
+   if(before!==after)log("Access","Role changed",`${a.id} · ${a.name} · ${before} → ${after}`);save();closeModal();render()},
+ accResend:()=>{const a=db.access.find(x=>x.id===accEdit);if(isPhone(a.contact))sendSms(a.name,a.contact,`Reminder: sign in to the Pembrokeshire Silage Day operations app: [link] code ${a.code}`,"Access invite");log("Access","Invitation resent",`${a.id} · ${a.name}`);toast("Sent",`Invitation resent to ${a.name}.`)},
+ accRemove:()=>{const a=db.access.find(x=>x.id===accEdit);if(a.role==="admin"&&db.access.filter(x=>x.role==="admin"&&x.status==="active").length<=1&&a.status==="active"){$("#aeMsg").textContent="You can't remove the last signed-in organiser.";return}
+   a.status="removed";a.removedAt=dstampNow();a.code=null;log("Access","Access removed",`${a.id} · ${a.name} · ${ACCESS_ROLES[a.role]}`);save();closeModal();render()},
+ accRestore:el=>{const a=db.access.find(x=>x.id===el.dataset.id);a.status="invited";a.code=newCode();if(isPhone(a.contact))sendSms(a.name,a.contact,`You've been given ${ACCESS_ROLES[a.role]} access to the Pembrokeshire Silage Day operations app again. Sign in: [link] code ${a.code}`,"Access invite");log("Access","Access given back",`${a.id} · ${a.name} · ${ACCESS_ROLES[a.role]}`);save();render()}
+});
+
+/* ============ BACK-END ACCESS SHEET: import / export ============ */
+const ROLE_FROM_TEXT=t=>{t=String(t||"").trim().toLowerCase();if(/^(organi[sz]er|admin)/.test(t))return"admin";if(/^scrut/.test(t))return"scrut";if(/marshal/.test(t))return"marshal";if(/gate|cashier/.test(t))return"gate";if(/cater/.test(t))return"catering";return null};
+const parseFields=t=>{const out=new Set();String(t||"").split(/[,;/ ]+/).filter(Boolean).forEach(p=>{const m=p.match(/^(\d+)\s*[-–]\s*(\d+)$/);if(m){for(let i=+m[1];i<=+m[2];i++)out.add(i)}else if(/^\d+$/.test(p))out.add(+p);else out.add(NaN)});return[...out]};
+const normC=c=>String(c||"").replace(/\s/g,"").toLowerCase();
+let sheetRows=null,sheetText="";
+function checkSheet(text){
+ const lines=text.split(/\r?\n/).filter(l=>l.trim());if(!lines.length)return[];
+ let rows=lines.map(l=>l.split("\t").map(x=>x.trim()));
+ if(/name/i.test(rows[0][0]||"")&&/mobile|email|contact/i.test(rows[0][1]||""))rows=rows.slice(1); // skip header row
+ const seen=new Set(),out=[];
+ rows.forEach((r,i)=>{const [name,contact,roleT,fieldsT,statusT]=r;const o={n:i+1,name:name||"",contact:contact||"",roleT:roleT||"",fieldsT:fieldsT||"",remove:/^remove/i.test(statusT||""),errs:[],act:""};
+  const role=ROLE_FROM_TEXT(roleT);o.role=role;const f=parseFields(fieldsT);o.fields=f.filter(x=>!isNaN(x));
+  if(!o.name)o.errs.push("No name");
+  if(!(isPhone(o.contact)||isEmail(o.contact)))o.errs.push("Mobile or email not valid");
+  if(!role)o.errs.push(`Role “${o.roleT||"blank"}” not recognised`);
+  if(role==="admin"&&!isEmail(o.contact))o.errs.push("Organisers need an email address");
+  if(role==="marshal"&&!o.remove){if(f.some(x=>isNaN(x)||!FIELD_IDS.includes(x)))o.errs.push(`Fields must be from ${FIELD_IDS[0]}–${FIELD_IDS.at(-1)}`);else if(!o.fields.length)o.errs.push("Marshal needs fields")}
+  if(role!=="marshal")o.fields=[];
+  const k=normC(o.contact);if(k&&seen.has(k))o.errs.push("Same person twice in the sheet");seen.add(k);
+  const ex=db.access.find(a=>normC(a.contact)===k);o.ex=ex?ex.id:null;
+  if(!o.errs.length){
+   if(o.remove)o.act=ex&&ex.status!=="removed"?"remove":"nothing";
+   else if(!ex)o.act="new";
+   else if(ex.status==="removed")o.act="restore";
+   else if(ex.role!==role||ex.fields.join()!==o.fields.join()||ex.name!==o.name)o.act="change";
+   else o.act="nothing"}
+  out.push(o)});
+ // last-organiser rule across the whole import
+ const orgsAfter=db.access.filter(a=>a.role==="admin"&&a.status!=="removed").map(a=>a.id).filter(id=>!out.some(o=>!o.errs.length&&o.ex===id&&(o.act==="remove"||(o.act==="change"&&o.role!=="admin"))));
+ const newOrgs=out.filter(o=>!o.errs.length&&o.role==="admin"&&(o.act==="new"||o.act==="restore")).length;
+ if(orgsAfter.length+newOrgs===0)out.forEach(o=>{if(o.ex&&(o.act==="remove"||o.act==="change")&&db.access.find(a=>a.id===o.ex).role==="admin")o.errs.push("This would leave no organisers")});
+ return out}
+const ACT_LABEL={new:'<span class="pill info">New – invite</span>',change:'<span class="pill wait">Change role</span>',remove:'<span class="pill bad">Remove access</span>',restore:'<span class="pill info">Give access back</span>',nothing:'<span class="pill grey">No change</span>'};
+function sheetCard(){
+ const ok=sheetRows?sheetRows.filter(o=>!o.errs.length&&o.act!=="nothing"):[],bad=sheetRows?sheetRows.filter(o=>o.errs.length):[];
+ return`<div class="card"><h3>🗂️ Back-end access sheet</h3><div class="small">A Google Sheet kept by the charity, outside the app. Use it to set up lots of roles at once, and to get back in if every organiser is ever removed. Columns: <b>Name · Mobile or email · Role · Fields · Status</b> (type “Remove” in Status to take access away). People not in the sheet are left as they are.</div>
+ <div class="row" style="margin-top:10px"><button class="btn sm alt" data-act="shCopy">Copy access list to sheet</button><button class="btn sm alt" data-act="shTemplate">Copy blank template</button></div>
+ <label class="fl">Paste rows from the sheet</label><textarea class="fi" id="shIn" rows="5" placeholder="Select the rows in Google Sheets, copy, and paste here">${esc(sheetText)}</textarea>
+ <button class="btn sm" data-act="shCheck" style="margin-top:8px">Check rows</button>
+ ${sheetRows?`<div style="margin-top:12px"><b>${sheetRows.length}</b> row(s): <span class="pill ok">${ok.length} to apply</span> <span class="pill ${bad.length?"bad":"grey"}">${bad.length} with problems</span> <span class="pill grey">${sheetRows.length-ok.length-bad.length} no change</span></div>
+ <table class="tbl" style="margin-top:8px"><tr><th>Row</th><th>Name</th><th>Contact</th><th>Role</th><th>Result</th></tr>${sheetRows.map(o=>`<tr><td>${o.n}</td><td>${esc(o.name)}</td><td>${esc(o.contact)}</td><td>${o.role?ACCESS_ROLES[o.role]:esc(o.roleT)}${o.fields.length?" · "+o.fields.join(", "):""}</td><td>${o.errs.length?`<span class="pill bad">${o.errs.map(esc).join(" · ")}</span>`:ACT_LABEL[o.act]}</td></tr>`).join("")}</table>
+ ${ok.length?`<button class="btn" data-act="shApply" style="margin-top:10px">Apply ${ok.length} change(s)${ok.some(o=>o.act==="new"||o.act==="restore")?" and send invitations":""}</button>`:""}${bad.length?'<div class="small" style="margin-top:6px">Rows with problems are skipped – fix them in the sheet and paste again.</div>':""}`:""}</div>`}
+const shDate=()=>new Date().toLocaleString("en-GB",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"});
+Object.assign(ACT,{
+ shCopy:async el=>{try{await navigator.clipboard.writeText(tsv([["Name","Mobile or email","Role","Fields","Status","ID","Last changed"],...db.access.map(a=>[a.name,a.contact,ACCESS_ROLES[a.role],a.fields.join(", "),a.status==="removed"?"Removed":a.status==="active"?"Signed in":"Invited",a.id,a.changed||a.at||""])]));el.textContent="Copied ✓ – paste into the sheet";log("Access","Access list copied to sheet",`${db.access.length} rows`)}catch(e){el.textContent="Couldn't copy"}},
+ shTemplate:async el=>{try{await navigator.clipboard.writeText(tsv([["Name","Mobile or email","Role","Fields","Status"],["Sample Person","07700 900400","Field marshal","8-11",""],["Sample Organiser","name@example.com","Organiser","",""]]));el.textContent="Copied ✓"}catch(e){el.textContent="Couldn't copy"}},
+ shCheck:()=>{sheetText=$("#shIn").value;sheetRows=checkSheet(sheetText);render()},
+ shApply:()=>{if(!sheetRows)return;sheetRows=checkSheet(sheetText);const ok=sheetRows.filter(o=>!o.errs.length&&o.act!=="nothing");let n=0;
+  ok.forEach(o=>{const stamp=shDate()+" via sheet";
+   if(o.act==="new"){const a={id:nextId(db.access,"AC-"),name:o.name,contact:o.contact,role:o.role,fields:o.fields,status:"invited",code:newCode(),at:dstampNow(),changed:stamp};db.access.push(a);
+     if(isPhone(a.contact))sendSms(a.name,a.contact,`Hi ${a.name.split(" ")[0]}, you've been given ${ACCESS_ROLES[a.role]} access to the Pembrokeshire Silage Day operations app. Sign in: [link] code ${a.code}`,"Access invite");
+     log("Access","Access given (from sheet)",`${a.id} · ${a.name} · ${ACCESS_ROLES[a.role]}${a.fields.length?" · Fields "+a.fields.join(", "):""}`)}
+   else{const a=db.access.find(x=>x.id===o.ex);
+    if(o.act==="remove"){a.status="removed";a.removedAt=dstampNow();a.code=null;log("Access","Access removed (from sheet)",`${a.id} · ${a.name} · ${ACCESS_ROLES[a.role]}`)}
+    else if(o.act==="restore"){Object.assign(a,{name:o.name,role:o.role,fields:o.fields,status:"invited",code:newCode()});if(isPhone(a.contact))sendSms(a.name,a.contact,`You've been given ${ACCESS_ROLES[a.role]} access to the Pembrokeshire Silage Day operations app. Sign in: [link] code ${a.code}`,"Access invite");log("Access","Access given back (from sheet)",`${a.id} · ${a.name} · ${ACCESS_ROLES[a.role]}`)}
+    else{const before=`${ACCESS_ROLES[a.role]}${a.fields.length?" (Fields "+a.fields.join(", ")+")":""}`;Object.assign(a,{name:o.name,role:o.role,fields:o.fields});log("Access","Role changed (from sheet)",`${a.id} · ${a.name} · ${before} → ${ACCESS_ROLES[a.role]}${a.fields.length?" (Fields "+a.fields.join(", ")+")":""}`)}
+    a.changed=stamp}n++});
+  save();sheetRows=null;sheetText="";render();toast("Sheet applied",`${n} change(s) made. Copy the access list back to the sheet to keep it up to date.`)}
+});
+// put the sheet card at the top of People & access
+{const base=VIEWS.access;VIEWS.access=()=>{const h=base();const i=h.indexOf('<div class="grid2">');return h.slice(0,i)+sheetCard()+h.slice(i)}}
+
+document.addEventListener("click",e=>{const el=e.target.closest("[data-act]");if(el&&ACT[el.dataset.act]){e.preventDefault();ACT[el.dataset.act](el)}});
+document.addEventListener("input",e=>{const k=e.target.dataset.inp;if(k){if(k==="entryQ")entryQ=e.target.value;if(k==="scrQ")scrQ=e.target.value;if(k==="gateQ")gateQ=e.target.value;const pos=e.target.selectionStart;render();const n=document.querySelector(`[data-inp="${k}"]`);if(n){n.focus();try{n.setSelectionRange(pos,pos)}catch(x){}}}});
+document.addEventListener("change",e=>{const pk=e.target.dataset.price;if(pk){const g=gateGet();g.prices[pk]=Math.max(0,+e.target.value||0);gateSave(g);log("Check-ins","Gate price changed",`${pk} = £${g.prices[pk]}`);render();return}const k=e.target.dataset.set;if(k){const v=k==="first"?parseTime(e.target.value):+e.target.value;if(v==null||isNaN(v))return;const old=db.settings[k];db.settings[k]=v;
+  if(k==="first"||k==="len"||k==="gap"){const ot=Array.from({length:db.settings.count},(_,i)=>(k==="first"?old:db.settings.first)+i*((k==="len"?old:db.settings.len)+(k==="gap"?old:db.settings.gap)));db.slots.forEach(s=>{const i=ot.indexOf(s.start);if(i>=0)s.start=slotGrid()[i]})}
+  log("Timetable","Timetable settings changed",`${k} = ${k==="first"?fmt(v):v}`);save();render()}});
+$("#scrim").onclick=closeModal;
+window.addEventListener("storage",e=>{if(e.key==="psd_gate"&&role==="gate"&&!$("#modal").classList.contains("on"))render()});
+$("#roleSel").onchange=e=>setRole(e.target.value);
+$("#slider").oninput=e=>{now=+e.target.value;$("#clock").textContent=fmt(now);if(!$("#modal").classList.contains("on"))render();checkToasts()};
+$("#slider").value=now;$("#clock").textContent=fmt(now);
+setRole(ROLES[role]?role:"admin");
+</script>
+</body>
+</html>
